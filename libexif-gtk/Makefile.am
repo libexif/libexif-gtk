@@ -2,6 +2,7 @@ INCLUDES =						\
 	-I$(top_srcdir)					\
 	-I$(top_srcdir)/gtk-extensions			\
 	$(LIBEXIF_GTK_CFLAGS)				\
+	$(GDK_PIXBUF_CFLAGS)				\
 	-DG_LOG_DOMAIN=\"libexif\"
 
 lib_LTLIBRARIES = libexif-gtk.la
@@ -42,7 +43,8 @@ libexif_gtk_la_SOURCES =			\
 libexif_gtk_la_LDFLAGS = -version-info @LIBEXIF_GTK_VERSION_INFO@
 libexif_gtk_la_LIBADD =						\
 	$(top_builddir)/gtk-extensions/libgtk-extensions.la	\
-	$(LIBEXIF_GTK_LIBS)
+	$(LIBEXIF_GTK_LIBS)					\
+	$(GDK_PIXBUF_LIBS)
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libexif-gtk.pc

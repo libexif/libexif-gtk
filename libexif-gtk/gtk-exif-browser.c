@@ -21,6 +21,8 @@
 #include <config.h>
 #include "gtk-exif-browser.h"
 
+#include <stdio.h>
+
 #include <gtk/gtksignal.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkhbox.h>
@@ -28,6 +30,14 @@
 #include <gtk/gtkbutton.h>
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkscrolledwindow.h>
+#include <gtk/gtkpixmap.h>
+#include <gtk/gtktooltips.h>
+#include <gtk/gtkhbbox.h>
+#include <gtk/gtkfilesel.h>
+
+#ifdef HAVE_GDK_PIXBUF
+#  include <gdk-pixbuf/gdk-pixbuf-loader.h>
+#endif
 
 #include "gtk-exif-content-list.h"
 #include "gtk-exif-entry-ascii.h"
@@ -66,7 +76,12 @@ static void gtk_exif_browser_show_entry (GtkExifBrowser *, ExifEntry *);
 struct _GtkExifBrowserPrivate {
 	ExifData *data;
 
+	GtkTooltips *tooltips;
+
 	GtkWidget *empty, *current, *info;
+
+	GtkContainer *thumb_box;
+	GtkWidget    *thumb;
 
 	GtkNotebook *notebook;
 };
@@ -87,6 +102,11 @@ gtk_exif_browser_destroy (GtkObject *object)
 	if (browser->priv->empty) {
 		gtk_widget_unref (browser->priv->empty);
 		browser->priv->empty = NULL;
+	}
+
+	if (browser->priv->tooltips) {
+		gtk_object_unref (GTK_OBJECT (browser->priv->tooltips));
+		browser->priv->tooltips = NULL;
 	}
 
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
@@ -118,6 +138,13 @@ static void
 gtk_exif_browser_init (GtkExifBrowser *browser)
 {
 	browser->priv = g_new0 (GtkExifBrowserPrivate, 1);
+
+	browser->priv->tooltips = gtk_tooltips_new ();
+
+	/* Placeholder */
+	browser->priv->empty = gtk_label_new ("Nothing selected.");
+	gtk_widget_show (browser->priv->empty);
+	gtk_object_ref (GTK_OBJECT (browser->priv->empty));
 }
 
 GtkType
@@ -337,18 +364,193 @@ gtk_exif_browser_new (void)
 	gtk_widget_show (browser->priv->info);
 	gtk_paned_pack2 (GTK_PANED (browser), browser->priv->info, TRUE, FALSE);
 
-	/* Placeholder */
-	browser->priv->empty = gtk_label_new ("Nothing selected.");
-	gtk_widget_show (browser->priv->empty);
-	gtk_object_ref (GTK_OBJECT (browser->priv->empty));
+	/* Set placeholder */
 	gtk_exif_browser_set_widget (browser, browser->priv->empty);
 
 	return (GTK_WIDGET (browser));
 }
 
+static void
+gtk_exif_browser_show_thumbnail (GtkExifBrowser *b)
+{
+	gchar *tip;
+
+	g_return_if_fail (GTK_EXIF_IS_BROWSER (b));
+
+	if (b->priv->thumb) {
+		gtk_container_remove (b->priv->thumb_box, b->priv->thumb);
+		b->priv->thumb = NULL;
+	}
+
+	if (!b->priv->data->data) {
+		b->priv->thumb = gtk_label_new (_("No thumbnail available."));
+	} else {
+#ifdef HAVE_GDK_PIXBUF
+		GdkPixbufLoader *loader;
+		GdkPixbuf *pixbuf;
+		GdkPixmap *pixmap;
+		GdkBitmap *bitmap;
+
+		loader = gdk_pixbuf_loader_new ();
+		if (!gdk_pixbuf_loader_write (loader,
+				b->priv->data->data, b->priv->data->size)) {
+			b->priv->thumb = gtk_label_new (_("Could not parse "
+							"thumbnail data."));
+		} else {
+			gdk_pixbuf_loader_close (loader);
+			pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
+			gdk_pixbuf_render_pixmap_and_mask (pixbuf, &pixmap, 
+							   &bitmap, 127);
+			gdk_pixbuf_unref (pixbuf);
+			b->priv->thumb = gtk_pixmap_new (pixmap, bitmap);
+			if (pixmap)
+				gdk_pixmap_unref (pixmap);
+			if (bitmap)
+				gdk_bitmap_unref (bitmap);
+		}
+		gtk_object_unref (GTK_OBJECT (loader));
+#else
+		b->priv->thumb = gtk_label_new (_("Compiled without "
+					"support for gdk-pixbuf. Can not "
+					"display thumbnail."));
+#endif
+		tip = g_strdup_printf (_("Size: %i byte(s)."),
+				       b->priv->data->size);
+		gtk_tooltips_set_tip (b->priv->tooltips, b->priv->thumb,
+				      tip, NULL);
+		g_free (tip);
+	}
+	gtk_widget_show (b->priv->thumb);
+	gtk_box_pack_start (GTK_BOX (b->priv->thumb_box), b->priv->thumb,
+			    TRUE, TRUE, 0);
+}
+
+static void
+on_cancel_clicked (GtkButton *button, GtkFileSelection *fsel)
+{
+	gtk_object_destroy (GTK_OBJECT (fsel));
+}
+
+static void
+on_load_ok_clicked (GtkButton *button, GtkExifBrowser *b)
+{
+	GtkWidget *fsel;
+	const gchar *path;
+	FILE *f;
+	unsigned int size;
+
+	g_return_if_fail (GTK_EXIF_IS_BROWSER (b));
+
+	fsel = gtk_widget_get_ancestor (GTK_WIDGET (button),
+					GTK_TYPE_FILE_SELECTION);
+	path = gtk_file_selection_get_filename (GTK_FILE_SELECTION (fsel));
+	f = fopen (path, "rb");
+	if (!f) {
+		g_warning ("Can not open file '%s'.", path);
+		return;
+	}
+	fseek (f, 0, SEEK_END);
+	size = ftell (f);
+	rewind (f);
+	if (b->priv->data->data) {
+		g_free (b->priv->data->data);
+		b->priv->data->data = NULL;
+		b->priv->data->size = 0;
+	}
+	if (size) {
+		b->priv->data->data = g_new0 (char, size);
+		if (!b->priv->data->data) {
+			g_warning ("Could not allocate %i bytes!", size);
+			fclose (f);
+			return;
+		}
+		fread (b->priv->data->data, 1, size, f);
+		if (ferror (f)) {
+			g_warning ("Could not read %i bytes!", size);
+			fclose (f);
+			return;
+		}
+	}
+	fclose (f);
+	gtk_object_destroy (GTK_OBJECT (fsel));
+
+	gtk_exif_browser_show_thumbnail (b);
+}
+
+static void
+on_load_clicked (GtkButton *button, GtkExifBrowser *b)
+{
+	GtkWidget *fsel;
+
+	fsel = gtk_file_selection_new (_("Load..."));
+	gtk_widget_show (fsel);
+	gtk_signal_connect (GTK_OBJECT (fsel), "delete_event",
+			    GTK_SIGNAL_FUNC (gtk_object_destroy), NULL);
+	gtk_signal_connect (
+		GTK_OBJECT (GTK_FILE_SELECTION (fsel)->cancel_button),
+		"clicked", GTK_SIGNAL_FUNC (on_cancel_clicked), fsel);
+	gtk_signal_connect (
+		GTK_OBJECT (GTK_FILE_SELECTION (fsel)->ok_button),
+		"clicked", GTK_SIGNAL_FUNC (on_load_ok_clicked), b);
+}
+
+static void
+on_save_ok_clicked (GtkButton *button, GtkExifBrowser *b)
+{
+	GtkWidget *fsel;
+	const gchar *path;
+	FILE *f;
+
+	g_return_if_fail (GTK_EXIF_IS_BROWSER (b));
+
+	fsel = gtk_widget_get_ancestor (GTK_WIDGET (button),
+					GTK_TYPE_FILE_SELECTION);
+	path = gtk_file_selection_get_filename (GTK_FILE_SELECTION (fsel));
+
+	f = fopen (path, "wb");
+	if (!f) {
+		g_warning ("Could not open '%s'.", path);
+		return;
+	}
+	fwrite (b->priv->data->data, 1, b->priv->data->size, f);
+	fclose (f);
+	gtk_object_destroy (GTK_OBJECT (fsel));
+}
+
+static void
+on_save_clicked (GtkButton *button, GtkExifBrowser *b)
+{
+	GtkWidget *fsel;
+
+	fsel = gtk_file_selection_new (_("Save As..."));
+	gtk_widget_show (fsel);
+	gtk_signal_connect (GTK_OBJECT (fsel), "delete_event",
+			    GTK_SIGNAL_FUNC (gtk_object_destroy), NULL);
+	gtk_signal_connect (
+		GTK_OBJECT (GTK_FILE_SELECTION (fsel)->cancel_button),
+		"clicked", GTK_SIGNAL_FUNC (on_cancel_clicked), fsel);
+	gtk_signal_connect (
+		GTK_OBJECT (GTK_FILE_SELECTION (fsel)->ok_button),
+		"clicked", GTK_SIGNAL_FUNC (on_save_ok_clicked), b);
+}
+
+static void
+on_delete_clicked (GtkButton *button, GtkExifBrowser *b)
+{
+	g_return_if_fail (GTK_EXIF_IS_BROWSER (b));
+
+	if (b->priv->data->data) {
+		g_free (b->priv->data->data);
+		b->priv->data->data = NULL;
+	}
+	b->priv->data->size = 0;
+	gtk_exif_browser_show_thumbnail (b);
+}
+
 void
 gtk_exif_browser_set_data (GtkExifBrowser *b, ExifData *data)
 {
+	GtkWidget *label, *vbox, *bbox, *button, *hbox;
 	gint n;
 
 	g_return_if_fail (GTK_EXIF_IS_BROWSER (b));
@@ -362,11 +564,48 @@ gtk_exif_browser_set_data (GtkExifBrowser *b, ExifData *data)
 	while ((n = gtk_notebook_get_current_page (b->priv->notebook)) >= 0)
 		gtk_notebook_remove_page (b->priv->notebook, n);
 
-	gtk_exif_browser_add_content (b, "IFD 0", data->ifd0);
-	gtk_exif_browser_add_content (b, "IFD 1", data->ifd1);
-	gtk_exif_browser_add_content (b, "Exif IFD", data->ifd_exif);
-	gtk_exif_browser_add_content (b, "GPS IFD", data->ifd_gps);
-	gtk_exif_browser_add_content (b, "Interoperability IFD",
+	gtk_exif_browser_add_content (b, _("IFD 0"), data->ifd0);
+	gtk_exif_browser_add_content (b, _("IFD 1"), data->ifd1);
+	gtk_exif_browser_add_content (b, _("Exif IFD"), data->ifd_exif);
+	gtk_exif_browser_add_content (b, _("GPS IFD"), data->ifd_gps);
+	gtk_exif_browser_add_content (b, _("Interoperability IFD"),
 				      data->ifd_interoperability);
+
+	/* Create the thumbnail page */
+	vbox = gtk_vbox_new (FALSE, 5);
+	gtk_widget_show (vbox);
+	label = gtk_label_new (_("Thumbnail"));
+	gtk_widget_show (label);
+	gtk_notebook_append_page (b->priv->notebook, vbox, label);
+
+	/* Thumbnail */
+	hbox = gtk_hbox_new (FALSE, 5);
+	gtk_widget_show (hbox);
+	gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
+	b->priv->thumb_box = GTK_CONTAINER (hbox);
+
+	/* Buttons */
+	bbox = gtk_hbutton_box_new ();
+	gtk_widget_show (bbox);
+	gtk_box_pack_end (GTK_BOX (vbox), bbox, FALSE, FALSE, 0);
+	button = gtk_button_new_with_label (_("Load"));
+	gtk_widget_show (button);
+	gtk_container_add (GTK_CONTAINER (bbox), button);
+	gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			    GTK_SIGNAL_FUNC (on_load_clicked), b);
+	button = gtk_button_new_with_label (_("Save"));
+	gtk_widget_show (button);
+	gtk_container_add (GTK_CONTAINER (bbox), button);
+	gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			    GTK_SIGNAL_FUNC (on_save_clicked), b);
+	button = gtk_button_new_with_label (_("Delete"));
+	gtk_widget_show (button);
+	gtk_container_add (GTK_CONTAINER (bbox), button);
+	gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			    GTK_SIGNAL_FUNC (on_delete_clicked), b);
+
+	/* Show the current thumbnail */
+	gtk_exif_browser_show_thumbnail (b);
+
 	gtk_widget_set_sensitive (GTK_WIDGET (b), TRUE);
 }

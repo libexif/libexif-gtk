@@ -1,9 +1,9 @@
 AC_INIT(libexif-gtk/gtk-exif-browser.c)
 AM_CONFIG_HEADER(config.h)
-AM_INIT_AUTOMAKE(libexif-gtk, 0.1)
+AM_INIT_AUTOMAKE(libexif-gtk, 0.2)
 AM_MAINTAINER_MODE
 
-LIBEXIF_GTK_VERSION_INFO=0:1:0
+LIBEXIF_GTK_VERSION_INFO=0:2:0
 AC_SUBST(LIBEXIF_GTK_VERSION_INFO)
 
 AM_PROG_LIBTOOL
@@ -23,6 +23,18 @@ AC_SUBST(LIBEXIF_GTK_CFLAGS)
 PKG_CHECK_MODULES(GTK, gtk)
 AC_SUBST(GTK_LIBS)
 AC_SUBST(GTK_CFLAGS)
+
+dnl ---------------------------------------------------------------------------
+dnl gdk-pixbuf
+dnl ---------------------------------------------------------------------------
+AC_PATH_PROG(GDK_PIXBUF_CONFIG,gdk-pixbuf-config)
+if test -n "${GDK_PIXBUF_CONFIG}"; then
+	GDK_PIXBUF_CFLAGS=`$GDK_PIXBUF_CONFIG --cflags`
+	GDK_PIXBUF_LIBS=`$GDK_PIXBUF_CONFIG --libs`
+	AC_DEFINE(HAVE_GDK_PIXBUF)
+fi
+AC_SUBST(GDK_PIXBUF_CFLAGS)
+AC_SUBST(GDK_PIXBUF_LIBS)
 
 CFLAGS="$CFLAGS -Wall -Wchar-subscripts -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wpointer-arith -Werror"
 AC_SUBST(CFLAGS)
