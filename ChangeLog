@@ -1,3 +1,9 @@
+2002-04-30  Lutz Müller <lutz@users.sourceforge.net>
+
+	Patch by Arnaud Rouanet <rouanet@labri.fr>:
+
+	* libexif-gtk/gtk-exif-entry-version.c: Support version 2.2.
+
 2002-04-04  Hans Ulrich Niedermann <gp@n-dimensional.de>
 
 	* Makefile.am: dded .tar.bz2 packaging to "make dist"

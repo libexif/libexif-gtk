@@ -129,7 +129,8 @@ gtk_exif_entry_version_get_type (void)
 typedef enum _ExifVersion ExifVersion;
 enum _ExifVersion {
 	EXIF_VERSION_2_0,
-	EXIF_VERSION_2_1
+	EXIF_VERSION_2_1,
+	EXIF_VERSION_2_2
 };
 
 typedef enum _FlashPixVersion FlashPixVersion;
@@ -140,6 +141,7 @@ enum _FlashPixVersion {
 static GtkOptions exif_list[] = {
         {EXIF_VERSION_2_0, N_("Exif Format Version 2.0")},
         {EXIF_VERSION_2_1, N_("Exif Format Version 2.1")},
+	{EXIF_VERSION_2_2, N_("Exif Format Version 2.2")},
         {0, NULL}
 };
 
@@ -154,6 +156,7 @@ static struct {
 } exif_versions[] = {
 	{EXIF_VERSION_2_0, "0200"},
 	{EXIF_VERSION_2_1, "0210"},
+	{EXIF_VERSION_2_2, "0220"},
 	{0, NULL}
 };
 
