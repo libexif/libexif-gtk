@@ -24,7 +24,8 @@ libexif_gtkinclude_HEADERS =		\
 	gtk-exif-entry-rational.h	\
 	gtk-exif-entry-resolution.h	\
 	gtk-exif-entry-user-comment.h	\
-	gtk-exif-entry-version.h
+	gtk-exif-entry-version.h	\
+	gtk-exif-tag-menu.h
 
 libexif_gtk_la_SOURCES =			\
 	gtk-exif-browser.c			\
@@ -42,6 +43,7 @@ libexif_gtk_la_SOURCES =			\
 	gtk-exif-entry-resolution.c		\
 	gtk-exif-entry-user-comment.c		\
 	gtk-exif-entry-version.c		\
+	gtk-exif-tag-menu.c			\
 	gtk-exif-util.h
 libexif_gtk_la_LDFLAGS = -version-info @LIBEXIF_GTK_VERSION_INFO@
 libexif_gtk_la_LIBADD =						\
@@ -51,4 +53,3 @@ libexif_gtk_la_LIBADD =						\
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libexif-gtk.pc
 EXTRA_DIST = libexif-gtk.pc.in
-
