@@ -143,7 +143,7 @@ gtk_exif_browser_init (GTypeInstance *instance, gpointer g_class)
 	gtk_object_sink (GTK_OBJECT (browser->priv->tooltips));
 
 	/* Placeholder */
-	browser->priv->empty = gtk_label_new (g_locale_to_utf8 (_("Nothing selected."), -1, NULL, NULL, NULL));
+	browser->priv->empty = gtk_label_new (_("Nothing selected."));
 	gtk_widget_show (browser->priv->empty);
 	g_object_ref (G_OBJECT (browser->priv->empty));
 }
@@ -157,18 +157,19 @@ gtk_exif_browser_get_content_list (GtkExifBrowser *b, ExifEntry *entry)
 	GtkWidget *swin, *viewport;
 	GtkExifContentList *list = NULL;
 
+	g_return_val_if_fail (GTK_EXIF_IS_BROWSER (b), NULL);
+	g_return_val_if_fail (entry != NULL, NULL);
+
 	n = g_list_length (b->priv->notebook->children);
 	for (i = 0; i < n; i++) {
 		swin = gtk_notebook_get_nth_page (b->priv->notebook, i);
+		if (!GTK_IS_SCROLLED_WINDOW (swin)) continue;
 		viewport = GTK_BIN (swin)->child;
 		list = GTK_EXIF_CONTENT_LIST (GTK_BIN (viewport)->child);
 		if (list->content == entry->parent)
 			break;
 	}
-	if (i == n)
-		return NULL;
-
-	return (list);
+	return (i == n) ? NULL : list;
 }
 
 static void
@@ -177,6 +178,8 @@ gtk_exif_browser_set_widget (GtkExifBrowser *browser, GtkWidget *w)
 	if (browser->priv->current)
 		gtk_container_remove (GTK_CONTAINER (browser->priv->info),
 				      browser->priv->current);
+	if (!w) return;
+
 	gtk_box_pack_start (GTK_BOX (browser->priv->info), w, TRUE, FALSE, 0);
 	browser->priv->current = w;
 }
@@ -210,6 +213,23 @@ on_entry_added (GtkExifEntry *entry, ExifEntry *e, GtkExifBrowser *b)
 static void
 on_entry_removed (GtkExifEntry *entry, ExifEntry *e, GtkExifBrowser *b)
 {
+	GtkExifContentList *list;
+
+	list = gtk_exif_browser_get_content_list (b, e);
+	if (!list) return;
+
+	switch (e->tag) {
+	case EXIF_TAG_RESOLUTION_UNIT:
+	case EXIF_TAG_X_RESOLUTION:
+	case EXIF_TAG_Y_RESOLUTION:
+		/* Do nothing. */
+		break;
+	default:
+		gtk_exif_browser_set_widget (b, b->priv->empty);
+		break;
+	}
+
+	gtk_exif_content_list_remove_entry (list, e);
 }
 
 static void
@@ -223,6 +243,11 @@ static void
 gtk_exif_browser_show_entry (GtkExifBrowser *browser, ExifEntry *entry)
 {
 	GtkWidget *w;
+
+	if (!entry) {
+		gtk_exif_browser_set_widget (browser, browser->priv->empty);
+		return;
+	}
 
 	switch (entry->tag) {
 	case EXIF_TAG_EXIF_VERSION:
@@ -368,7 +393,7 @@ gtk_exif_browser_show_thumbnail (GtkExifBrowser *b)
 	}
 
 	if (!b->priv->data->data) {
-		b->priv->thumb = gtk_label_new (g_locale_to_utf8 (_("No thumbnail available."), -1, NULL, NULL, NULL));
+		b->priv->thumb = gtk_label_new (_("No thumbnail available."));
 	} else {
 		GdkPixbufLoader *loader;
 		GtkWidget *image;
@@ -376,8 +401,8 @@ gtk_exif_browser_show_thumbnail (GtkExifBrowser *b)
 		loader = gdk_pixbuf_loader_new ();
 		if (!gdk_pixbuf_loader_write (loader,
 			b->priv->data->data, b->priv->data->size, NULL)) {
-			b->priv->thumb = gtk_label_new (g_locale_to_utf8 (_("Could not parse "
-							"thumbnail data."), -1, NULL, NULL, NULL));
+			b->priv->thumb = gtk_label_new (_("Could not parse "
+							"thumbnail data."));
 		} else {
 			gdk_pixbuf_loader_close (loader, NULL);
 			image = gtk_image_new_from_pixbuf (
@@ -391,7 +416,7 @@ gtk_exif_browser_show_thumbnail (GtkExifBrowser *b)
 				GTK_SCROLLED_WINDOW (b->priv->thumb), image);
 		}
 		g_object_unref (G_OBJECT (loader));
-		tip = g_strdup_printf (g_locale_to_utf8 (_("Size: %i byte(s)."), -1, NULL, NULL, NULL),
+		tip = g_strdup_printf (_("Size: %i byte(s)."), 
 				       b->priv->data->size);
 		gtk_tooltips_set_tip (b->priv->tooltips, b->priv->thumb,
 				      tip, NULL);
@@ -460,7 +485,7 @@ on_load_clicked (GtkButton *button, GtkExifBrowser *b)
 {
 	GtkWidget *fsel;
 
-	fsel = gtk_file_selection_new (g_locale_to_utf8 (_("Load..."), -1, NULL, NULL, NULL));
+	fsel = gtk_file_selection_new (_("Load..."));
 	gtk_widget_show (fsel);
 	g_signal_connect (GTK_OBJECT (fsel), "delete_event",
 			    G_CALLBACK (gtk_object_destroy), NULL);
@@ -500,7 +525,7 @@ on_save_clicked (GtkButton *button, GtkExifBrowser *b)
 {
 	GtkWidget *fsel;
 
-	fsel = gtk_file_selection_new (g_locale_to_utf8 (_("Save As..."), -1, NULL, NULL, NULL));
+	fsel = gtk_file_selection_new (_("Save As..."));
 	gtk_widget_show (fsel);
 	g_signal_connect (GTK_OBJECT (fsel), "delete_event",
 			    G_CALLBACK (gtk_object_destroy), NULL);
@@ -550,7 +575,7 @@ gtk_exif_browser_set_data (GtkExifBrowser *b, ExifData *data)
 	/* Create the thumbnail page */
 	vbox = gtk_vbox_new (FALSE, 5);
 	gtk_widget_show (vbox);
-	label = gtk_label_new (g_locale_to_utf8 (_("Thumbnail"), -1, NULL, NULL, NULL));
+	label = gtk_label_new (_("Thumbnail"));
 	gtk_widget_show (label);
 	gtk_notebook_append_page (b->priv->notebook, vbox, label);
 
@@ -567,17 +592,17 @@ gtk_exif_browser_set_data (GtkExifBrowser *b, ExifData *data)
 	gtk_container_set_border_width (GTK_CONTAINER (bbox), 5);
 	gtk_box_set_spacing (GTK_BOX (bbox), 5);
 	gtk_box_pack_end (GTK_BOX (vbox), bbox, FALSE, FALSE, 0);
-	button = gtk_button_new_with_label (g_locale_to_utf8 (_("Load"), -1, NULL, NULL, NULL));
+	button = gtk_button_new_with_label (_("Load"));
 	gtk_widget_show (button);
 	gtk_container_add (GTK_CONTAINER (bbox), button);
 	g_signal_connect (GTK_OBJECT (button), "clicked",
 			    G_CALLBACK (on_load_clicked), b);
-	button = gtk_button_new_with_label (g_locale_to_utf8 (_("Save"), -1, NULL, NULL, NULL));
+	button = gtk_button_new_with_label (_("Save"));
 	gtk_widget_show (button);
 	gtk_container_add (GTK_CONTAINER (bbox), button);
 	g_signal_connect (GTK_OBJECT (button), "clicked",
 			    G_CALLBACK (on_save_clicked), b);
-	button = gtk_button_new_with_label (g_locale_to_utf8 (_("Delete"), -1, NULL, NULL, NULL));
+	button = gtk_button_new_with_label (_("Delete"));
 	gtk_widget_show (button);
 	gtk_container_add (GTK_CONTAINER (bbox), button);
 	g_signal_connect (GTK_OBJECT (button), "clicked",

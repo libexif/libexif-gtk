@@ -363,31 +363,58 @@ gtk_exif_content_list_new (void)
 }
 
 static gboolean
-update_foreach_func (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
-		     void *data)
+gtk_exif_content_list_get_iter (GtkExifContentList *list, ExifEntry *e,
+				GtkTreeIter *iter)
 {
-	ExifEntry *e = data;
+	GtkTreeModel *model;
 	GValue value = {0};
 
+	g_return_val_if_fail (GTK_EXIF_IS_CONTENT_LIST (list), FALSE);
+	g_return_val_if_fail (e != NULL, FALSE);
+	g_return_val_if_fail (iter != NULL, FALSE);
+
+	model = GTK_TREE_MODEL (list->priv->store);
+	if (!gtk_tree_model_get_iter_first (model, iter)) return FALSE;
 	gtk_tree_model_get_value (model, iter, ENTRY_COLUMN, &value);
 	if (g_value_peek_pointer (&value) == e) {
 		g_value_unset (&value);
-		gtk_list_store_set (GTK_LIST_STORE (model), iter,
-				VALUE_COLUMN, exif_entry_get_value (e), -1);
-		return (TRUE);
+		return TRUE;
 	}
 	g_value_unset (&value);
-	return (FALSE);
+	while (gtk_tree_model_iter_next (model, iter)) {
+		gtk_tree_model_get_value (model, iter, ENTRY_COLUMN, &value);
+		if (g_value_peek_pointer (&value) == e) {
+			g_value_unset (&value);
+			return TRUE;
+		}
+		g_value_unset (&value);
+	}
+	return FALSE;
 }
 
 void
-gtk_exif_content_list_update_entry (GtkExifContentList *list, ExifEntry *entry)
+gtk_exif_content_list_update_entry (GtkExifContentList *list, ExifEntry *e)
 {
+	GtkTreeIter iter;
+
+	g_return_if_fail (GTK_EXIF_IS_CONTENT_LIST (list));
+	g_return_if_fail (e != NULL);
+
+	if (!gtk_exif_content_list_get_iter (list, e, &iter)) return;
+	gtk_list_store_set (list->priv->store, &iter,
+			    VALUE_COLUMN, exif_entry_get_value (e), -1);
+}
+
+void
+gtk_exif_content_list_remove_entry (GtkExifContentList *list, ExifEntry *entry)
+{
+	GtkTreeIter iter;
+
 	g_return_if_fail (GTK_EXIF_IS_CONTENT_LIST (list));
 	g_return_if_fail (entry != NULL);
 
-	gtk_tree_model_foreach (GTK_TREE_MODEL (list->priv->store),
-				update_foreach_func, entry);
+	if (!gtk_exif_content_list_get_iter (list, entry, &iter)) return;
+	gtk_list_store_remove (list->priv->store, &iter);
 }
 
 void

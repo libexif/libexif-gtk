@@ -60,6 +60,8 @@ void       gtk_exif_content_list_add_entry    (GtkExifContentList *,
 					       ExifEntry *entry);
 void       gtk_exif_content_list_update_entry (GtkExifContentList *,
 					       ExifEntry *);
+void       gtk_exif_content_list_remove_entry (GtkExifContentList *,
+					       ExifEntry *);
 void       gtk_exif_content_list_set_content  (GtkExifContentList *,
 					       ExifContent *);
 

@@ -1,5 +1,9 @@
 2003-08-01  Lutz Mueller <lutz@users.sourceforge.net>
 
+	* libexif-gtk/gtk-exif-browser.c: Implement removal of entries.
+
+2003-08-01  Lutz Mueller <lutz@users.sourceforge.net>
+
 	* libexif-gtk/gtk-exif-entry-resolution.c: An entry must have a 
 	  parent before initialization.
 

@@ -307,10 +307,10 @@ on_cw_toggled (GtkToggleButton *toggle, GtkExifEntryResolution *entry)
 		exif_entry_unref (e);
 		gtk_exif_entry_added (GTK_EXIF_ENTRY (entry), e);
 	} else if (!toggle->active && e) {
-		exif_entry_ref (e);
-		exif_content_remove_entry (entry->priv->content, e);
+		g_object_ref (entry);
 		gtk_exif_entry_removed (GTK_EXIF_ENTRY (entry), e);
-		exif_entry_unref (e);
+		exif_content_remove_entry (entry->priv->content, e);
+		g_object_unref (entry);
 	}
 }
 
@@ -331,10 +331,10 @@ on_ch_toggled (GtkToggleButton *toggle, GtkExifEntryResolution *entry)
 		exif_entry_unref (e);
 		gtk_exif_entry_added (GTK_EXIF_ENTRY (entry), e);
         } else if (!toggle->active && e) {
-		exif_entry_ref (e);
-		exif_content_remove_entry (entry->priv->content, e);
+		g_object_ref (entry);
 		gtk_exif_entry_removed (GTK_EXIF_ENTRY (entry), e);
-		exif_entry_unref (e);
+		exif_content_remove_entry (entry->priv->content, e);
+		g_object_unref (entry);
         }
 }
 
@@ -355,10 +355,10 @@ on_unit_toggled (GtkToggleButton *toggle, GtkExifEntryResolution *entry)
 		exif_entry_unref (e);
 		gtk_exif_entry_added (GTK_EXIF_ENTRY (entry), e);
 	} else if (!toggle->active && e) {
-		exif_entry_ref (e);
-		exif_content_remove_entry (entry->priv->content, e);
+		g_object_ref (entry);
 		gtk_exif_entry_removed (GTK_EXIF_ENTRY (entry), e);
-		exif_entry_unref (e);
+		exif_content_remove_entry (entry->priv->content, e);
+		g_object_unref (entry);
 	}
 }
 
