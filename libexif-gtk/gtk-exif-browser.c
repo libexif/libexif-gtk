@@ -401,7 +401,6 @@ gtk_exif_browser_show_thumbnail (GtkExifBrowser *b)
 			pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
 			gdk_pixbuf_render_pixmap_and_mask (pixbuf, &pixmap, 
 							   &bitmap, 127);
-			gdk_pixbuf_unref (pixbuf);
 			b->priv->thumb = gtk_pixmap_new (pixmap, bitmap);
 			if (pixmap)
 				gdk_pixmap_unref (pixmap);
