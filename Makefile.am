@@ -1,4 +1,4 @@
-SUBDIRS = gtk-extensions libexif-gtk tests po intl
+SUBDIRS = gtk-extensions libexif-gtk tests po
 
 
 ########################################################################
