@@ -34,11 +34,11 @@ libexif_gtk_la_SOURCES =			\
 	gtk-exif-entry-version.c		\
 	gtk-exif-util.h
 libexif_gtk_la_CFLAGS =	\
-	$(AM_CFLAGS) $(CFLAGS)				\
+	$(AM_CPPFLAGS) $(CPPFLAGS)			\
 	-I$(top_srcdir)					\
 	-I$(top_srcdir)/gtk-extensions			\
 	$(LIBEXIF_CFLAGS)				\
-	$(GTK_CFLAGS)				\
+	$(GTK_CFLAGS)					\
 	-DG_LOG_DOMAIN=\"libexif\"			\
 	-DGTK_DISABLE_DEPRECATED
 libexif_gtk_la_LDFLAGS = -version-info @LIBEXIF_GTK_VERSION_INFO@
