@@ -1,7 +1,7 @@
 INCLUDES =						\
 	-I$(top_srcdir)					\
 	-I$(top_srcdir)/gtk-extensions			\
-	$(GTK_CFLAGS)					\
+	$(LIBEXIF_GTK_CFLAGS)				\
 	-DG_LOG_DOMAIN=\"libexif\"
 
 noinst_LTLIBRARIES = libexif-gtk.la
@@ -39,11 +39,10 @@ libexif_gtk_la_SOURCES =			\
 	gtk-exif-entry-resolution.c		\
 	gtk-exif-entry-version.c		\
 	gtk-exif-tag-menu.c gtk-exif-tag-menu.h
-libexif_gtk_la_LDFLAGS = -version-info @LIBEXIF_VERSION_INFO@
-libexif_gtk_la_LIBADD =				\
-	gtk-extensions/libgtk-extensions.la	\
-	$(top_builddir)/libexif/libexif.la	\
-	$(GTK_LIBS)
+libexif_gtk_la_LDFLAGS = -version-info @LIBEXIF_GTK_VERSION_INFO@
+libexif_gtk_la_LIBADD =						\
+	$(top_builddir)/gtk-extensions/libgtk-extensions.la	\
+	$(LIBEXIF_GTK_LIBS)
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libexif-gtk.pc

@@ -21,6 +21,8 @@
 #include <config.h>
 #include "gtk-exif-entry-copyright.h"
 
+#include <string.h>
+
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtkradiobutton.h>
 #include <gtk/gtkvbox.h>
@@ -31,9 +33,24 @@
 #include <gtk/gtktable.h>
 #include <gtk/gtkhbox.h>
 
-#include <libexif/exif-i18n.h>
-
-#include <string.h>
+#ifdef ENABLE_NLS
+#  include <libintl.h>
+#  undef _
+#  define _(String) dgettext (PACKAGE, String)
+#  ifdef gettext_noop
+#    define N_(String) gettext_noop (String)
+#  else
+#    define N_(String) (String)
+#  endif
+#else
+#  define textdomain(String) (String)
+#  define gettext(String) (String)
+#  define dgettext(Domain,Message) (Message)
+#  define dcgettext(Domain,Message,Type) (Message)
+#  define bindtextdomain(Domain,Directory) (Domain)
+#  define _(String) (String)
+#  define N_(String) (String)
+#endif
 
 struct _GtkExifEntryCopyrightPrivate {
 	ExifEntry *entry;
@@ -43,12 +60,6 @@ struct _GtkExifEntryCopyrightPrivate {
 
 #define PARENT_TYPE GTK_EXIF_TYPE_ENTRY
 static GtkExifEntryClass *parent_class;
-
-enum {
-	LAST_SIGNAL
-};
-
-static guint signals[LAST_SIGNAL] = {0};
 
 static void
 gtk_exif_entry_copyright_destroy (GtkObject *object)
@@ -81,8 +92,6 @@ gtk_exif_entry_copyright_class_init (GtkExifEntryCopyrightClass *klass)
 	object_class = GTK_OBJECT_CLASS (klass);
 	object_class->destroy  = gtk_exif_entry_copyright_destroy;
 	object_class->finalize = gtk_exif_entry_copyright_finalize;
-
-	gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
 
 	parent_class = gtk_type_class (PARENT_TYPE);
 }

@@ -40,12 +40,6 @@ struct _GtkExifEntryAsciiPrivate {
 #define PARENT_TYPE GTK_EXIF_TYPE_ENTRY
 static GtkExifEntryClass *parent_class;
 
-enum {
-	LAST_SIGNAL
-};
-
-static guint signals[LAST_SIGNAL] = {0};
-
 static void
 gtk_exif_entry_ascii_destroy (GtkObject *object)
 {
@@ -77,8 +71,6 @@ gtk_exif_entry_ascii_class_init (GtkExifEntryAsciiClass *klass)
 	object_class = GTK_OBJECT_CLASS (klass);
 	object_class->destroy  = gtk_exif_entry_ascii_destroy;
 	object_class->finalize = gtk_exif_entry_ascii_finalize;
-
-	gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
 
 	parent_class = gtk_type_class (PARENT_TYPE);
 }

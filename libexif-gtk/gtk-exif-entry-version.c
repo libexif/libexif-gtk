@@ -33,7 +33,24 @@
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkhbox.h>
 
-#include <libexif/exif-i18n.h>
+#ifdef ENABLE_NLS
+#  include <libintl.h>
+#  undef _
+#  define _(String) dgettext (PACKAGE, String)
+#  ifdef gettext_noop
+#    define N_(String) gettext_noop (String)
+#  else
+#    define N_(String) (String)
+#  endif
+#else
+#  define textdomain(String) (String)
+#  define gettext(String) (String)
+#  define dgettext(Domain,Message) (Message)
+#  define dcgettext(Domain,Message,Type) (Message)
+#  define bindtextdomain(Domain,Directory) (Domain)
+#  define _(String) (String)
+#  define N_(String) (String)
+#endif
 
 #include "gtk-extensions/gtk-option-menu-option.h"
 #include "gtk-extensions/gtk-options.h"
@@ -48,12 +65,6 @@ struct _GtkExifEntryVersionPrivate {
 
 #define PARENT_TYPE GTK_EXIF_TYPE_ENTRY
 static GtkExifEntryClass *parent_class;
-
-enum {
-	LAST_SIGNAL
-};
-
-static guint signals[LAST_SIGNAL] = {0};
 
 static void
 gtk_exif_entry_version_destroy (GtkObject *object)
@@ -86,8 +97,6 @@ gtk_exif_entry_version_class_init (GtkExifEntryVersionClass *klass)
 	object_class = GTK_OBJECT_CLASS (klass);
 	object_class->destroy  = gtk_exif_entry_version_destroy;
 	object_class->finalize = gtk_exif_entry_version_finalize;
-
-	gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
 
 	parent_class = gtk_type_class (PARENT_TYPE);
 }

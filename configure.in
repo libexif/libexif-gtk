@@ -3,8 +3,8 @@ AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE(libexif, 0.1)
 AM_MAINTAINER_MODE
 
-LIBEXIF_VERSION_INFO=0:1:0
-AC_SUBST(LIBEXIF_VERSION_INFO)
+LIBEXIF_GTK_VERSION_INFO=0:1:0
+AC_SUBST(LIBEXIF_GTK_VERSION_INFO)
 
 AM_PROG_LIBTOOL
 
@@ -20,6 +20,9 @@ dnl ---------------------------------------------------------------------------
 PKG_CHECK_MODULES(LIBEXIF_GTK, gtk libexif)
 AC_SUBST(LIBEXIF_GTK_LIBS)
 AC_SUBST(LIBEXIF_GTK_CFLAGS)
+PKG_CHECK_MODULES(GTK, gtk)
+AC_SUBST(GTK_LIBS)
+AC_SUBST(GTK_CFLAGS)
 
 CFLAGS="$CFLAGS -Wall -Wchar-subscripts -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wpointer-arith -Werror"
 AC_SUBST(CFLAGS)

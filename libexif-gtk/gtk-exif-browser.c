@@ -29,8 +29,6 @@
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkscrolledwindow.h>
 
-#include <libexif/exif-i18n.h>
-
 #include "gtk-exif-content-list.h"
 #include "gtk-exif-entry-ascii.h"
 #include "gtk-exif-entry-copyright.h"
@@ -44,6 +42,25 @@
 #include "gtk-exif-entry-resolution.h"
 #include "gtk-exif-entry-version.h"
 
+#ifdef ENABLE_NLS
+#  include <libintl.h>
+#  undef _
+#  define _(String) dgettext (PACKAGE, String)
+#  ifdef gettext_noop
+#    define N_(String) gettext_noop (String)
+#  else
+#    define N_(String) (String)
+#  endif
+#else
+#  define textdomain(String) (String)
+#  define gettext(String) (String)
+#  define dgettext(Domain,Message) (Message)
+#  define dcgettext(Domain,Message,Type) (Message)
+#  define bindtextdomain(Domain,Directory) (Domain)
+#  define _(String) (String)
+#  define N_(String) (String)
+#endif
+
 static void gtk_exif_browser_show_entry (GtkExifBrowser *, ExifEntry *);
 
 struct _GtkExifBrowserPrivate {
@@ -56,12 +73,6 @@ struct _GtkExifBrowserPrivate {
 
 #define PARENT_TYPE gtk_hpaned_get_type()
 static GtkHPanedClass *parent_class;
-
-enum {
-	LAST_SIGNAL
-};
-
-static guint signals[LAST_SIGNAL] = {0};
 
 static void
 gtk_exif_browser_destroy (GtkObject *object)
@@ -99,8 +110,6 @@ gtk_exif_browser_class_init (GtkExifBrowserClass *klass)
 	object_class = GTK_OBJECT_CLASS (klass);
 	object_class->destroy  = gtk_exif_browser_destroy;
 	object_class->finalize = gtk_exif_browser_finalize;
-
-	gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
 
 	parent_class = gtk_type_class (PARENT_TYPE);
 }
