@@ -1,0 +1,31 @@
+AC_INIT(libexif-gtk/gtk-exif-browser.c)
+AM_CONFIG_HEADER(config.h)
+AM_INIT_AUTOMAKE(libexif, 0.1)
+AM_MAINTAINER_MODE
+
+LIBEXIF_VERSION_INFO=0:1:0
+AC_SUBST(LIBEXIF_VERSION_INFO)
+
+AM_PROG_LIBTOOL
+
+dnl ---------------------------------------------------------------------------
+dnl i18n support
+dnl ---------------------------------------------------------------------------
+dnl ALL_LINGUAS=""
+dnl AM_GNU_GETTEXT
+
+dnl ---------------------------------------------------------------------------
+dnl libraries needed
+dnl ---------------------------------------------------------------------------
+PKG_CHECK_MODULES(LIBEXIF_GTK, gtk libexif)
+AC_SUBST(LIBEXIF_GTK_LIBS)
+AC_SUBST(LIBEXIF_GTK_CFLAGS)
+
+CFLAGS="$CFLAGS -Wall -Wchar-subscripts -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wpointer-arith -Werror"
+AC_SUBST(CFLAGS)
+
+AC_OUTPUT([
+  Makefile
+  libexif-gtk/Makefile
+  gtk-extensions/Makefile
+])
