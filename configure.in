@@ -3,8 +3,10 @@ AC_INIT([EXIF GTK widget library],[0.3.6],[libexif-devel@lists.sourceforge.net],
 AC_CONFIG_SRCDIR([libexif-gtk/gtk-exif-browser.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([gnu 1.8 dist-bzip2])
-GP_CONFIG_MSG([Source code location],[${srcdir}])
 
+GP_CHECK_SHELL_ENVIRONMENT
+
+GP_CONFIG_MSG([Source code location],[${srcdir}])
 
 AC_PROG_CC
 AM_PROG_CC_STDC
@@ -58,9 +60,7 @@ dnl AM_CFLAGS="$AM_CFLAGS -DLOCALEDIR=\\\"${localedir}\\\""
 # ---------------------------------------------------------------------------
 # libraries needed
 # ---------------------------------------------------------------------------
-GP_CHECK_LIBEXIF
-GP_CONFIG_MSG([libexif library],[${LIBEXIF_LIBS}])
-GP_CONFIG_MSG([libexif cflags],[${LIBEXIF_CFLAGS}])
+GP_CHECK_LIBRARY([LIBEXIF],[libexif])
 
 PKG_CHECK_MODULES([GTK], [gtk+-2.0])
 AC_SUBST([GTK_LIBS])
