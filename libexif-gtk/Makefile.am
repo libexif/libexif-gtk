@@ -1,5 +1,6 @@
 INCLUDES =						\
 	-I$(top_srcdir)					\
+	-I$(top_srcdir)/intl				\
 	-I$(top_srcdir)/gtk-extensions			\
 	$(LIBEXIF_GTK_CFLAGS)				\
 	-DG_LOG_DOMAIN=\"libexif\"			\
