@@ -1,7 +1,7 @@
 AC_PREREQ(2.50)
 AC_INIT(libexif-gtk/gtk-exif-browser.c)
 AM_CONFIG_HEADER(config.h)
-AM_INIT_AUTOMAKE(libexif-gtk, 0.3.0)
+AM_INIT_AUTOMAKE(libexif-gtk, 0.3.1)
 AM_MAINTAINER_MODE
 
 AC_ISC_POSIX
@@ -21,7 +21,7 @@ dnl                      removals.
 dnl ---------------------------------------------------------------------------
 LIBEXIF_GTK_AGE=0
 LIBEXIF_GTK_REVISION=0
-LIBEXIF_GTK_CURRENT=3
+LIBEXIF_GTK_CURRENT=4
 AC_SUBST(LIBEXIF_GTK_AGE)
 AC_SUBST(LIBEXIF_GTK_REVISION)
 AC_SUBST(LIBEXIF_GTK_CURRENT)
