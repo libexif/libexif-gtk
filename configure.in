@@ -39,7 +39,7 @@ AM_GNU_GETTEXT
 dnl ---------------------------------------------------------------------------
 dnl libraries needed
 dnl ---------------------------------------------------------------------------
-PKG_CHECK_MODULES(LIBEXIF_GTK, gtk+-2.0 libexif >= 0.5.4)
+PKG_CHECK_MODULES(LIBEXIF_GTK, gtk+-2.0 libexif >= 0.5.9)
 AC_SUBST(LIBEXIF_GTK_LIBS)
 AC_SUBST(LIBEXIF_GTK_CFLAGS)
 PKG_CHECK_MODULES(GTK, gtk+-2.0)
@@ -49,7 +49,7 @@ AC_SUBST(GTK_CFLAGS)
 CFLAGS="$CFLAGS -Wall -Wchar-subscripts -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wpointer-arith"
 AC_SUBST(CFLAGS)
 
-AC_OUTPUT([
+AC_OUTPUT([ intl/Makefile po/Makefile.in m4/Makefile 
   Makefile
   libexif-gtk/Makefile
   libexif-gtk/libexif-gtk.pc

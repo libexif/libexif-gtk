@@ -220,9 +220,10 @@ on_remove_activate (GtkMenuItem *item, GtkExifContentList *list)
 }
 
 static void
-on_tag_selected (GtkExifTagMenu *menu, ExifTag tag, GtkExifContentList *list)
+on_tag_selected (GtkMenuOption *menu, guint option, GtkExifContentList *list)
 {
 	ExifEntry *entry;
+	ExifTag tag = option;
 
 	entry = exif_entry_new ();
 	exif_content_add_entry (list->content, entry);
@@ -231,11 +232,17 @@ on_tag_selected (GtkExifTagMenu *menu, ExifTag tag, GtkExifContentList *list)
 	exif_entry_unref (entry);
 }
 
+#define LIST_SIZE 1024
+
 static gint
 on_button_press_event (GtkWidget *widget, GdkEventButton *event, 
 		       GtkExifContentList *list)
 {
-	GtkWidget *menu, *item, *smenu;
+	GtkWidget *menu, *item, *smenu, *ssmenu;
+	GtkOptions tags[LIST_SIZE];
+	guint t, n, i, j;
+	const gchar *name;
+	gchar *s;
 
 	g_return_val_if_fail (GTK_EXIF_IS_CONTENT_LIST (list), FALSE);
 
@@ -248,16 +255,83 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event,
 		gtk_object_sink (GTK_OBJECT (menu));
 
 		/* Add */
-		item = gtk_menu_item_new_with_label ("Add");
+		item = gtk_menu_item_new_with_label (_("Add"));
 		gtk_widget_show (item);
 		gtk_container_add (GTK_CONTAINER (menu), item);
-		smenu = gtk_exif_tag_menu_new ();
+		smenu = gtk_menu_new ();
 		gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), smenu);
-		g_signal_connect (GTK_OBJECT (smenu), "tag_selected",
-				GTK_SIGNAL_FUNC (on_tag_selected), list);
+
+		/* Create a sorted list of tags. */
+		t = n = 0;
+		memset (tags, 0, sizeof (GtkOptions) * LIST_SIZE);
+		while ((t < 0xffff) && (n < LIST_SIZE - 2)) {
+			name = exif_tag_get_name (t);
+			if (name) {
+				tags[n].option = t;
+				tags[n].name = name;
+				n++;
+			}
+			t++;
+		}
+		gtk_options_sort (tags);
+		g_assert (n > 1);
+
+		/* Split the list into 3 parts. */
+		for (i = n / 3; tags[i].name && tags[i + 1].name; i++)
+			if (*tags[i].name != *tags[i + 1].name)
+				break;
+		i++;
+		memmove (tags + i + 1, tags + i, n - i);
+		memset (tags + i, 0, sizeof (GtkOptions));
+		for (j = MAX (i, 2 * n / 3) + 1;
+		     tags[j].name && tags[j + 1].name; j++)
+			if (*tags[j].name != *tags[j + 1].name)
+				break;
+		j++;
+		memmove (tags + j + 1, tags + j, n - j);
+		memset (tags + j, 0, sizeof (GtkOptions));
+		
+		/* Create the first part of the list */
+		s = g_strdup_printf ("%c - %c", *tags[0].name,
+				     *tags[i - 1].name);
+		item = gtk_menu_item_new_with_label (s);
+		g_free (s);
+		gtk_widget_show (item);
+		gtk_container_add (GTK_CONTAINER (smenu), item);
+		ssmenu = gtk_menu_option_new (tags);
+		gtk_widget_show (ssmenu);
+		gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), ssmenu);
+		g_signal_connect (GTK_OBJECT (ssmenu), "option_selected",
+				  G_CALLBACK (on_tag_selected), list);
+
+		/* Create the second part of the list */
+		s = g_strdup_printf ("%c - %c",
+			*tags[i + 1].name, *tags[j - 1].name);
+		item = gtk_menu_item_new_with_label (s);
+		g_free (s);
+		gtk_widget_show (item);
+		gtk_container_add (GTK_CONTAINER (smenu), item);
+		ssmenu = gtk_menu_option_new (tags + i + 1);
+		gtk_widget_show (ssmenu);
+		gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), ssmenu);
+		g_signal_connect (GTK_OBJECT (ssmenu), "option_selected",
+				  G_CALLBACK (on_tag_selected), list);
+
+		/* Create the third part of the list */
+		s = g_strdup_printf ("%c - %c",
+			*tags[j + 1].name, *tags[n - 1].name);
+		item = gtk_menu_item_new_with_label (s);
+		g_free (s);
+		gtk_widget_show (item);
+		gtk_container_add (GTK_CONTAINER (smenu), item);
+		ssmenu = gtk_menu_option_new (tags + j + 1);
+		gtk_widget_show (ssmenu);
+		gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), ssmenu);
+		g_signal_connect (GTK_OBJECT (ssmenu), "option_selected",
+				  G_CALLBACK (on_tag_selected), list);
 
 		/* Remove */
-		item = gtk_menu_item_new_with_label ("Remove");
+		item = gtk_menu_item_new_with_label (_("Remove"));
 		gtk_widget_show (item);
 		gtk_container_add (GTK_CONTAINER (menu), item);
 		g_signal_connect (GTK_OBJECT (item), "activate",

@@ -50,6 +50,7 @@
 #include "gtk-exif-entry-option.h"
 #include "gtk-exif-entry-rational.h"
 #include "gtk-exif-entry-resolution.h"
+#include "gtk-exif-entry-user-comment.h"
 #include "gtk-exif-entry-version.h"
 #include "gtk-exif-util.h"
 
@@ -227,6 +228,9 @@ gtk_exif_browser_show_entry (GtkExifBrowser *browser, ExifEntry *entry)
 	case EXIF_TAG_EXIF_VERSION:
 	case EXIF_TAG_FLASH_PIX_VERSION:
 		w = gtk_exif_entry_version_new (entry);
+		break;
+	case EXIF_TAG_USER_COMMENT:
+		w = gtk_exif_entry_user_comment_new (entry);
 		break;
 	case EXIF_TAG_COPYRIGHT:
 		w = gtk_exif_entry_copyright_new (entry);
