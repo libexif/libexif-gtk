@@ -402,17 +402,18 @@ gtk_exif_browser_show_thumbnail (GtkExifBrowser *b)
 			gdk_pixbuf_render_pixmap_and_mask (
 				gdk_pixbuf_loader_get_pixbuf (loader),
 				&pixmap, &bitmap, 127);
-			b->priv->thumb = gtk_scrolled_window_new (NULL, NULL);
-			gtk_scrolled_window_set_policy (
-				GTK_SCROLLED_WINDOW (b->priv->thumb),
-				GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 			image = gtk_pixmap_new (pixmap, bitmap);
-			gtk_scrolled_window_add_with_viewport (
-				GTK_SCROLLED_WINDOW (b->priv->thumb), image);
+			gtk_widget_show (image);
 			if (pixmap)
 				gdk_pixmap_unref (pixmap);
 			if (bitmap)
 				gdk_bitmap_unref (bitmap);
+			b->priv->thumb = gtk_scrolled_window_new (NULL, NULL);
+			gtk_scrolled_window_set_policy (
+				GTK_SCROLLED_WINDOW (b->priv->thumb),
+				GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+			gtk_scrolled_window_add_with_viewport (
+				GTK_SCROLLED_WINDOW (b->priv->thumb), image);
 		}
 		gtk_object_unref (GTK_OBJECT (loader));
 #else
