@@ -1,5 +1,9 @@
 2004-10-17  Lutz Mueller <lutz@users.sourceforge.net>
 
+	* configure.in: We have been working on 0.3.4 all the time.
+
+2004-10-17  Lutz Mueller <lutz@users.sourceforge.net>
+
 	* libexif-gtk/gtk-exif-entry-version.c and others: Adapt to new
 	  gtk API
 

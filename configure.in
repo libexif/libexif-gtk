@@ -1,6 +1,6 @@
 AC_PREREQ(2.50)
 AC_INIT(libexif-gtk/gtk-exif-browser.c)
-AM_INIT_AUTOMAKE(libexif-gtk, 0.3.3)
+AM_INIT_AUTOMAKE(libexif-gtk, 0.3.4)
 AM_MAINTAINER_MODE
 AC_CONFIG_HEADERS(config.h)
 
