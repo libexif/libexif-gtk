@@ -16,7 +16,6 @@ libexif_gtkinclude_HEADERS =		\
 	gtk-exif-entry-ascii.h		\
 	gtk-exif-entry-copyright.h	\
 	gtk-exif-entry-date.h		\
-	gtk-exif-entry-exposure.h	\
 	gtk-exif-entry-generic.h	\
 	gtk-exif-entry-flash.h		\
 	gtk-exif-entry-number.h		\
@@ -24,8 +23,7 @@ libexif_gtkinclude_HEADERS =		\
 	gtk-exif-entry-rational.h	\
 	gtk-exif-entry-resolution.h	\
 	gtk-exif-entry-user-comment.h	\
-	gtk-exif-entry-version.h	\
-	gtk-exif-tag-menu.h
+	gtk-exif-entry-version.h
 
 libexif_gtk_la_SOURCES =			\
 	gtk-exif-browser.c			\
@@ -35,7 +33,6 @@ libexif_gtk_la_SOURCES =			\
 	gtk-exif-entry-copyright.c		\
 	gtk-exif-entry-date.c			\
 	gtk-exif-entry-generic.c		\
-	gtk-exif-entry-exposure.c		\
 	gtk-exif-entry-flash.c			\
 	gtk-exif-entry-number.c			\
 	gtk-exif-entry-option.c			\
@@ -43,7 +40,6 @@ libexif_gtk_la_SOURCES =			\
 	gtk-exif-entry-resolution.c		\
 	gtk-exif-entry-user-comment.c		\
 	gtk-exif-entry-version.c		\
-	gtk-exif-tag-menu.c			\
 	gtk-exif-util.h
 libexif_gtk_la_LDFLAGS = -version-info @LIBEXIF_GTK_VERSION_INFO@
 libexif_gtk_la_LIBADD =						\

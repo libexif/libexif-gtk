@@ -43,7 +43,6 @@
 #include "gtk-exif-entry-ascii.h"
 #include "gtk-exif-entry-copyright.h"
 #include "gtk-exif-entry-date.h"
-#include "gtk-exif-entry-exposure.h"
 #include "gtk-exif-entry-flash.h"
 #include "gtk-exif-entry-generic.h"
 #include "gtk-exif-entry-number.h"
@@ -264,8 +263,6 @@ gtk_exif_browser_show_entry (GtkExifBrowser *browser, ExifEntry *entry)
 		w = gtk_exif_entry_flash_new (entry);
 		break;
 	case EXIF_TAG_EXPOSURE_PROGRAM:
-		w = gtk_exif_entry_exposure_new (entry);
-		break;
 	case EXIF_TAG_SENSING_METHOD:
 	case EXIF_TAG_ORIENTATION:
 	case EXIF_TAG_METERING_MODE:

@@ -88,7 +88,7 @@ gtk_exif_entry_generic_new (ExifEntry *e)
 {
 	GtkExifEntryGeneric *entry;
 	GtkWidget *table, *label;
-	gchar *txt;
+	gchar *txt, s[1024];
 
 	g_return_val_if_fail (e != NULL, NULL);
 
@@ -136,7 +136,7 @@ gtk_exif_entry_generic_new (ExifEntry *e)
 	label = gtk_label_new ("Value:");
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4, 0, 0, 0, 0);
-	label = gtk_label_new (exif_entry_get_value (e));
+	label = gtk_label_new (exif_entry_get_value (e, s, sizeof (s)));
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 3, 4, 0, 0, 0, 0);
 

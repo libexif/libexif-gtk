@@ -21,7 +21,7 @@
 #ifndef __GTK_OPTIONS_H__ 
 #define __GTK_OPTIONS_H__
 
-#include <glib.h>
+#include <gtk/gtktreemodel.h>
 
 typedef struct _GtkOptions GtkOptions;
 struct _GtkOptions {
@@ -29,7 +29,17 @@ struct _GtkOptions {
 	const gchar *name;
 };
 
-void gtk_options_sort (GtkOptions *options);
+void          gtk_options_sort (GtkOptions *);
+
+enum {
+	GTK_OPTIONS_OPTION_COLUMN,
+	GTK_OPTIONS_NAME_COLUMN,
+	GTK_OPTIONS_N_COLUMNS
+};
+
+GtkTreeModel *gtk_tree_model_new_from_options     (GtkOptions *);
+gboolean      gtk_tree_model_get_iter_from_option (GtkTreeModel *, guint,
+						   GtkTreeIter *);
 
 #endif /* __GTK_OPTIONS_H__ */
 

@@ -29,7 +29,8 @@
 #include <gtk/gtkcellrenderertext.h>
 #include <gtk/gtktreeselection.h>
 
-#include "gtk-exif-tag-menu.h"
+#include <gtk-extensions/gtk-menu-option.h>
+
 #include "gtk-exif-util.h"
 
 #ifdef ENABLE_NLS
@@ -396,13 +397,15 @@ void
 gtk_exif_content_list_update_entry (GtkExifContentList *list, ExifEntry *e)
 {
 	GtkTreeIter iter;
+	gchar s[1024];
 
 	g_return_if_fail (GTK_EXIF_IS_CONTENT_LIST (list));
 	g_return_if_fail (e != NULL);
 
 	if (!gtk_exif_content_list_get_iter (list, e, &iter)) return;
 	gtk_list_store_set (list->priv->store, &iter,
-			    VALUE_COLUMN, exif_entry_get_value (e), -1);
+			    VALUE_COLUMN,
+			    exif_entry_get_value (e, s, sizeof (s)), -1);
 }
 
 void
@@ -418,18 +421,19 @@ gtk_exif_content_list_remove_entry (GtkExifContentList *list, ExifEntry *entry)
 }
 
 void
-gtk_exif_content_list_add_entry (GtkExifContentList *list, ExifEntry *entry)
+gtk_exif_content_list_add_entry (GtkExifContentList *list, ExifEntry *e)
 {
 	GtkTreeIter iter;
+	gchar s[1024];
 
 	g_return_if_fail (GTK_EXIF_IS_CONTENT_LIST (list));
 
 	gtk_list_store_append (list->priv->store, &iter);
 	gtk_list_store_set (GTK_LIST_STORE (list->priv->store), &iter,
-			NAME_COLUMN, exif_tag_get_name (entry->tag),
-			VALUE_COLUMN, exif_entry_get_value (entry),
-			ENTRY_COLUMN, entry, -1);
-	g_signal_emit (list, signals[ENTRY_ADDED], 0, entry);
+			NAME_COLUMN, exif_tag_get_name (e->tag),
+			VALUE_COLUMN, exif_entry_get_value (e, s, sizeof (s)),
+			ENTRY_COLUMN, e, -1);
+	g_signal_emit (list, signals[ENTRY_ADDED], 0, e);
 }
 
 void

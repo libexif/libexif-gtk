@@ -30,14 +30,13 @@
 #include <gtk/gtkframe.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkentry.h>
-#include <gtk/gtkoptionmenu.h>
+#include <gtk/gtkcombobox.h>
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkhbox.h>
 
 #include <libexif/exif-utils.h>
 
-#include "gtk-extensions/gtk-option-menu-option.h"
 #include "gtk-extensions/gtk-options.h"
 
 #include "gtk-exif-util.h"
@@ -64,7 +63,7 @@
 struct _GtkExifEntryOptionPrivate {
 	ExifEntry *entry;
 
-	GtkOptionMenuOption *menu;
+	GtkComboBox *menu;
 };
 
 #define PARENT_TYPE GTK_EXIF_TYPE_ENTRY
@@ -115,31 +114,31 @@ gtk_exif_entry_option_load (GtkExifEntryOption *entry)
 {
 	ExifShort value;
 	ExifByteOrder o;
+	GtkTreeIter iter;
+	GtkTreeModel *tm;
 
 	g_return_if_fail (GTK_EXIF_IS_ENTRY_OPTION (entry));
 
 	o = exif_data_get_byte_order (entry->priv->entry->parent->parent);
 	value = exif_get_short (entry->priv->entry->data, o);
-	gtk_option_menu_option_set (entry->priv->menu, value);
+	tm = gtk_combo_box_get_model (entry->priv->menu);
+	gtk_tree_model_get_iter_from_option (tm, value, &iter);
+	gtk_combo_box_set_active_iter (entry->priv->menu, &iter);
 }
 
 static void
-gtk_exif_entry_option_save (GtkExifEntryOption *entry)
+on_changed (GtkComboBox *cb, GtkExifEntryOption *e)
 {
-	ExifShort value;
+	GValue v = {0,};
 	ExifByteOrder o;
+	GtkTreeModel *tm = gtk_combo_box_get_model (cb);
+	GtkTreeIter iter;
 
-	o = exif_data_get_byte_order (entry->priv->entry->parent->parent);
-	value = gtk_option_menu_option_get (entry->priv->menu);
-	exif_set_short (entry->priv->entry->data, o, value);
-	g_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed",
-				 entry->priv->entry);
-}
-
-static void
-on_option_selected (GtkOptions *options, guint option, GtkExifEntryOption *entry)
-{
-	gtk_exif_entry_option_save (entry);
+	gtk_combo_box_get_active_iter (cb, &iter);
+	gtk_tree_model_get_value (tm, &iter, GTK_OPTIONS_OPTION_COLUMN, &v);
+	o = exif_data_get_byte_order (e->priv->entry->parent->parent);
+	exif_set_short (e->priv->entry->data, o, g_value_get_int (&v));
+	gtk_exif_entry_changed (GTK_EXIF_ENTRY (e), e->priv->entry);
 }
 
 static GtkOptions options_sensing_method[] = {
@@ -204,6 +203,21 @@ static GtkOptions options_ycbcr_positioning[] = {
         {  0, NULL}
 };
 
+static GtkOptions options_exposure_program[] = {
+	{0, N_("Not defined")},
+	{1, N_("Manual")},
+	{2, N_("Normal program")},
+	{3, N_("Aperture priority")},
+	{4, N_("Shutter priority")},
+	{5, N_("Creative program (biased toward depth of field)")},
+	{6, N_("Action program (biased toward fast shutter speed)")},
+	{7, N_("Portrait mode (for closeup photos with the "
+	       "background out of focus")},
+	{8, N_("Landscape mode (for landscape photos with the "
+	       "background in focus")},
+	{0, NULL}
+};
+
 GtkWidget *
 gtk_exif_entry_option_new (ExifEntry *e)
 {
@@ -219,6 +233,7 @@ gtk_exif_entry_option_new (ExifEntry *e)
 			      (e->tag == EXIF_TAG_LIGHT_SOURCE) ||
 			      (e->tag == EXIF_TAG_ORIENTATION) ||
 			      (e->tag == EXIF_TAG_YCBCR_POSITIONING) ||
+			      (e->tag == EXIF_TAG_EXPOSURE_PROGRAM) ||
 			      (e->tag == EXIF_TAG_COMPRESSION), NULL);
 
 	switch (e->tag) {
@@ -246,6 +261,10 @@ gtk_exif_entry_option_new (ExifEntry *e)
 		title = N_("YCbCr Positioning:");
 		options = options_ycbcr_positioning;
 		break;
+	case EXIF_TAG_EXPOSURE_PROGRAM:
+		title = N_("Exposure Program:");
+		options = options_exposure_program;
+		break;
 	default:
 		return (NULL);
 	}
@@ -263,12 +282,13 @@ gtk_exif_entry_option_new (ExifEntry *e)
 	label = gtk_label_new (_(title));
 	gtk_widget_show (label);
 	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-	menu = gtk_option_menu_option_new (options);
+	menu = gtk_combo_box_new_with_model (
+			gtk_tree_model_new_from_options (options));
 	gtk_widget_show (menu);
 	gtk_box_pack_start (GTK_BOX (hbox), menu, FALSE, FALSE, 0);
-	entry->priv->menu = GTK_OPTION_MENU_OPTION (menu);
-	g_signal_connect (G_OBJECT (menu), "option_selected",
-			  G_CALLBACK (on_option_selected), entry);
+	entry->priv->menu = GTK_COMBO_BOX (menu);
+	g_signal_connect (G_OBJECT (menu), "changed",
+			  G_CALLBACK (on_changed), entry);
 
 	gtk_exif_entry_option_load (entry);
 

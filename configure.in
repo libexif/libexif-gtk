@@ -1,8 +1,8 @@
 AC_PREREQ(2.50)
 AC_INIT(libexif-gtk/gtk-exif-browser.c)
-AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE(libexif-gtk, 0.3.3)
 AM_MAINTAINER_MODE
+AC_CONFIG_HEADERS(config.h)
 
 AC_ISC_POSIX
 AC_PROG_CC
@@ -21,7 +21,7 @@ dnl                      removals.
 dnl ---------------------------------------------------------------------------
 LIBEXIF_GTK_AGE=0
 LIBEXIF_GTK_REVISION=0
-LIBEXIF_GTK_CURRENT=4
+LIBEXIF_GTK_CURRENT=5
 AC_SUBST(LIBEXIF_GTK_AGE)
 AC_SUBST(LIBEXIF_GTK_REVISION)
 AC_SUBST(LIBEXIF_GTK_CURRENT)
@@ -49,7 +49,7 @@ AC_SUBST(GTK_CFLAGS)
 CFLAGS="$CFLAGS -Wall -Wchar-subscripts -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wpointer-arith"
 AC_SUBST(CFLAGS)
 
-AC_OUTPUT([
+AC_OUTPUT([ po/Makefile.in m4/Makefile 
   Makefile
   libexif-gtk/Makefile
   libexif-gtk/libexif-gtk.pc

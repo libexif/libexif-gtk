@@ -29,10 +29,11 @@
 #include <gtk/gtkhbox.h>
 #include <gtk/gtksignal.h>
 #include <gtk/gtkframe.h>
-#include <gtk/gtkoptionmenu.h>
+#include <gtk/gtkcombobox.h>
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtklabel.h>
+#include <gtk/gtktreestore.h>
 
 #include <libexif/exif-utils.h>
 
@@ -69,7 +70,7 @@ typedef struct _ResolutionUnitObjects ResolutionUnitObjects;
 struct _ResolutionUnitObjects
 {
 	GtkToggleButton *check;
-	GtkOptionMenu *menu;
+	GtkComboBox *menu;
 };
 
 struct _GtkExifEntryResolutionPrivate
@@ -126,31 +127,33 @@ gtk_exif_entry_resolution_init (GTypeInstance *instance, gpointer g_class)
 
 GTK_EXIF_CLASS (entry_resolution, EntryResolution, "EntryResolution")
 
-static void
-on_inch_activate (GtkMenuItem *item, GtkExifEntryResolution *entry)
-{
-	ExifEntry *e;
-	ExifByteOrder o;
+enum {
+	UNIT_CENTIMETER = 3,
+	UNIT_INCH = 2
+};
 
-	e = exif_content_get_entry (entry->priv->content,
-				    entry->priv->tag_u);
-	g_return_if_fail (e != NULL);
-	o = exif_data_get_byte_order (e->parent->parent);
-	exif_set_short (e->data, o, 2);
-	gtk_exif_entry_changed (GTK_EXIF_ENTRY (entry), e);
-}
+enum {
+	UNIT_COLUMN,
+	NAME_COLUMN,
+	N_COLUMNS
+};
 
 static void
-on_centimeter_activate (GtkMenuItem *item, GtkExifEntryResolution *entry)
+on_unit_changed (GtkComboBox *cb, GtkExifEntryResolution *entry)
 {
-	ExifEntry *e;
+	GtkTreeModel *tm = gtk_combo_box_get_model (cb);
+	GtkTreeIter iter;
+	GValue v = {0,};
 	ExifByteOrder o;
+	ExifEntry *e;
 
-	e = exif_content_get_entry (entry->priv->content,
-				    entry->priv->tag_u);
-	g_return_if_fail (e != NULL);
+	gtk_combo_box_get_active_iter (cb, &iter);
+	gtk_tree_model_get_value (tm, &iter, UNIT_COLUMN, &v);
+	
+	e = exif_content_get_entry (entry->priv->content, entry->priv->tag_u);
+	g_return_if_fail (e);
 	o = exif_data_get_byte_order (e->parent->parent);
-	exif_set_short (e->data, o, 3);
+	exif_set_short (e->data, o, g_value_get_int (&v));
 	gtk_exif_entry_changed (GTK_EXIF_ENTRY (entry), e);
 }
 
@@ -219,20 +222,20 @@ gtk_exif_entry_resolution_load_unit (GtkExifEntryResolution *entry,
 				     ExifEntry *e)
 {
 	ExifByteOrder o;
+	GtkTreeModel *tm;
+	GValue v = {0,};
+	GtkTreeIter iter;
 
 	o = exif_data_get_byte_order (e->parent->parent);
 	switch (e->format) {
 	case EXIF_FORMAT_SHORT:
-		switch (exif_get_short (e->data, o)) {
-		case 2:
-			gtk_option_menu_set_history (entry->priv->u.menu, 1);
-			break;
-		case 3:
-			gtk_option_menu_set_history (entry->priv->u.menu, 0);
-			break;
-		default:
-			g_warning ("Invalid unit!");
-		}
+		tm = gtk_combo_box_get_model (entry->priv->u.menu);
+		gtk_tree_model_get_iter_first (tm, &iter);
+		gtk_tree_model_get_value (tm, &iter, UNIT_COLUMN, &v);
+		while ((g_value_get_int (&v) != exif_get_short (e->data, o)) &&
+		       gtk_tree_model_iter_next (tm, &iter))
+			gtk_tree_model_get_value (tm, &iter, UNIT_COLUMN, &v);
+		gtk_combo_box_set_active_iter (entry->priv->u.menu, &iter);
 		break;
 	default:
 		g_warning ("Invalid format!");
@@ -366,9 +369,11 @@ GtkWidget *
 gtk_exif_entry_resolution_new (ExifContent *content, gboolean focal_plane)
 {
 	GtkExifEntryResolution *entry;
-	GtkWidget *hbox, *sp, *sq, *label, *menu, *item, *o, *c;
+	GtkWidget *hbox, *sp, *sq, *label, *o, *c;
 	GtkObject *ap, *aq;
 	ExifEntry *e;
+	GtkTreeIter iter;
+	GtkTreeModel *tm;
 
 	g_return_val_if_fail (content != NULL, NULL);
 
@@ -476,23 +481,20 @@ gtk_exif_entry_resolution_new (ExifContent *content, gboolean focal_plane)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (c), (e != NULL));
 	g_signal_connect (GTK_OBJECT (c), "toggled",
 			  G_CALLBACK (on_unit_toggled), entry);
-	o = gtk_option_menu_new ();
+	tm = GTK_TREE_MODEL (gtk_list_store_new (N_COLUMNS, UNIT_COLUMN,
+						 NAME_COLUMN));
+	gtk_list_store_append (GTK_LIST_STORE (tm), &iter);
+	gtk_tree_store_set (GTK_TREE_STORE (tm), UNIT_COLUMN, UNIT_CENTIMETER,
+			    NAME_COLUMN, _("Centimeter"), -1);
+	gtk_list_store_append (GTK_LIST_STORE (tm), &iter);
+	gtk_tree_store_set (GTK_TREE_STORE (tm), UNIT_COLUMN, UNIT_INCH,
+			    NAME_COLUMN, _("Inch"), -1);
+	o = gtk_combo_box_new_with_model (tm);
 	gtk_widget_show (o);
 	gtk_box_pack_start (GTK_BOX (hbox), o, TRUE, TRUE, 0);
-	entry->priv->u.menu = GTK_OPTION_MENU (o);
-	menu = gtk_menu_new ();
-	gtk_widget_show (menu);
-	item = gtk_menu_item_new_with_label (_("Centimeter"));
-	gtk_widget_show (item);
-	gtk_container_add (GTK_CONTAINER (menu), item);
-	g_signal_connect (GTK_OBJECT (item), "activate",
-			  G_CALLBACK (on_centimeter_activate), entry);
-	item = gtk_menu_item_new_with_label (_("Inch"));
-	gtk_widget_show (item);
-	gtk_container_add (GTK_CONTAINER (menu), item);
-	g_signal_connect (GTK_OBJECT (item), "activate",
-			  G_CALLBACK (on_inch_activate), entry);
-	gtk_option_menu_set_menu (GTK_OPTION_MENU (o), menu);
+	g_signal_connect (G_OBJECT (o), "changed",
+			  G_CALLBACK (on_unit_changed), entry);
+	entry->priv->u.menu = GTK_COMBO_BOX (o);
 	if (e)
 		gtk_exif_entry_resolution_load_unit (entry, e);
 

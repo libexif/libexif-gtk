@@ -1,3 +1,16 @@
+2004-10-17  Lutz Mueller <lutz@users.sourceforge.net>
+
+	First part of a patch to get libexif-gtk to compile again against
+	current gtk. For now, libexif-gtk does not compile at all.
+
+	* gtk-extensions/gtk-option-menu-option.[c,h]: Removed.
+	* libexif-gtk/gtk-exif-browser.c: Redirect EXPOSURE_PROGRAM to 
+	  the generic entry.
+	* libexif-gtk/gtk-exif-tag-menu.[c,h]: Removed.
+	* libexif-gtk/gtk-exif-entry-exposure.[c,h]: Removed. Now covered
+	  by the generic entry.
+	* configure.in: CURRENT = 5.
+
 2003-08-01  Lutz Mueller <lutz@users.sourceforge.net>
 
 	* libexif-gtk/gtk-exif-browser.c: Implement removal of entries.
