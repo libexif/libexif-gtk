@@ -34,6 +34,7 @@
 #include <gtk/gtktooltips.h>
 #include <gtk/gtkhbbox.h>
 #include <gtk/gtkfilesel.h>
+#include <gtk/gtkscrolledwindow.h>
 
 #ifdef HAVE_GDK_PIXBUF
 #  include <gdk-pixbuf/gdk-pixbuf-loader.h>
@@ -387,9 +388,9 @@ gtk_exif_browser_show_thumbnail (GtkExifBrowser *b)
 	} else {
 #ifdef HAVE_GDK_PIXBUF
 		GdkPixbufLoader *loader;
-		GdkPixbuf *pixbuf;
 		GdkPixmap *pixmap;
 		GdkBitmap *bitmap;
+		GtkWidget *image;
 
 		loader = gdk_pixbuf_loader_new ();
 		if (!gdk_pixbuf_loader_write (loader,
@@ -398,10 +399,16 @@ gtk_exif_browser_show_thumbnail (GtkExifBrowser *b)
 							"thumbnail data."));
 		} else {
 			gdk_pixbuf_loader_close (loader);
-			pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
-			gdk_pixbuf_render_pixmap_and_mask (pixbuf, &pixmap, 
-							   &bitmap, 127);
-			b->priv->thumb = gtk_pixmap_new (pixmap, bitmap);
+			gdk_pixbuf_render_pixmap_and_mask (
+				gdk_pixbuf_loader_get_pixbuf (loader),
+				&pixmap, &bitmap, 127);
+			b->priv->thumb = gtk_scrolled_window_new (NULL, NULL);
+			gtk_scrolled_window_set_policy (
+				GTK_SCROLLED_WINDOW (b->priv->thumb),
+				GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+			image = gtk_pixmap_new (pixmap, bitmap);
+			gtk_scrolled_window_add_with_viewport (
+				GTK_SCROLLED_WINDOW (b->priv->thumb), image);
 			if (pixmap)
 				gdk_pixmap_unref (pixmap);
 			if (bitmap)
