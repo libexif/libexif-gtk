@@ -1,6 +1,6 @@
 AC_INIT(libexif-gtk/gtk-exif-browser.c)
 AM_CONFIG_HEADER(config.h)
-AM_INIT_AUTOMAKE(libexif, 0.1)
+AM_INIT_AUTOMAKE(libexif-gtk, 0.1)
 AM_MAINTAINER_MODE
 
 LIBEXIF_GTK_VERSION_INFO=0:1:0
