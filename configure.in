@@ -30,5 +30,6 @@ AC_SUBST(CFLAGS)
 AC_OUTPUT([
   Makefile
   libexif-gtk/Makefile
+  libexif-gtk/libexif-gtk.pc
   gtk-extensions/Makefile
 ])
