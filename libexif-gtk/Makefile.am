@@ -1,11 +1,3 @@
-INCLUDES =						\
-	-I$(top_srcdir)					\
-	-I$(top_srcdir)/intl				\
-	-I$(top_srcdir)/gtk-extensions			\
-	$(LIBEXIF_GTK_CFLAGS)				\
-	-DG_LOG_DOMAIN=\"libexif\"			\
-	-DGTK_DISABLE_DEPRECATED
-
 lib_LTLIBRARIES = libexif-gtk.la
 
 libexif_gtkincludedir = $(includedir)/libexif-gtk
@@ -41,10 +33,20 @@ libexif_gtk_la_SOURCES =			\
 	gtk-exif-entry-user-comment.c		\
 	gtk-exif-entry-version.c		\
 	gtk-exif-util.h
+libexif_gtk_la_CFLAGS =	\
+	$(AM_CFLAGS) $(CFLAGS)				\
+	-I$(top_srcdir)					\
+	-I$(top_srcdir)/gtk-extensions			\
+	$(LIBEXIF_CFLAGS)				\
+	$(GTK_CFLAGS)				\
+	-DG_LOG_DOMAIN=\"libexif\"			\
+	-DGTK_DISABLE_DEPRECATED
 libexif_gtk_la_LDFLAGS = -version-info @LIBEXIF_GTK_VERSION_INFO@
-libexif_gtk_la_LIBADD =						\
+libexif_gtk_la_LIBADD = \
+	$(AM_LDFLAGS) $(LDFLAGS)				\
 	$(top_builddir)/gtk-extensions/libgtk-extensions.la	\
-	$(LIBEXIF_GTK_LIBS)
+	$(LIBEXIF_LIBS)						\
+	$(GTK_LIBS)
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libexif-gtk.pc

@@ -1,5 +1,3 @@
-SUBDIRS = m4  gtk-extensions libexif-gtk tests po
+SUBDIRS = m4 po gtk-extensions libexif-gtk tests
 
 ACLOCAL_AMFLAGS = -I m4
-
-EXTRA_DIST = config.rpath mkinstalldirs
