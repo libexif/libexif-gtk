@@ -1,7 +1,7 @@
 AC_PREREQ(2.50)
 AC_INIT(libexif-gtk/gtk-exif-browser.c)
 AM_CONFIG_HEADER(config.h)
-AM_INIT_AUTOMAKE(libexif-gtk, 0.3.2)
+AM_INIT_AUTOMAKE(libexif-gtk, 0.3.3)
 AM_MAINTAINER_MODE
 
 AC_ISC_POSIX
@@ -33,7 +33,7 @@ AM_PROG_LIBTOOL
 dnl ---------------------------------------------------------------------------
 dnl i18n support
 dnl ---------------------------------------------------------------------------
-ALL_LINGUAS="es"
+ALL_LINGUAS="es fr"
 AM_GNU_GETTEXT
 
 dnl ---------------------------------------------------------------------------
