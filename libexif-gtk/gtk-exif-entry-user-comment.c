@@ -12,10 +12,12 @@
 #include <gtk/gtklabel.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkentry.h>
+#include <gtk/gtkcellrenderertext.h>
+#include <gtk/gtkcelllayout.h>
+#include <gtk/gtkcombobox.h>
 
 #include "gtk-exif-util.h"
 
-#include "gtk-extensions/gtk-option-menu-option.h"
 #include "gtk-extensions/gtk-options.h"
 
 #ifdef ENABLE_NLS
@@ -40,7 +42,7 @@
 struct _GtkExifEntryUserCommentPrivate {
 	ExifEntry *entry;
 
-	GtkOptionMenuOption *menu;
+	GtkComboBox *menu;
 	GtkEntry *entry_widget;
 };
 
@@ -111,25 +113,25 @@ gtk_exif_entry_user_comment_load (GtkExifEntryUserComment *entry)
 {
 	guint i;
 	gchar *s;
+	GtkTreeIter iter;
+	GtkTreeModel *tm;
 
 	g_return_if_fail (GTK_EXIF_IS_ENTRY_USER_COMMENT (entry));
 
-	/* Make sure we have enough data to figure out the character code. */
-	if (entry->priv->entry->size < 8)
-		return;
-	for (i = 0; character_codes[i].data; i++)
-		if (!memcmp (character_codes[i].data,
-			     entry->priv->entry->data, 8)) {
-			gtk_option_menu_option_set (entry->priv->menu,
-					character_codes[i].code);
-			break;
-		}
+	tm = gtk_combo_box_get_model (entry->priv->menu);
+	if (entry->priv->entry->size < 8) return;
+	for (i = 0; character_codes[i].data &&
+		    memcmp (character_codes[i].data,
+			    entry->priv->entry->data, 8); i++);
+	if (!memcmp (character_codes[i].data, entry->priv->entry->data, 8)) {
+		gtk_tree_model_get_iter_from_option (tm,
+					character_codes[i].code, &iter);
+		gtk_combo_box_set_active_iter (entry->priv->menu, &iter);
+	}
 
-	if (entry->priv->entry->size < 9)
-		return;
+	if (entry->priv->entry->size < 9) return;
 	s = g_new0 (gchar, entry->priv->entry->size - 8 + 1);
-	if (!s)
-		return;
+	if (!s) return;
 	memcpy (s, entry->priv->entry->data + 8, entry->priv->entry->size - 8);
 	gtk_entry_set_text (entry->priv->entry_widget, s);
 	g_free (s);
@@ -138,31 +140,35 @@ gtk_exif_entry_user_comment_load (GtkExifEntryUserComment *entry)
 static void
 gtk_exif_entry_user_comment_save (GtkExifEntryUserComment *entry)
 {
-	guint option, i;
+	guint i;
 	char *d;
 	unsigned int s;
 	const gchar *t;
+	GtkTreeIter iter;
+	GtkTreeModel *tm;
+	GValue v = {0,};
 
-	option = gtk_option_menu_option_get (entry->priv->menu);
-	for (i = 0; character_codes[i].data; i++)
-		if (option == character_codes[i].code) {
+	tm = gtk_combo_box_get_model (entry->priv->menu);
+	gtk_combo_box_get_active_iter (entry->priv->menu, &iter);
+	gtk_tree_model_get_value (tm, &iter, GTK_OPTIONS_OPTION_COLUMN, &v);
+	for (i = 0; character_codes[i].data &&
+		    (g_value_get_int (&v) != character_codes[i].code); i++);
+	if (g_value_get_int (&v) == character_codes[i].code) {
 
-			/*
-			 * Make sure we have enough data left to save
-			 * the character code.
-			 */
-			if (entry->priv->entry->size < 8) {
-				s = sizeof (char) * 8;
-				d = realloc (entry->priv->entry->data, s);
-				if (!d)
-					return;
-				entry->priv->entry->data = d;
-				entry->priv->entry->size = s;
-			}
-			memcpy (entry->priv->entry->data,
-				character_codes[i].data, 8);
-			break;
+		/*
+		 * Make sure we have enough data left to save
+		 * the character code.
+		 */
+		if (entry->priv->entry->size < 8) {
+			s = sizeof (char) * 8;
+			d = realloc (entry->priv->entry->data, s);
+			if (!d) return;
+			entry->priv->entry->data = d;
+			entry->priv->entry->size = s;
 		}
+		memcpy (entry->priv->entry->data,
+			character_codes[i].data, 8);
+	}
 
 	/* Save the actual comment. */
 	t = gtk_entry_get_text (entry->priv->entry_widget);
@@ -182,8 +188,7 @@ gtk_exif_entry_user_comment_save (GtkExifEntryUserComment *entry)
 }
 
 static void
-on_option_selected (GtkOptions *options, guint option,
-		    GtkExifEntryUserComment *entry)
+on_character_code_changed (GtkComboBox *cb, GtkExifEntryUserComment *entry)
 {
 	gtk_exif_entry_user_comment_save (entry);
 }
@@ -207,6 +212,7 @@ gtk_exif_entry_user_comment_new (ExifEntry *e)
 {
 	GtkExifEntryUserComment *entry;
 	GtkWidget *hbox, *w;
+	GtkCellRenderer *cell;
 
 	g_return_val_if_fail (e != NULL, NULL);
 	g_return_val_if_fail (e->format == EXIF_FORMAT_UNDEFINED, NULL);
@@ -225,12 +231,17 @@ gtk_exif_entry_user_comment_new (ExifEntry *e)
 	w = gtk_label_new (_("Character Code:"));
 	gtk_widget_show (w);
 	gtk_box_pack_start (GTK_BOX (hbox), w, FALSE, FALSE, 0);
-	w = gtk_option_menu_option_new (character_codes_list);
+	w = gtk_combo_box_new_with_model (
+		gtk_tree_model_new_from_options (character_codes_list));
 	gtk_widget_show (w);
 	gtk_box_pack_start (GTK_BOX (hbox), w, FALSE, FALSE, 0);
-	entry->priv->menu = GTK_OPTION_MENU_OPTION (w);
-	g_signal_connect (w, "option_selected", G_CALLBACK (on_option_selected),
-			  entry);
+	entry->priv->menu = GTK_COMBO_BOX (w);
+	cell = gtk_cell_renderer_text_new ();
+	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (w), cell, TRUE);
+	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (w), cell,
+			"text", GTK_OPTIONS_NAME_COLUMN, NULL);
+	g_signal_connect (G_OBJECT (w), "changed",
+			  G_CALLBACK (on_character_code_changed), entry);
 	w = gtk_entry_new ();
 	gtk_box_pack_start (GTK_BOX (entry), w, FALSE, FALSE, 5);
 	gtk_widget_show (w);

@@ -30,7 +30,9 @@
 #include <gtk/gtkframe.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkentry.h>
-#include <gtk/gtkoptionmenu.h>
+#include <gtk/gtkcombobox.h>
+#include <gtk/gtkcellrenderertext.h>
+#include <gtk/gtkcelllayout.h>
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkhbox.h>
@@ -56,7 +58,6 @@
 #  define N_(String) (String)
 #endif
 
-#include "gtk-extensions/gtk-option-menu-option.h"
 #include "gtk-extensions/gtk-options.h"
 
 #include <string.h>
@@ -64,7 +65,7 @@
 struct _GtkExifEntryVersionPrivate {
 	ExifEntry *entry;
 
-	GtkOptionMenuOption *menu;
+	GtkComboBox *menu;
 };
 
 #define PARENT_TYPE GTK_EXIF_TYPE_ENTRY
@@ -114,7 +115,8 @@ typedef enum _ExifVersion ExifVersion;
 enum _ExifVersion {
 	EXIF_VERSION_2_0,
 	EXIF_VERSION_2_1,
-	EXIF_VERSION_2_2
+	EXIF_VERSION_2_2,
+	EXIF_VERSION_2_21
 };
 
 typedef enum _FlashPixVersion FlashPixVersion;
@@ -123,9 +125,10 @@ enum _FlashPixVersion {
 };
 
 static GtkOptions exif_list[] = {
-        {EXIF_VERSION_2_0, N_("Exif Format Version 2.0")},
-        {EXIF_VERSION_2_1, N_("Exif Format Version 2.1")},
-	{EXIF_VERSION_2_2, N_("Exif Format Version 2.2")},
+        {EXIF_VERSION_2_0 , N_("Exif Format Version 2.0")},
+        {EXIF_VERSION_2_1 , N_("Exif Format Version 2.1")},
+	{EXIF_VERSION_2_2 , N_("Exif Format Version 2.2")},
+	{EXIF_VERSION_2_21, N_("Exif Format Version 2.21")},
         {0, NULL}
 };
 
@@ -138,9 +141,10 @@ static struct {
 	ExifVersion version;
 	const guchar *data;
 } exif_versions[] = {
-	{EXIF_VERSION_2_0, "0200"},
-	{EXIF_VERSION_2_1, "0210"},
-	{EXIF_VERSION_2_2, "0220"},
+	{EXIF_VERSION_2_0 , "0200"},
+	{EXIF_VERSION_2_1 , "0210"},
+	{EXIF_VERSION_2_2 , "0220"},
+	{EXIF_VERSION_2_21, "0221"},
 	{0, NULL}
 };
 
@@ -156,16 +160,20 @@ static void
 gtk_exif_entry_version_load (GtkExifEntryVersion *entry)
 {
 	guint i;
+	GtkTreeIter iter;
+	GtkTreeModel *tm;
 
 	g_return_if_fail (GTK_EXIF_IS_ENTRY_VERSION (entry));
 
+	tm = gtk_combo_box_get_model (entry->priv->menu);
 	switch (entry->priv->entry->tag) {
 	case EXIF_TAG_EXIF_VERSION:
 		for (i = 0; exif_versions[i].data; i++)
 			if (!memcmp (exif_versions[i].data,
 				     entry->priv->entry->data, 4)) {
-				gtk_option_menu_option_set (entry->priv->menu,
-						 exif_versions[i].version);
+				if (!gtk_tree_model_get_iter_from_option (tm,
+					exif_versions[i].version, &iter))
+					return;
 				break;
 			}
 		break;
@@ -173,26 +181,34 @@ gtk_exif_entry_version_load (GtkExifEntryVersion *entry)
 		for (i = 0; flash_pix_versions[i].data; i++)
 			if (!memcmp (flash_pix_versions[i].data, 
 				     entry->priv->entry->data, 4)) {
-				gtk_option_menu_option_set (entry->priv->menu, 
-						 flash_pix_versions[i].version);
+				if (!gtk_tree_model_get_iter_from_option (tm,
+					flash_pix_versions[i].version, &iter))
+					return;
 				break;
 			}
 		break;
 	default:
-		break;
+		return;
 	}
+	gtk_combo_box_set_active_iter (entry->priv->menu, &iter);
 }
 
 static void
 gtk_exif_entry_version_save (GtkExifEntryVersion *entry)
 {
-	guint option, i;
+	guint i;
+	GtkTreeIter iter;
+	GtkTreeModel *tm;
+	GValue v = {0,};
 
-	option = gtk_option_menu_option_get (entry->priv->menu);
+	tm = gtk_combo_box_get_model (entry->priv->menu);
+	gtk_combo_box_get_active_iter (entry->priv->menu, &iter);
+	gtk_tree_model_get_value (tm, &iter, GTK_OPTIONS_OPTION_COLUMN, &v);
 	switch (entry->priv->entry->tag) {
 	case EXIF_TAG_EXIF_VERSION:
 		for (i = 0; exif_versions[i].data; i++)
-			if (option == exif_versions[i].version) {
+			if (g_value_get_int (&v) ==
+					exif_versions[i].version) {
 				memcpy (entry->priv->entry->data,
 					exif_versions[i].data, 4);
 				break;
@@ -200,7 +216,8 @@ gtk_exif_entry_version_save (GtkExifEntryVersion *entry)
 		break;
 	case EXIF_TAG_FLASH_PIX_VERSION:
 		for (i = 0; flash_pix_versions[i].data; i++)
-			if (option == flash_pix_versions[i].version) {
+			if (g_value_get_int (&v) ==
+					flash_pix_versions[i].version) {
 				memcpy (entry->priv->entry->data,
 					flash_pix_versions[i].data, 4);
 				break;
@@ -213,7 +230,7 @@ gtk_exif_entry_version_save (GtkExifEntryVersion *entry)
 }
 
 static void
-on_option_selected (GtkOptions *options, guint option, GtkExifEntryVersion *entry)
+on_changed (GtkComboBox *cb, GtkExifEntryVersion *entry)
 {
 	gtk_exif_entry_version_save (entry);
 }
@@ -223,6 +240,8 @@ gtk_exif_entry_version_new (ExifEntry *e)
 {
 	GtkExifEntryVersion *entry;
 	GtkWidget *hbox, *label, *options;
+	GtkTreeModel *tm = NULL;
+	GtkCellRenderer *cell;
 
 	g_return_val_if_fail (e != NULL, NULL);
 	g_return_val_if_fail ((e->tag == EXIF_TAG_EXIF_VERSION) ||
@@ -246,18 +265,23 @@ gtk_exif_entry_version_new (ExifEntry *e)
 	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 	switch (e->tag) {
 	case EXIF_TAG_EXIF_VERSION:
-		options = gtk_option_menu_option_new (exif_list);
+		tm = gtk_tree_model_new_from_options (exif_list);
 		break;
 	case EXIF_TAG_FLASH_PIX_VERSION:
 	default:
-		options = gtk_option_menu_option_new (flash_pix_list);
+		tm = gtk_tree_model_new_from_options (flash_pix_list);
 		break;
 	}
+	options = gtk_combo_box_new_with_model (tm);
 	gtk_widget_show (options);
 	gtk_box_pack_start (GTK_BOX (hbox), options, FALSE, FALSE, 0);
-	entry->priv->menu = GTK_OPTION_MENU_OPTION (options);
-	g_signal_connect (GTK_OBJECT (options), "option_selected",
-			  G_CALLBACK (on_option_selected), entry);
+	entry->priv->menu = GTK_COMBO_BOX (options);
+	cell = gtk_cell_renderer_text_new ();
+	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (options), cell, TRUE);
+	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (options), cell,
+			"text", GTK_OPTIONS_NAME_COLUMN, NULL);
+	g_signal_connect (G_OBJECT (options), "changed",
+			  G_CALLBACK (on_changed), entry);
 
 	gtk_exif_entry_version_load (entry);
 

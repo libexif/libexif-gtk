@@ -22,6 +22,7 @@
 #include "gtk-options.h"
 
 #include <gtk/gtkliststore.h>
+#include <gtk/gtktreemodel.h>
 
 #include <string.h>
 
@@ -50,13 +51,13 @@ gtk_tree_model_new_from_options (GtkOptions *options)
 	guint i;
 	GtkTreeIter iter;
 	
-	ls = gtk_list_store_new (GTK_OPTIONS_N_COLUMNS,
-		GTK_OPTIONS_OPTION_COLUMN, GTK_OPTIONS_NAME_COLUMN);
-	for (i = 0; i < G_N_ELEMENTS (options); i++) {
+	ls = gtk_list_store_new (GTK_OPTIONS_N_COLUMNS, G_TYPE_INT,
+				 G_TYPE_STRING);
+	for (i = 0; options[i].name; i++) {
 		gtk_list_store_append (ls, &iter);
-		gtk_tree_model_set (GTK_TREE_MODEL (ls),
-			OPTION_COLUMN, options[i].option,
-			NAME_COLUMN, options[i].name, -1);
+		gtk_list_store_set (ls, &iter,
+			GTK_OPTIONS_OPTION_COLUMN, options[i].option,
+			GTK_OPTIONS_NAME_COLUMN, options[i].name, -1);
 	}
 
 	return GTK_TREE_MODEL (ls);
@@ -71,9 +72,14 @@ gtk_tree_model_get_iter_from_option (GtkTreeModel *tm, guint option,
 	g_return_val_if_fail (GTK_IS_TREE_MODEL (tm), FALSE);
 	g_return_val_if_fail (iter != NULL, FALSE);
 
+	/* Search the option in the list store. */
 	if (!gtk_tree_model_get_iter_first (tm, iter)) return FALSE;
-	gtk_tree_model_get_value (tm, iter, GTK_OPTIONS_OPTION_COLUMN, &v);
-	while ((option != g_value_get_int (&v)) && 
-	       gtk_tree_model_iter_next (tm, iter));
+	do {
+		gtk_tree_model_get_value (tm, iter, GTK_OPTIONS_OPTION_COLUMN,
+					  &v);
+		if (option == g_value_get_int (&v)) break;
+		g_value_unset (&v);
+	} while (gtk_tree_model_iter_next (tm, iter));
+
 	return (option == g_value_get_int (&v));
 }

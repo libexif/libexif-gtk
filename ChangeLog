@@ -1,5 +1,10 @@
 2004-10-17  Lutz Mueller <lutz@users.sourceforge.net>
 
+	* libexif-gtk/gtk-exif-entry-version.c and others: Adapt to new
+	  gtk API
+
+2004-10-17  Lutz Mueller <lutz@users.sourceforge.net>
+
 	First part of a patch to get libexif-gtk to compile again against
 	current gtk. For now, libexif-gtk does not compile at all.
 

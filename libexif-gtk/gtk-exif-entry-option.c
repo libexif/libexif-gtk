@@ -33,6 +33,8 @@
 #include <gtk/gtkcombobox.h>
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkmenu.h>
+#include <gtk/gtkcellrenderertext.h>
+#include <gtk/gtkcelllayout.h>
 #include <gtk/gtkhbox.h>
 
 #include <libexif/exif-utils.h>
@@ -122,8 +124,8 @@ gtk_exif_entry_option_load (GtkExifEntryOption *entry)
 	o = exif_data_get_byte_order (entry->priv->entry->parent->parent);
 	value = exif_get_short (entry->priv->entry->data, o);
 	tm = gtk_combo_box_get_model (entry->priv->menu);
-	gtk_tree_model_get_iter_from_option (tm, value, &iter);
-	gtk_combo_box_set_active_iter (entry->priv->menu, &iter);
+	if (gtk_tree_model_get_iter_from_option (tm, value, &iter))
+		gtk_combo_box_set_active_iter (entry->priv->menu, &iter);
 }
 
 static void
@@ -225,6 +227,7 @@ gtk_exif_entry_option_new (ExifEntry *e)
 	GtkWidget *hbox, *label, *menu;
 	GtkOptions *options;
 	const gchar *title;
+	GtkCellRenderer *cell;
 
 	g_return_val_if_fail (e != NULL, NULL);
 	g_return_val_if_fail (e->format == EXIF_FORMAT_SHORT, NULL);
@@ -287,6 +290,10 @@ gtk_exif_entry_option_new (ExifEntry *e)
 	gtk_widget_show (menu);
 	gtk_box_pack_start (GTK_BOX (hbox), menu, FALSE, FALSE, 0);
 	entry->priv->menu = GTK_COMBO_BOX (menu);
+	cell = gtk_cell_renderer_text_new ();
+	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (menu), cell, TRUE);
+	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (menu), cell,
+			"text", GTK_OPTIONS_NAME_COLUMN, NULL);
 	g_signal_connect (G_OBJECT (menu), "changed",
 			  G_CALLBACK (on_changed), entry);
 

@@ -27,13 +27,14 @@
 #include <gtk/gtkradiobutton.h>
 #include <gtk/gtkvbox.h>
 #include <gtk/gtkhbox.h>
+#include <gtk/gtkcellrenderertext.h>
+#include <gtk/gtkcelllayout.h>
 #include <gtk/gtksignal.h>
 #include <gtk/gtkframe.h>
 #include <gtk/gtkcombobox.h>
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtklabel.h>
-#include <gtk/gtktreestore.h>
 
 #include <libexif/exif-utils.h>
 
@@ -231,10 +232,13 @@ gtk_exif_entry_resolution_load_unit (GtkExifEntryResolution *entry,
 	case EXIF_FORMAT_SHORT:
 		tm = gtk_combo_box_get_model (entry->priv->u.menu);
 		gtk_tree_model_get_iter_first (tm, &iter);
-		gtk_tree_model_get_value (tm, &iter, UNIT_COLUMN, &v);
-		while ((g_value_get_int (&v) != exif_get_short (e->data, o)) &&
-		       gtk_tree_model_iter_next (tm, &iter))
+		do {
 			gtk_tree_model_get_value (tm, &iter, UNIT_COLUMN, &v);
+			if (g_value_get_int (&v) ==
+					exif_get_short (e->data, o))
+				break;
+			g_value_unset (&v);
+		} while (gtk_tree_model_iter_next (tm, &iter));
 		gtk_combo_box_set_active_iter (entry->priv->u.menu, &iter);
 		break;
 	default:
@@ -374,6 +378,7 @@ gtk_exif_entry_resolution_new (ExifContent *content, gboolean focal_plane)
 	ExifEntry *e;
 	GtkTreeIter iter;
 	GtkTreeModel *tm;
+	GtkCellRenderer *cell;
 
 	g_return_val_if_fail (content != NULL, NULL);
 
@@ -481,22 +486,27 @@ gtk_exif_entry_resolution_new (ExifContent *content, gboolean focal_plane)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (c), (e != NULL));
 	g_signal_connect (GTK_OBJECT (c), "toggled",
 			  G_CALLBACK (on_unit_toggled), entry);
-	tm = GTK_TREE_MODEL (gtk_list_store_new (N_COLUMNS, UNIT_COLUMN,
-						 NAME_COLUMN));
+	tm = GTK_TREE_MODEL (gtk_list_store_new (N_COLUMNS, G_TYPE_INT,
+						 G_TYPE_STRING));
 	gtk_list_store_append (GTK_LIST_STORE (tm), &iter);
-	gtk_tree_store_set (GTK_TREE_STORE (tm), UNIT_COLUMN, UNIT_CENTIMETER,
+	gtk_list_store_set (GTK_LIST_STORE (tm), &iter,
+			    UNIT_COLUMN, UNIT_CENTIMETER,
 			    NAME_COLUMN, _("Centimeter"), -1);
 	gtk_list_store_append (GTK_LIST_STORE (tm), &iter);
-	gtk_tree_store_set (GTK_TREE_STORE (tm), UNIT_COLUMN, UNIT_INCH,
+	gtk_list_store_set (GTK_LIST_STORE (tm), &iter,
+			    UNIT_COLUMN, UNIT_INCH,
 			    NAME_COLUMN, _("Inch"), -1);
 	o = gtk_combo_box_new_with_model (tm);
 	gtk_widget_show (o);
 	gtk_box_pack_start (GTK_BOX (hbox), o, TRUE, TRUE, 0);
+	cell = gtk_cell_renderer_text_new ();
+	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (o), cell, TRUE);
+	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (o), cell,
+				"text", NAME_COLUMN, NULL);
 	g_signal_connect (G_OBJECT (o), "changed",
 			  G_CALLBACK (on_unit_changed), entry);
 	entry->priv->u.menu = GTK_COMBO_BOX (o);
-	if (e)
-		gtk_exif_entry_resolution_load_unit (entry, e);
+	if (e) gtk_exif_entry_resolution_load_unit (entry, e);
 
 	return (GTK_WIDGET (entry));
 }
