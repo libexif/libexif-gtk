@@ -1,6 +1,6 @@
 AC_PREREQ(2.50)
 AC_INIT(libexif-gtk/gtk-exif-browser.c)
-AM_INIT_AUTOMAKE(libexif-gtk, 0.3.4)
+AM_INIT_AUTOMAKE(libexif-gtk, 0.3.6)
 AM_MAINTAINER_MODE
 AC_CONFIG_HEADERS(config.h)
 
@@ -46,6 +46,18 @@ PKG_CHECK_MODULES(GTK, gtk+-2.0)
 AC_SUBST(GTK_LIBS)
 AC_SUBST(GTK_CFLAGS)
 
+dnl ---------------------------------------------------------------------------
+dnl There are still some old version of libexif around. For now, don't force
+dnl users to upgrade
+dnl ---------------------------------------------------------------------------
+CPPFLAGS_save="$CPPFLAGS"
+CPPFLAGS=$LIBEXIF_GTK_CFLAGS
+AC_CHECK_HEADER([exif-mem.h], [
+	exif_msg=">= 0.6.12"
+	AC_DEFINE(HAVE_EXIF_0_6_12,1,[whether we use a version of libexif greater than 0.6.12])],[
+	exif_msg="< 0.6.12 (think about upgrading)"])
+CPPFLAGS="$CPPFLAGS_save"
+
 CFLAGS="$CFLAGS -Wall -Wchar-subscripts -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wpointer-arith"
 AC_SUBST(CFLAGS)
 
@@ -56,3 +68,15 @@ AC_OUTPUT([ po/Makefile.in m4/Makefile
   gtk-extensions/Makefile
   tests/Makefile
 ])
+
+echo "
+
+Configuration (${PACKAGE}):
+
+	Source code location:    $(srcdir)
+	Version:                 ${VERSION}
+	Compiler:                ${CC}
+
+	libexif:                 ${exif_msg}
+
+"
