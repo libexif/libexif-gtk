@@ -1,3 +1,8 @@
+2002-07-25  Lutz Müller <lutz@users.sourceforge.net>
+
+	* configure.in: Version 0.3.2. Require libexif-0.5.4 or higher.
+	* libexif-gtk/gtk-exif-browser.c: Adapt to new API.
+
 2002-07-23  Lutz Müller <lutz@users.sourceforge.net>
 
 	* configure.in: Version 0.3.1

@@ -526,6 +526,7 @@ gtk_exif_browser_set_data (GtkExifBrowser *b, ExifData *data)
 {
 	GtkWidget *label, *vbox, *bbox, *button, *hbox;
 	gint n;
+	guint i;
 
 	g_return_if_fail (GTK_EXIF_IS_BROWSER (b));
 	g_return_if_fail (data != NULL);
@@ -538,12 +539,9 @@ gtk_exif_browser_set_data (GtkExifBrowser *b, ExifData *data)
 	while ((n = gtk_notebook_get_current_page (b->priv->notebook)) >= 0)
 		gtk_notebook_remove_page (b->priv->notebook, n);
 
-	gtk_exif_browser_add_content (b, _("IFD 0"), data->ifd0);
-	gtk_exif_browser_add_content (b, _("IFD 1"), data->ifd1);
-	gtk_exif_browser_add_content (b, _("Exif IFD"), data->ifd_exif);
-	gtk_exif_browser_add_content (b, _("GPS IFD"), data->ifd_gps);
-	gtk_exif_browser_add_content (b, _("Interoperability IFD"),
-				      data->ifd_interoperability);
+	for (i = 0; i < EXIF_IFD_COUNT; i++)
+		gtk_exif_browser_add_content (b, exif_ifd_get_name (i),
+					      data->ifd[i]);
 
 	/* Create the thumbnail page */
 	vbox = gtk_vbox_new (FALSE, 5);
