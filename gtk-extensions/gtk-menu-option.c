@@ -26,7 +26,7 @@
 #include <gtk/gtkmenu.h>
 
 #ifdef ENABLE_NLS
-#  include <liboptionl.h>
+#  include <libintl.h>
 #  undef _
 #  define _(String) dgettext (PACKAGE, String)
 #  ifdef gettext_noop
