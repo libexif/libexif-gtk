@@ -56,12 +56,15 @@ main (int argc, char **argv)
 	gtk_set_locale ();
 	textdomain (PACKAGE);
 
+	g_log_set_always_fatal (G_LOG_LEVEL_CRITICAL);
 	gtk_init (&argc, &argv);
 
 	w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	gtk_widget_show (w);
 	b = gtk_exif_browser_new ();
 	ed = exif_data_new_from_file (argv[1]);
+	if (!ed)
+		g_error ("Could not load EXIF data from '%s'.", argv[1]);
 	gtk_exif_browser_set_data (GTK_EXIF_BROWSER (b), ed);
 	gtk_widget_show (b);
 	gtk_container_add (GTK_CONTAINER (w), b);

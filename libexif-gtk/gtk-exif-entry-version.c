@@ -209,8 +209,7 @@ gtk_exif_entry_version_save (GtkExifEntryVersion *entry)
 	default:
 		break;
 	}
-	g_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed",
-				 entry->priv->entry);
+	gtk_exif_entry_changed (GTK_EXIF_ENTRY (entry), entry->priv->entry);
 }
 
 static void

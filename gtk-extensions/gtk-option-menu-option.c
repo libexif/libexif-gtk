@@ -21,6 +21,8 @@
 #include <config.h>
 #include "gtk-option-menu-option.h"
 
+#include <string.h>
+
 #include <gtk/gtksignal.h>
 
 #include "gtk-menu-option.h"
@@ -49,57 +51,62 @@ gtk_option_menu_option_destroy (GtkObject *object)
 }
 
 static void
-gtk_option_menu_option_finalize (GtkObject *object)
+gtk_option_menu_option_finalize (GObject *object)
 {
 	GtkOptionMenuOption *menu = GTK_OPTION_MENU_OPTION (object);
 
 	g_free (menu->priv);
 
-	GTK_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
-gtk_option_menu_option_class_init (GtkOptionMenuOptionClass *klass)
+gtk_option_menu_option_class_init (gpointer g_class, gpointer class_data)
 {
 	GtkObjectClass *object_class;
+	GObjectClass *gobject_class;
 
-	object_class = GTK_OBJECT_CLASS (klass);
+	object_class = GTK_OBJECT_CLASS (g_class);
 	object_class->destroy  = gtk_option_menu_option_destroy;
-	object_class->finalize = gtk_option_menu_option_finalize;
 
-	signals[OPTION_SELECTED] = gtk_signal_new ("option_selected",
-		GTK_RUN_FIRST, object_class->type,
-		GTK_SIGNAL_OFFSET (GtkOptionMenuOptionClass, option_selected),
-		gtk_marshal_NONE__UINT, GTK_TYPE_NONE, 1, GTK_TYPE_UINT);
-	gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
+	gobject_class = G_OBJECT_CLASS (g_class);
+	gobject_class->finalize = gtk_option_menu_option_finalize;
 
-	parent_class = gtk_type_class (PARENT_TYPE);
+	signals[OPTION_SELECTED] = g_signal_new ("option_selected",
+		G_TYPE_FROM_CLASS (g_class), G_SIGNAL_RUN_FIRST,
+		G_STRUCT_OFFSET (GtkOptionMenuOptionClass, option_selected),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__UINT, G_TYPE_NONE, 1, G_TYPE_UINT);
+
+	parent_class = g_type_class_peek_parent (g_class);
 }
 
 static void
-gtk_option_menu_option_init (GtkOptionMenuOption *menu)
+gtk_option_menu_option_init (GTypeInstance *instance, gpointer g_class)
 {
+	GtkOptionMenuOption *menu = GTK_OPTION_MENU_OPTION (instance);
+
 	menu->priv = g_new0 (GtkOptionMenuOptionPrivate, 1);
 }
 
-GtkType
+GType
 gtk_option_menu_option_get_type (void)
 {
-	static GtkType option_menu_type = 0;
+	static GType t = 0;
+	GTypeInfo ti;
 
-	if (!option_menu_type) {
-		static const GtkTypeInfo option_menu_info = {
-			"GtkOptionMenuOption",
-			sizeof (GtkOptionMenuOption),
-			sizeof (GtkOptionMenuOptionClass),
-			(GtkClassInitFunc)  gtk_option_menu_option_class_init,
-			(GtkObjectInitFunc) gtk_option_menu_option_init,
-			NULL, NULL, NULL};
-			option_menu_type = gtk_type_unique (PARENT_TYPE,
-							&option_menu_info);
+	if (!t) {
+		memset (&ti, 0, sizeof (GTypeInfo));
+		ti.class_size    = sizeof (GtkOptionMenuOptionClass);
+		ti.class_init    = gtk_option_menu_option_class_init;
+		ti.instance_size = sizeof (GtkOptionMenuOption);
+		ti.instance_init = gtk_option_menu_option_init;
+
+		t = g_type_register_static (PARENT_TYPE, "GtkOptionMenuOption",
+					    &ti, 0);
 	}
 
-	return (option_menu_type);
+	return (t);
 }
 
 static void
@@ -114,8 +121,7 @@ on_option_set (GtkMenuOption *m, guint option, GtkOptionMenuOption *menu)
 static void
 on_option_selected (GtkMenuOption *m, guint option, GtkOptionMenuOption *menu)
 {
-	gtk_signal_emit (GTK_OBJECT (menu), signals[OPTION_SELECTED],
-			 option);
+	g_signal_emit (G_OBJECT (menu), signals[OPTION_SELECTED], 0, option);
 }
 
 GtkWidget *
@@ -126,15 +132,15 @@ gtk_option_menu_option_new (GtkOptions *options)
 
 	g_return_val_if_fail (options != NULL, NULL);
 
-	menu = gtk_type_new (GTK_TYPE_OPTION_MENU_OPTION);
+	menu = g_object_new (GTK_TYPE_OPTION_MENU_OPTION, NULL);
 
 	m = gtk_menu_option_new (options);
 	gtk_widget_show (m);
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (menu), m);
-	gtk_signal_connect (GTK_OBJECT (m), "option_set",
-			    GTK_SIGNAL_FUNC (on_option_set), menu);
-	gtk_signal_connect (GTK_OBJECT (m), "option_selected",
-			    GTK_SIGNAL_FUNC (on_option_selected), menu);
+	g_signal_connect (G_OBJECT (m), "option_set",
+			  G_CALLBACK (on_option_set), menu);
+	g_signal_connect (G_OBJECT (m), "option_selected",
+			  G_CALLBACK (on_option_selected), menu);
 
 	return (GTK_WIDGET (menu));
 }

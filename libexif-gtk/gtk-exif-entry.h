@@ -22,7 +22,7 @@
 #define __GTK_EXIF_ENTRY_H__
 
 #include <gtk/gtkvbox.h>
-#include <libexif/exif-data.h>
+#include <libexif/exif-entry.h>
 
 #define GTK_EXIF_TYPE_ENTRY     (gtk_exif_entry_get_type())
 #define GTK_EXIF_ENTRY(o)       (GTK_CHECK_CAST((o),GTK_EXIF_TYPE_ENTRY,GtkExifEntry))
@@ -53,5 +53,10 @@ struct _GtkExifEntryClass
 GType  gtk_exif_entry_get_type  (void);
 void   gtk_exif_entry_construct (GtkExifEntry *, const gchar *name,
 				 const gchar *description);
+
+/* Signals */
+void   gtk_exif_entry_changed   (GtkExifEntry *, ExifEntry *);
+void   gtk_exif_entry_added     (GtkExifEntry *, ExifEntry *);
+void   gtk_exif_entry_removed   (GtkExifEntry *, ExifEntry *);
 
 #endif /* __GTK_EXIF_ENTRY_H__ */

@@ -155,8 +155,7 @@ gtk_exif_entry_date_save (GtkExifEntryDate *entry)
 		 (gint) entry->priv->a_hour->value,
 		 (gint) entry->priv->a_min->value,
 		 (gint) entry->priv->a_sec->value);
-	g_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed",
-				 entry->priv->entry);
+	gtk_exif_entry_changed (GTK_EXIF_ENTRY (entry), entry->priv->entry);
 }
 
 static void

@@ -126,8 +126,7 @@ on_text_changed (GtkEditable *editable, GtkExifEntryCopyright *entry)
 	entry->priv->entry->components = entry->priv->entry->size;
 	g_free (photographer);
 	g_free (editor);
-	g_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed",
-				 entry->priv->entry);
+	gtk_exif_entry_changed (GTK_EXIF_ENTRY (entry), entry->priv->entry);
 }
 
 GtkWidget *

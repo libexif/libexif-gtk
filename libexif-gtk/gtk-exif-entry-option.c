@@ -267,7 +267,7 @@ gtk_exif_entry_option_new (ExifEntry *e)
 	gtk_widget_show (menu);
 	gtk_box_pack_start (GTK_BOX (hbox), menu, FALSE, FALSE, 0);
 	entry->priv->menu = GTK_OPTION_MENU_OPTION (menu);
-	g_signal_connect (GTK_OBJECT (menu), "option_selected",
+	g_signal_connect (G_OBJECT (menu), "option_selected",
 			  G_CALLBACK (on_option_selected), entry);
 
 	gtk_exif_entry_option_load (entry);

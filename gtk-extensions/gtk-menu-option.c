@@ -21,6 +21,8 @@
 #include <config.h>
 #include "gtk-menu-option.h"
 
+#include <string.h>
+
 #include <gtk/gtksignal.h>
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkmenu.h>
@@ -83,71 +85,78 @@ gtk_menu_option_destroy (GtkObject *object)
 }
 
 static void
-gtk_menu_option_finalize (GtkObject *object)
+gtk_menu_option_finalize (GObject *object)
 {
 	GtkMenuOption *menu = GTK_MENU_OPTION (object);
 
 	g_free (menu->priv);
 
-	GTK_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
-gtk_menu_option_class_init (GtkMenuOptionClass *klass)
+gtk_menu_option_class_init (gpointer g_class, gpointer class_data)
 {
 	GtkObjectClass *object_class;
+	GObjectClass *gobject_class;
 
-	object_class = GTK_OBJECT_CLASS (klass);
+	object_class = GTK_OBJECT_CLASS (g_class);
 	object_class->destroy  = gtk_menu_option_destroy;
-	object_class->finalize = gtk_menu_option_finalize;
 
-	signals[OPTION_SELECTED] = gtk_signal_new ("option_selected",
-		GTK_RUN_LAST, object_class->type,
-		GTK_SIGNAL_OFFSET (GtkMenuOptionClass, option_selected),
-		gtk_marshal_NONE__UINT, GTK_TYPE_NONE, 1, GTK_TYPE_UINT);
-	signals[OPTION_SET] = gtk_signal_new ("option_set",
-		GTK_RUN_LAST, object_class->type,
-		GTK_SIGNAL_OFFSET (GtkMenuOptionClass, option_set),
-		gtk_marshal_NONE__UINT, GTK_TYPE_NONE, 1, GTK_TYPE_UINT);
-	gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
+	gobject_class = G_OBJECT_CLASS (g_class);
+	gobject_class->finalize = gtk_menu_option_finalize;
 
-	parent_class = gtk_type_class (PARENT_TYPE);
+	signals[OPTION_SELECTED] = g_signal_new ("option_selected",
+		G_TYPE_FROM_CLASS (g_class), G_SIGNAL_RUN_LAST,
+		G_STRUCT_OFFSET (GtkMenuOptionClass, option_selected),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__UINT, G_TYPE_NONE, 1, G_TYPE_UINT);
+	signals[OPTION_SET] = g_signal_new ("option_set",
+		G_TYPE_FROM_CLASS (g_class), G_SIGNAL_RUN_LAST,
+		G_STRUCT_OFFSET (GtkMenuOptionClass, option_set),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__UINT, G_TYPE_NONE, 1, G_TYPE_UINT);
+
+	parent_class = g_type_class_peek_parent (g_class);
 }
 
 static void
-gtk_menu_option_init (GtkMenuOption *menu)
+gtk_menu_option_init (GTypeInstance *instance, gpointer g_class)
 {
+	GtkMenuOption *menu = GTK_MENU_OPTION (instance);
+
 	menu->priv = g_new0 (GtkMenuOptionPrivate, 1);
 	menu->priv->array = g_array_new (FALSE, TRUE, sizeof (guint));
 	menu->priv->items = g_ptr_array_new ();
 }
 
-GtkType
+GType
 gtk_menu_option_get_type (void)
 {
-	static GtkType menu_option_type = 0;
+	static GType t = 0;
+	GTypeInfo ti;
 
-	if (!menu_option_type) {
-		static const GtkTypeInfo menu_option_info = {
-			"GtkMenuOption",
-			sizeof (GtkMenuOption),
-			sizeof (GtkMenuOptionClass),
-			(GtkClassInitFunc)  gtk_menu_option_class_init,
-			(GtkObjectInitFunc) gtk_menu_option_init,
-			NULL, NULL, NULL};
-		menu_option_type = gtk_type_unique (PARENT_TYPE, &menu_option_info);
+	if (!t) {
+		memset (&ti, 0, sizeof (GTypeInfo));
+		ti.class_size    = sizeof (GtkMenuOptionClass);
+		ti.class_init    = gtk_menu_option_class_init;
+		ti.instance_size = sizeof (GtkMenuOption);
+		ti.instance_init = gtk_menu_option_init;
+
+		t = g_type_register_static (PARENT_TYPE, "GtkMenuOption",
+					    &ti, 0);
 	}
 
-	return (menu_option_type);
+	return (t);
 }
 
 static void
 on_item_activate (GtkMenuItem *item, GtkMenuOption *menu)
 {
 	menu->priv->current = GPOINTER_TO_INT (
-		gtk_object_get_data (GTK_OBJECT (item), "option"));
-	gtk_signal_emit (GTK_OBJECT (menu), signals[OPTION_SELECTED],
-			 menu->priv->current);
+		g_object_get_data (G_OBJECT (item), "option"));
+	g_signal_emit (G_OBJECT (menu), signals[OPTION_SELECTED], 0,
+		       menu->priv->current);
 }
 
 GtkWidget *
@@ -157,7 +166,7 @@ gtk_menu_option_new (GtkOptions *list)
 
 	g_return_val_if_fail (list != NULL, NULL);
 
-	menu = gtk_type_new (GTK_TYPE_MENU_OPTION);
+	menu = g_object_new (GTK_TYPE_MENU_OPTION, NULL);
 	gtk_menu_option_construct (menu, list);
 
 	return (GTK_WIDGET (menu));
@@ -178,11 +187,11 @@ gtk_menu_option_construct (GtkMenuOption *menu, GtkOptions *list)
 	for (i = 0; list[i].name; i++) {
 		item = gtk_menu_item_new_with_label (list[i].name);
 		gtk_widget_show (item);
-		gtk_menu_append (GTK_MENU (menu), item);
-		gtk_object_set_data (GTK_OBJECT (item), "option",
-				GINT_TO_POINTER ((gint) list[i].option));
-		gtk_signal_connect (GTK_OBJECT (item), "activate",
-				GTK_SIGNAL_FUNC (on_item_activate), menu);
+		gtk_container_add (GTK_CONTAINER (menu), item);
+		g_object_set_data (G_OBJECT (item), "option",
+				   GINT_TO_POINTER ((gint) list[i].option));
+		g_signal_connect (GTK_OBJECT (item), "activate",
+				  G_CALLBACK (on_item_activate), menu);
 		g_array_append_val (menu->priv->array, list[i].option);
 		g_ptr_array_add (menu->priv->items, item);
 	}
@@ -229,7 +238,7 @@ gtk_menu_option_set (GtkMenuOption *menu, guint option)
 
 	menu->priv->current = option;
 
-	gtk_signal_emit (GTK_OBJECT (menu), signals[OPTION_SET], option);
+	g_signal_emit (G_OBJECT (menu), signals[OPTION_SET], 0, option);
 }
 
 guint

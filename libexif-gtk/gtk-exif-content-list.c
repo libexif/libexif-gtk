@@ -180,6 +180,8 @@ gtk_exif_content_list_init (GTypeInstance *instance, gpointer g_class)
 
 	list->priv->store = gtk_list_store_new (NUM_COLUMNS,
 				G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER);
+	gtk_tree_view_set_model (GTK_TREE_VIEW (list),
+				 GTK_TREE_MODEL (list->priv->store));
 }
 
 GTK_EXIF_CLASS (content_list, ContentList, "ContentList")

@@ -143,3 +143,27 @@ gtk_exif_entry_construct (GtkExifEntry *entry,
 #endif
 	gtk_box_pack_start (GTK_BOX (entry), label, TRUE, FALSE, 0);
 }
+
+void
+gtk_exif_entry_changed (GtkExifEntry *entry, ExifEntry *e)
+{
+	g_return_if_fail (GTK_EXIF_IS_ENTRY (entry));
+
+	g_signal_emit (G_OBJECT (entry), signals[ENTRY_CHANGED], 0, e);
+}
+
+void
+gtk_exif_entry_added (GtkExifEntry *entry, ExifEntry *e)
+{
+	g_return_if_fail (GTK_EXIF_IS_ENTRY (entry));
+
+	g_signal_emit (G_OBJECT (entry), signals[ENTRY_ADDED], 0, e);
+}
+
+void
+gtk_exif_entry_removed (GtkExifEntry *entry, ExifEntry *e)
+{
+	g_return_if_fail (GTK_EXIF_IS_ENTRY (entry));
+	
+	g_signal_emit (G_OBJECT (entry), signals[ENTRY_REMOVED], 0, e);
+}

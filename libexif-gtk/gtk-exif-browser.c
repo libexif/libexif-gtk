@@ -31,7 +31,7 @@
 #include <gtk/gtkbutton.h>
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkscrolledwindow.h>
-#include <gtk/gtkpixmap.h>
+#include <gtk/gtkimage.h>
 #include <gtk/gtktooltips.h>
 #include <gtk/gtkhbbox.h>
 #include <gtk/gtkfilesel.h>
@@ -366,19 +366,16 @@ gtk_exif_browser_show_thumbnail (GtkExifBrowser *b)
 	if (!b->priv->data->data) {
 		b->priv->thumb = gtk_label_new (_("No thumbnail available."));
 	} else {
-#ifdef HAVE_GDK_PIXBUF
 		GdkPixbufLoader *loader;
-		GdkPixmap *pixmap;
-		GdkBitmap *bitmap;
 		GtkWidget *image;
 
 		loader = gdk_pixbuf_loader_new ();
 		if (!gdk_pixbuf_loader_write (loader,
-				b->priv->data->data, b->priv->data->size)) {
+			b->priv->data->data, b->priv->data->size, NULL)) {
 			b->priv->thumb = gtk_label_new (_("Could not parse "
 							"thumbnail data."));
 		} else {
-			gdk_pixbuf_loader_close (loader);
+			gdk_pixbuf_loader_close (loader, NULL);
 			image = gtk_image_new_from_pixbuf (
 					gdk_pixbuf_loader_get_pixbuf (loader));
 			gtk_widget_show (image);
@@ -389,12 +386,7 @@ gtk_exif_browser_show_thumbnail (GtkExifBrowser *b)
 			gtk_scrolled_window_add_with_viewport (
 				GTK_SCROLLED_WINDOW (b->priv->thumb), image);
 		}
-		g_object_unref (GTK_OBJECT (loader));
-#else
-		b->priv->thumb = gtk_label_new (_("Compiled without "
-					"support for gdk-pixbuf. Can not "
-					"display thumbnail."));
-#endif
+		g_object_unref (G_OBJECT (loader));
 		tip = g_strdup_printf (_("Size: %i byte(s)."),
 				       b->priv->data->size);
 		gtk_tooltips_set_tip (b->priv->tooltips, b->priv->thumb,
