@@ -40,7 +40,7 @@ libexif_gtk_la_SOURCES =			\
 	gtk-exif-entry-resolution.c		\
 	gtk-exif-entry-version.c		\
 	gtk-exif-tag-menu.c gtk-exif-tag-menu.h
-libexif_gtk_la_LDFLAGS = -version-info $(LIBEXIF_GTK_CURRENT):$(LIBEXIF_GTK_REVISION):$(LIBEXIF_GTK_AGE)
+libexif_gtk_la_LDFLAGS = -version-info @LIBEXIF_GTK_VERSION_INFO@
 libexif_gtk_la_LIBADD =						\
 	$(top_builddir)/gtk-extensions/libgtk-extensions.la	\
 	$(LIBEXIF_GTK_LIBS)					\
