@@ -49,7 +49,7 @@ AC_SUBST(GTK_CFLAGS)
 CFLAGS="$CFLAGS -Wall -Wchar-subscripts -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wpointer-arith"
 AC_SUBST(CFLAGS)
 
-AC_OUTPUT([ intl/Makefile po/Makefile.in m4/Makefile 
+AC_OUTPUT([
   Makefile
   libexif-gtk/Makefile
   libexif-gtk/libexif-gtk.pc
