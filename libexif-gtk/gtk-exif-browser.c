@@ -436,7 +436,7 @@ on_load_ok_clicked (GtkButton *button, GtkExifBrowser *b)
 	GtkWidget *fsel;
 	const gchar *path;
 	FILE *f;
-	unsigned int size;
+	unsigned int size, read;
 
 	g_return_if_fail (GTK_EXIF_IS_BROWSER (b));
 
@@ -463,8 +463,9 @@ on_load_ok_clicked (GtkButton *button, GtkExifBrowser *b)
 			fclose (f);
 			return;
 		}
-		fread (b->priv->data->data, 1, size, f);
-		if (ferror (f)) {
+		b->priv->data->size = size;
+		read = fread (b->priv->data->data, 1, size, f);
+		if ((read != size) || ferror (f)) {
 			g_warning ("Could not read %i bytes!", size);
 			fclose (f);
 			return;
@@ -586,6 +587,9 @@ gtk_exif_browser_set_data (GtkExifBrowser *b, ExifData *data)
 	/* Buttons */
 	bbox = gtk_hbutton_box_new ();
 	gtk_widget_show (bbox);
+	gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_SPREAD);
+	gtk_container_set_border_width (GTK_CONTAINER (bbox), 5);
+	gtk_button_box_set_spacing (GTK_BUTTON_BOX (bbox), 5);
 	gtk_box_pack_end (GTK_BOX (vbox), bbox, FALSE, FALSE, 0);
 	button = gtk_button_new_with_label (_("Load"));
 	gtk_widget_show (button);
