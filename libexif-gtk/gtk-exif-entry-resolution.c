@@ -301,8 +301,8 @@ on_cw_toggled (GtkToggleButton *toggle, GtkExifEntryResolution *entry)
 	gtk_widget_set_sensitive (entry->priv->ox.sq, toggle->active);
 	if (toggle->active && !e) { 
 		e = exif_entry_new ();
-		exif_entry_initialize (e, entry->priv->tag_x);
 		exif_content_add_entry (entry->priv->content, e);
+		exif_entry_initialize (e, entry->priv->tag_x);
 		gtk_exif_entry_resolution_load (entry, e);
 		exif_entry_unref (e);
 		gtk_exif_entry_added (GTK_EXIF_ENTRY (entry), e);
@@ -325,8 +325,8 @@ on_ch_toggled (GtkToggleButton *toggle, GtkExifEntryResolution *entry)
 	gtk_widget_set_sensitive (entry->priv->oy.sq, toggle->active);
         if (toggle->active && !e) {
 		e = exif_entry_new ();
-		exif_entry_initialize (e, entry->priv->tag_y);
 		exif_content_add_entry (entry->priv->content, e);
+		exif_entry_initialize (e, entry->priv->tag_y);
 		gtk_exif_entry_resolution_load (entry, e);
 		exif_entry_unref (e);
 		gtk_exif_entry_added (GTK_EXIF_ENTRY (entry), e);
@@ -349,8 +349,8 @@ on_unit_toggled (GtkToggleButton *toggle, GtkExifEntryResolution *entry)
 				  toggle->active);
 	if (toggle->active && !e) {
 		e = exif_entry_new ();
-		exif_entry_initialize (e, entry->priv->tag_u);
 		exif_content_add_entry (entry->priv->content, e);
+		exif_entry_initialize (e, entry->priv->tag_u);
 		gtk_exif_entry_resolution_load_unit (entry, e);
 		exif_entry_unref (e);
 		gtk_exif_entry_added (GTK_EXIF_ENTRY (entry), e);

@@ -1,3 +1,8 @@
+2003-08-01  Lutz Mueller <lutz@users.sourceforge.net>
+
+	* libexif-gtk/gtk-exif-entry-resolution.c: An entry must have a 
+	  parent before initialization.
+
 2002-12-11  Lutz Müller <lutz@users.sourceforge.net>
 
 	* libexif-gtk/gtk-exif-content-list.c: Split the endless list of tags.
