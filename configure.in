@@ -46,7 +46,7 @@ PKG_CHECK_MODULES(GTK, gtk+-2.0)
 AC_SUBST(GTK_LIBS)
 AC_SUBST(GTK_CFLAGS)
 
-CFLAGS="$CFLAGS -Wall -Wchar-subscripts -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wpointer-arith -Werror"
+CFLAGS="$CFLAGS -Wall -Wchar-subscripts -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wpointer-arith"
 AC_SUBST(CFLAGS)
 
 AC_OUTPUT([
@@ -55,6 +55,4 @@ AC_OUTPUT([
   libexif-gtk/libexif-gtk.pc
   gtk-extensions/Makefile
   tests/Makefile
-  intl/Makefile
-  po/Makefile.in
 ])
