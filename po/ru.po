@@ -1,52 +1,52 @@
-# LIBEXIF-GTK PO FILE
+# Russian Translation
 # Copyright � 2003 Free Software Foundation, Inc.
 # This file is distributed under the same license as the LIBEXIF-GTK package.
-# Arnaud Launay <asl@launay.org>, 2003.
+# Вячеслав Диконов (Vyachelav Dikonov) <sdiconov@mail.ru>, 2003.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: libexif-gtk 0.3.3\n"
-"POT-Creation-Date: 2003-01-07 17:11+0100\n"
-"PO-Revision-Date: 2003-01-07 17:30+0100\n"
-"Last-Translator: Arnaud Launay <asl@launay.org>\n"
-"Language-Team: Fran�ais <traduc@traduc.org>\n"
+"POT-Creation-Date: 2003-03-21 00:19+0300\n"
+"PO-Revision-Date: 2003-03-19 21:37+0300\n"
+"Last-Translator: Вячеслав Диконов <sdiconov@mail.ru>\n"
+"Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: libexif-gtk/gtk-exif-browser.c:371
 msgid "No thumbnail available."
-msgstr "Pas de vignette disponible."
+msgstr "Нет миниатюрного изображения."
 
 #: libexif-gtk/gtk-exif-browser.c:379
 msgid "Could not parse thumbnail data."
-msgstr "Ne peut parcourir les donne�s de la vignette."
+msgstr "Невозможно прочесть миниатюрное изображение."
 
 #: libexif-gtk/gtk-exif-browser.c:394
 #, c-format
 msgid "Size: %i byte(s)."
-msgstr "Taille: %i octet(s)."
+msgstr "Размер: %i байт."
 
 #: libexif-gtk/gtk-exif-browser.c:463
 msgid "Load..."
-msgstr "Chargement..."
+msgstr "Загрузить..."
 
 #: libexif-gtk/gtk-exif-browser.c:503
 msgid "Save As..."
-msgstr "Sauver sous..."
+msgstr "Сохранить как..."
 
 #: libexif-gtk/gtk-exif-browser.c:553
 msgid "Thumbnail"
-msgstr "Vignette"
+msgstr "Миниатюра"
 
 #: libexif-gtk/gtk-exif-browser.c:570
 msgid "Load"
-msgstr "Charger"
+msgstr "Загрузить"
 
 #: libexif-gtk/gtk-exif-browser.c:575
 msgid "Save"
-msgstr "Sauver"
+msgstr "Сохранить"
 
 #: libexif-gtk/gtk-exif-browser.c:580
 msgid "Delete"
-msgstr "Effacer"
+msgstr "Удалить"
