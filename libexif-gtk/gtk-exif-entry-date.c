@@ -23,6 +23,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtkradiobutton.h>
@@ -78,50 +79,57 @@ gtk_exif_entry_date_destroy (GtkObject *object)
 }
 
 static void
-gtk_exif_entry_date_finalize (GtkObject *object)
+gtk_exif_entry_date_finalize (GObject *object)
 {
 	GtkExifEntryDate *entry = GTK_EXIF_ENTRY_DATE (object);
 
 	g_free (entry->priv);
 
-	GTK_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
-gtk_exif_entry_date_class_init (GtkExifEntryDateClass *klass)
+gtk_exif_entry_date_class_init (gpointer g_class, gpointer class_data)
 {
 	GtkObjectClass *object_class;
+	GObjectClass *gobject_class;
 
-	object_class = GTK_OBJECT_CLASS (klass);
+	object_class = GTK_OBJECT_CLASS (g_class);
 	object_class->destroy  = gtk_exif_entry_date_destroy;
-	object_class->finalize = gtk_exif_entry_date_finalize;
 
-	parent_class = gtk_type_class (PARENT_TYPE);
+	gobject_class = G_OBJECT_CLASS (g_class);
+	gobject_class->finalize = gtk_exif_entry_date_finalize;
+
+	parent_class = g_type_class_peek_parent (g_class);
 }
 
 static void
-gtk_exif_entry_date_init (GtkExifEntryDate *entry)
+gtk_exif_entry_date_init (GTypeInstance *instance, gpointer g_class)
 {
+	GtkExifEntryDate *entry = GTK_EXIF_ENTRY_DATE (instance);
+
 	entry->priv = g_new0 (GtkExifEntryDatePrivate, 1);
 }
 
-GtkType
+GType
 gtk_exif_entry_date_get_type (void)
 {
-	static GtkType entry_type = 0;
+        static GType t = 0;
 
-	if (!entry_type) {
-		static const GtkTypeInfo entry_info = {
-			"GtkExifEntryDate",
-			sizeof (GtkExifEntryDate),
-			sizeof (GtkExifEntryDateClass),
-			(GtkClassInitFunc)  gtk_exif_entry_date_class_init,
-			(GtkObjectInitFunc) gtk_exif_entry_date_init,
-			NULL, NULL, NULL};
-		entry_type = gtk_type_unique (PARENT_TYPE, &entry_info);
-	}
+        if (!t) {
+                GTypeInfo ti;
 
-	return (entry_type);
+                memset (&ti, 0, sizeof (GTypeInfo));
+                ti.class_size    = sizeof (GtkExifEntryDateClass);
+                ti.class_init    = gtk_exif_entry_date_class_init;
+                ti.instance_size = sizeof (GtkExifEntryDate);
+                ti.instance_init = gtk_exif_entry_date_init;
+
+                t = g_type_register_static (PARENT_TYPE, "GtkExifEntryDate",
+                                            &ti, 0);
+        }
+
+        return (t); 
 }
 
 static void
@@ -133,10 +141,14 @@ gtk_exif_entry_date_load (GtkExifEntryDate *entry)
 	g_return_if_fail (GTK_EXIF_IS_ENTRY_DATE (entry));
 	p = entry->priv;
 
-	gtk_signal_handler_block_by_data (GTK_OBJECT (p->cal), entry);
-	gtk_signal_handler_block_by_data (GTK_OBJECT (p->a_hour), entry);
-	gtk_signal_handler_block_by_data (GTK_OBJECT (p->a_min), entry);
-	gtk_signal_handler_block_by_data (GTK_OBJECT (p->a_sec), entry);
+	g_signal_handlers_block_matched (GTK_OBJECT (p->cal),
+				G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, entry);
+	g_signal_handlers_block_matched (GTK_OBJECT (p->a_hour),
+				G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, entry);
+	g_signal_handlers_block_matched (GTK_OBJECT (p->a_min),
+				G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, entry);
+	g_signal_handlers_block_matched (GTK_OBJECT (p->a_sec),
+				G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, entry);
 
 	data = g_strdup (entry->priv->entry->data);
 	data[4] = data[7] = data[10] = data[13] = data[16] = '\0';
@@ -147,10 +159,14 @@ gtk_exif_entry_date_load (GtkExifEntryDate *entry)
 	gtk_adjustment_set_value (entry->priv->a_sec,  atoi (data + 17));
 	g_free (data);
 
-	gtk_signal_handler_unblock_by_data (GTK_OBJECT (p->cal), entry);
-	gtk_signal_handler_unblock_by_data (GTK_OBJECT (p->a_hour), entry);
-	gtk_signal_handler_unblock_by_data (GTK_OBJECT (p->a_min), entry);
-	gtk_signal_handler_unblock_by_data (GTK_OBJECT (p->a_sec), entry);
+	g_signal_handlers_unblock_matched (G_OBJECT (p->cal),
+				G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, entry);
+	g_signal_handlers_unblock_matched (G_OBJECT (p->a_hour),
+				G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, entry);
+	g_signal_handlers_unblock_matched (G_OBJECT (p->a_min),
+				G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, entry);
+	g_signal_handlers_unblock_matched (G_OBJECT (p->a_sec),
+				G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, entry);
 }
 
 static void
@@ -164,7 +180,7 @@ gtk_exif_entry_date_save (GtkExifEntryDate *entry)
 		 (gint) entry->priv->a_hour->value,
 		 (gint) entry->priv->a_min->value,
 		 (gint) entry->priv->a_sec->value);
-	gtk_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed",
+	g_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed",
 				 entry->priv->entry);
 }
 
@@ -192,7 +208,7 @@ gtk_exif_entry_date_new (ExifEntry *e)
 			      (e->tag == EXIF_TAG_DATE_TIME_ORIGINAL) ||
 			      (e->tag == EXIF_TAG_DATE_TIME_DIGITIZED), NULL);
 
-	entry = gtk_type_new (GTK_EXIF_TYPE_ENTRY_DATE);
+	entry = g_object_new (GTK_EXIF_TYPE_ENTRY_DATE, NULL);
 	entry->priv->entry = e;
 	exif_entry_ref (e);
 	gtk_exif_entry_construct (GTK_EXIF_ENTRY (entry),
@@ -203,8 +219,8 @@ gtk_exif_entry_date_new (ExifEntry *e)
 	gtk_widget_show (c);
 	gtk_box_pack_start (GTK_BOX (entry), c, TRUE, FALSE, 0);
 	entry->priv->cal = GTK_CALENDAR (c);
-	gtk_signal_connect (GTK_OBJECT (c), "day_selected",
-			    GTK_SIGNAL_FUNC (on_day_selected), entry);
+	g_signal_connect (GTK_OBJECT (c), "day_selected",
+			    G_CALLBACK (on_day_selected), entry);
 
 	hbox = gtk_hbox_new (FALSE, 5);
 	gtk_widget_show (hbox);
@@ -217,8 +233,8 @@ gtk_exif_entry_date_new (ExifEntry *e)
 	gtk_widget_show (spin);
 	gtk_box_pack_start (GTK_BOX (hbox), spin, FALSE, FALSE, 0);
 	entry->priv->a_hour = GTK_ADJUSTMENT (a);
-	gtk_signal_connect (a, "value_changed",
-			    GTK_SIGNAL_FUNC (on_time_changed), entry);
+	g_signal_connect (a, "value_changed",
+			    G_CALLBACK (on_time_changed), entry);
 	label = gtk_label_new (":");
 	gtk_widget_show (label);
 	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
@@ -227,8 +243,8 @@ gtk_exif_entry_date_new (ExifEntry *e)
 	gtk_widget_show (spin);
 	gtk_box_pack_start (GTK_BOX (hbox), spin, FALSE, FALSE, 0);
 	entry->priv->a_min = GTK_ADJUSTMENT (a);
-	gtk_signal_connect (a, "value_changed",
-			    GTK_SIGNAL_FUNC (on_time_changed), entry);
+	g_signal_connect (a, "value_changed",
+			  G_CALLBACK (on_time_changed), entry);
 	label = gtk_label_new (":");
 	gtk_widget_show (label);
 	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
@@ -237,8 +253,8 @@ gtk_exif_entry_date_new (ExifEntry *e)
 	gtk_widget_show (spin);
 	gtk_box_pack_start (GTK_BOX (hbox), spin, FALSE, FALSE, 0);
 	entry->priv->a_sec = GTK_ADJUSTMENT (a);
-	gtk_signal_connect (a, "value_changed",
-			    GTK_SIGNAL_FUNC (on_time_changed), entry);
+	g_signal_connect (a, "value_changed",
+			  G_CALLBACK (on_time_changed), entry);
 
 	gtk_exif_entry_date_load (entry);
 

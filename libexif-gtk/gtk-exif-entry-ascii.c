@@ -54,50 +54,57 @@ gtk_exif_entry_ascii_destroy (GtkObject *object)
 }
 
 static void
-gtk_exif_entry_ascii_finalize (GtkObject *object)
+gtk_exif_entry_ascii_finalize (GObject *object)
 {
 	GtkExifEntryAscii *entry = GTK_EXIF_ENTRY_ASCII (object);
 
 	g_free (entry->priv);
 
-	GTK_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
-gtk_exif_entry_ascii_class_init (GtkExifEntryAsciiClass *klass)
+gtk_exif_entry_ascii_class_init (gpointer g_class, gpointer class_data)
 {
 	GtkObjectClass *object_class;
+	GObjectClass *gobject_class;
 
-	object_class = GTK_OBJECT_CLASS (klass);
+	object_class = GTK_OBJECT_CLASS (g_class);
 	object_class->destroy  = gtk_exif_entry_ascii_destroy;
-	object_class->finalize = gtk_exif_entry_ascii_finalize;
 
-	parent_class = gtk_type_class (PARENT_TYPE);
+	gobject_class = G_OBJECT_CLASS (g_class);
+	gobject_class->finalize = gtk_exif_entry_ascii_finalize;
+
+	parent_class = g_type_class_peek_parent (g_class);
 }
 
 static void
-gtk_exif_entry_ascii_init (GtkExifEntryAscii *entry)
+gtk_exif_entry_ascii_init (GTypeInstance *instance, gpointer g_class)
 {
+	GtkExifEntryAscii *entry = GTK_EXIF_ENTRY_ASCII (instance);
+
 	entry->priv = g_new0 (GtkExifEntryAsciiPrivate, 1);
 }
 
-GtkType
+GType
 gtk_exif_entry_ascii_get_type (void)
 {
-	static GtkType entry_type = 0;
+        static GType t = 0;
 
-	if (!entry_type) {
-		static const GtkTypeInfo entry_info = {
-			"GtkExifEntryAscii",
-			sizeof (GtkExifEntryAscii),
-			sizeof (GtkExifEntryAsciiClass),
-			(GtkClassInitFunc)  gtk_exif_entry_ascii_class_init,
-			(GtkObjectInitFunc) gtk_exif_entry_ascii_init,
-			NULL, NULL, NULL};
-		entry_type = gtk_type_unique (PARENT_TYPE, &entry_info);
-	}
+        if (!t) {
+                GTypeInfo ti;
 
-	return (entry_type);
+                memset (&ti, 0, sizeof (GTypeInfo));
+                ti.class_size    = sizeof (GtkExifEntryAsciiClass);
+                ti.class_init    = gtk_exif_entry_ascii_class_init;
+                ti.instance_size = sizeof (GtkExifEntryAscii);
+                ti.instance_init = gtk_exif_entry_ascii_init;
+
+                t = g_type_register_static (PARENT_TYPE, "GtkExifEntryAscii",
+					    &ti, 0);
+        }
+
+        return (t);
 }
 
 static void
@@ -110,7 +117,7 @@ on_text_changed (GtkEditable *editable, GtkExifEntryAscii *entry)
 	entry->priv->entry->data = txt;
 	entry->priv->entry->size = strlen (txt) + 1;
 	entry->priv->entry->components = entry->priv->entry->size;
-	gtk_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed",
+	g_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed",
 				 entry->priv->entry);
 }
 
@@ -123,7 +130,7 @@ gtk_exif_entry_ascii_new (ExifEntry *e)
 	g_return_val_if_fail (e != NULL, NULL);
 	g_return_val_if_fail (e->format == EXIF_FORMAT_ASCII, NULL);
 
-	entry = gtk_type_new (GTK_EXIF_TYPE_ENTRY_ASCII);
+	entry = g_object_new (GTK_EXIF_TYPE_ENTRY_ASCII, NULL);
 	entry->priv->entry = e;
 	exif_entry_ref (e);
 	gtk_exif_entry_construct (GTK_EXIF_ENTRY (entry),
@@ -134,8 +141,8 @@ gtk_exif_entry_ascii_new (ExifEntry *e)
 	gtk_widget_show (widget);
 	gtk_box_pack_start (GTK_BOX (entry), widget, TRUE, FALSE, 0);
 	gtk_entry_set_text (GTK_ENTRY (widget), e->data);
-	gtk_signal_connect (GTK_OBJECT (widget), "changed",
-			    GTK_SIGNAL_FUNC (on_text_changed), entry);
+	g_signal_connect (G_OBJECT (widget), "changed",
+			  G_CALLBACK (on_text_changed), entry);
 
 	return (GTK_WIDGET (entry));
 }

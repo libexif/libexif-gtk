@@ -26,7 +26,7 @@
 #define GTK_EXIF_TYPE_ENTRY_ASCII     (gtk_exif_entry_ascii_get_type())
 #define GTK_EXIF_ENTRY_ASCII(o)       (GTK_CHECK_CAST((o),GTK_EXIF_TYPE_ENTRY_ASCII,GtkExifEntryAscii))
 #define GTK_EXIF_ENTRY_ASCII_CLASS(k) (GTK_CHECK_CLASS_CAST((k),GTK_EXIF_TYPE_ENTRY_ASCII,GtkExifEntryAsciiClass))
-#define GTK_EXIF_IS_ENTRY_ASCII(o)    (GTK_CHECK_TYPE((o),GTK_EXIF_TYPE_ENTRY_ASCII))
+#define GTK_EXIF_IS_ENTRY_ASCII(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o),GTK_EXIF_TYPE_ENTRY_ASCII))
 
 typedef struct _GtkExifEntryAscii        GtkExifEntryAscii;
 typedef struct _GtkExifEntryAsciiPrivate GtkExifEntryAsciiPrivate;

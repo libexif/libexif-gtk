@@ -21,13 +21,13 @@
 #ifndef __GTK_EXIF_CONTENT_LIST_H__
 #define __GTK_EXIF_CONTENT_LIST_H__
 
-#include <gtk/gtkclist.h>
+#include <gtk/gtktreeview.h>
 #include <libexif/exif-data.h>
 
 #define GTK_EXIF_TYPE_CONTENT_LIST     (gtk_exif_content_list_get_type())
 #define GTK_EXIF_CONTENT_LIST(o)       (GTK_CHECK_CAST((o),GTK_EXIF_TYPE_CONTENT_LIST,GtkExifContentList))
 #define GTK_EXIF_CONTENT_LIST_CLASS(k) (GTK_CHECK_CLASS_CAST((k),GTK_EXIF_TYPE_CONTENT_LIST,GtkExifContentListClass))
-#define GTK_EXIF_IS_CONTENT_LIST(o)    (GTK_CHECK_TYPE((o),GTK_EXIF_TYPE_CONTENT_LIST))
+#define GTK_EXIF_IS_CONTENT_LIST(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o),GTK_EXIF_TYPE_CONTENT_LIST))
 
 typedef struct _GtkExifContentList        GtkExifContentList;
 typedef struct _GtkExifContentListPrivate GtkExifContentListPrivate;
@@ -35,7 +35,7 @@ typedef struct _GtkExifContentListClass   GtkExifContentListClass;
 
 struct _GtkExifContentList
 {
-	GtkCList parent;
+	GtkTreeView parent;
 
 	ExifContent *content;
 
@@ -44,7 +44,7 @@ struct _GtkExifContentList
 
 struct _GtkExifContentListClass
 {
-	GtkCListClass parent_class;
+	GtkTreeViewClass parent_class;
 
 	/* Signals */
 	void (* entry_selected)  (GtkExifContentList *list, ExifEntry *);
@@ -53,12 +53,14 @@ struct _GtkExifContentListClass
 	void (* entry_removed)   (GtkExifContentList *list, ExifEntry *);
 };
 
-GtkType    gtk_exif_content_list_get_type (void);
+GType      gtk_exif_content_list_get_type (void);
 GtkWidget *gtk_exif_content_list_new      (void);
 
-void       gtk_exif_content_list_add_entry   (GtkExifContentList *list,
-					      ExifEntry *entry);
-void       gtk_exif_content_list_set_content (GtkExifContentList *list,
-					      ExifContent *content);
+void       gtk_exif_content_list_add_entry    (GtkExifContentList *,
+					       ExifEntry *entry);
+void       gtk_exif_content_list_update_entry (GtkExifContentList *,
+					       ExifEntry *);
+void       gtk_exif_content_list_set_content  (GtkExifContentList *,
+					       ExifContent *);
 
 #endif /* __GTK_EXIF_CONTENT_LIST_H__ */

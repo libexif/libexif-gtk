@@ -26,7 +26,7 @@
 #define GTK_EXIF_TYPE_ENTRY_COPYRIGHT     (gtk_exif_entry_copyright_get_type())
 #define GTK_EXIF_ENTRY_COPYRIGHT(o)       (GTK_CHECK_CAST((o),GTK_EXIF_TYPE_ENTRY_COPYRIGHT,GtkExifEntryCopyright))
 #define GTK_EXIF_ENTRY_COPYRIGHT_CLASS(k) (GTK_CHECK_CLASS_CAST((k),GTK_EXIF_TYPE_ENTRY_COPYRIGHT,GtkExifEntryCopyrightClass))
-#define GTK_EXIF_IS_ENTRY_COPYRIGHT(o)    (GTK_CHECK_TYPE((o),GTK_EXIF_TYPE_ENTRY_COPYRIGHT))
+#define GTK_EXIF_IS_ENTRY_COPYRIGHT(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o),GTK_EXIF_TYPE_ENTRY_COPYRIGHT))
 
 typedef struct _GtkExifEntryCopyright        GtkExifEntryCopyright;
 typedef struct _GtkExifEntryCopyrightPrivate GtkExifEntryCopyrightPrivate;

@@ -27,7 +27,7 @@
 #define GTK_EXIF_TYPE_ENTRY     (gtk_exif_entry_get_type())
 #define GTK_EXIF_ENTRY(o)       (GTK_CHECK_CAST((o),GTK_EXIF_TYPE_ENTRY,GtkExifEntry))
 #define GTK_EXIF_ENTRY_CLASS(k) (GTK_CHECK_CLASS_CAST((k),GTK_EXIF_TYPE_ENTRY,GtkExifEntryClass))
-#define GTK_EXIF_IS_ENTRY(o)    (GTK_CHECK_TYPE((o),GTK_EXIF_TYPE_ENTRY))
+#define GTK_EXIF_IS_ENTRY(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o),GTK_EXIF_TYPE_ENTRY))
 
 typedef struct _GtkExifEntry        GtkExifEntry;
 typedef struct _GtkExifEntryPrivate GtkExifEntryPrivate;
@@ -50,8 +50,8 @@ struct _GtkExifEntryClass
 	void (* entry_added)   (GtkExifEntry *entry, ExifEntry *e);
 };
 
-GtkType    gtk_exif_entry_get_type  (void);
-void       gtk_exif_entry_construct (GtkExifEntry *entry, const gchar *name,
-				     const gchar *description);
+GType  gtk_exif_entry_get_type  (void);
+void   gtk_exif_entry_construct (GtkExifEntry *, const gchar *name,
+				 const gchar *description);
 
 #endif /* __GTK_EXIF_ENTRY_H__ */

@@ -26,7 +26,7 @@
 #define GTK_EXIF_TYPE_ENTRY_DATE     (gtk_exif_entry_date_get_type())
 #define GTK_EXIF_ENTRY_DATE(o)       (GTK_CHECK_CAST((o),GTK_EXIF_TYPE_ENTRY_DATE,GtkExifEntryDate))
 #define GTK_EXIF_ENTRY_DATE_CLASS(k) (GTK_CHECK_CLASS_CAST((k),GTK_EXIF_TYPE_ENTRY_DATE,GtkExifEntryDateClass))
-#define GTK_EXIF_IS_ENTRY_DATE(o)    (GTK_CHECK_TYPE((o),GTK_EXIF_TYPE_ENTRY_DATE))
+#define GTK_EXIF_IS_ENTRY_DATE(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o),GTK_EXIF_TYPE_ENTRY_DATE))
 
 typedef struct _GtkExifEntryDate        GtkExifEntryDate;
 typedef struct _GtkExifEntryDatePrivate GtkExifEntryDatePrivate;

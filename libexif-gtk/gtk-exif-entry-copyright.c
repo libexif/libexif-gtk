@@ -75,50 +75,57 @@ gtk_exif_entry_copyright_destroy (GtkObject *object)
 }
 
 static void
-gtk_exif_entry_copyright_finalize (GtkObject *object)
+gtk_exif_entry_copyright_finalize (GObject *object)
 {
 	GtkExifEntryCopyright *entry = GTK_EXIF_ENTRY_COPYRIGHT (object);
 
 	g_free (entry->priv);
 
-	GTK_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
-gtk_exif_entry_copyright_class_init (GtkExifEntryCopyrightClass *klass)
+gtk_exif_entry_copyright_class_init (gpointer g_class, gpointer class_data)
 {
 	GtkObjectClass *object_class;
+	GObjectClass *gobject_class;
 
-	object_class = GTK_OBJECT_CLASS (klass);
+	object_class = GTK_OBJECT_CLASS (g_class);
 	object_class->destroy  = gtk_exif_entry_copyright_destroy;
-	object_class->finalize = gtk_exif_entry_copyright_finalize;
 
-	parent_class = gtk_type_class (PARENT_TYPE);
+	gobject_class = G_OBJECT_CLASS (g_class);
+	gobject_class->finalize = gtk_exif_entry_copyright_finalize;
+
+	parent_class = g_type_class_peek_parent (g_class);
 }
 
 static void
-gtk_exif_entry_copyright_init (GtkExifEntryCopyright *entry)
+gtk_exif_entry_copyright_init (GTypeInstance *instance, gpointer g_class)
 {
+	GtkExifEntryCopyright *entry = GTK_EXIF_ENTRY_COPYRIGHT (instance);
+
 	entry->priv = g_new0 (GtkExifEntryCopyrightPrivate, 1);
 }
 
-GtkType
+GType
 gtk_exif_entry_copyright_get_type (void)
 {
-	static GtkType entry_type = 0;
+        static GType t = 0;
 
-	if (!entry_type) {
-		static const GtkTypeInfo entry_info = {
-			"GtkExifEntryCopyright",
-			sizeof (GtkExifEntryCopyright),
-			sizeof (GtkExifEntryCopyrightClass),
-			(GtkClassInitFunc)  gtk_exif_entry_copyright_class_init,
-			(GtkObjectInitFunc) gtk_exif_entry_copyright_init,
-			NULL, NULL, NULL};
-		entry_type = gtk_type_unique (PARENT_TYPE, &entry_info);
-	}
+        if (!t) {
+                GTypeInfo ti;
 
-	return (entry_type);
+                memset (&ti, 0, sizeof (GTypeInfo));
+                ti.class_size    = sizeof (GtkExifEntryCopyrightClass);
+                ti.class_init    = gtk_exif_entry_copyright_class_init;
+                ti.instance_size = sizeof (GtkExifEntryCopyright);
+                ti.instance_init = gtk_exif_entry_copyright_init;
+
+                t = g_type_register_static (PARENT_TYPE,
+					    "GtkExifEntryCopyright", &ti, 0);
+        }
+
+        return (t); 
 }
 
 static void
@@ -144,7 +151,7 @@ on_text_changed (GtkEditable *editable, GtkExifEntryCopyright *entry)
 	entry->priv->entry->components = entry->priv->entry->size;
 	g_free (photographer);
 	g_free (editor);
-	gtk_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed",
+	g_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed",
 				 entry->priv->entry);
 }
 
@@ -158,7 +165,7 @@ gtk_exif_entry_copyright_new (ExifEntry *e)
 	g_return_val_if_fail (e->format == EXIF_FORMAT_ASCII, NULL);
 	g_return_val_if_fail (e->tag == EXIF_TAG_COPYRIGHT, NULL);
 
-	entry = gtk_type_new (GTK_EXIF_TYPE_ENTRY_COPYRIGHT);
+	entry = g_object_new (GTK_EXIF_TYPE_ENTRY_COPYRIGHT, NULL);
 	entry->priv->entry = e;
 	exif_entry_ref (e);
 	gtk_exif_entry_construct (GTK_EXIF_ENTRY (entry),
@@ -187,16 +194,16 @@ gtk_exif_entry_copyright_new (ExifEntry *e)
 	gtk_table_attach (GTK_TABLE (table), widget, 1, 2, 0, 1,
 			  GTK_FILL | GTK_EXPAND, 0, 0, 0);
 	gtk_entry_set_text (GTK_ENTRY (widget), e->data);
-	gtk_signal_connect (GTK_OBJECT (widget), "changed",
-			    GTK_SIGNAL_FUNC (on_text_changed), entry);
+	g_signal_connect (GTK_OBJECT (widget), "changed",
+			    G_CALLBACK (on_text_changed), entry);
 	entry->priv->photographer = GTK_ENTRY (widget);
 	widget = gtk_entry_new ();
 	gtk_widget_show (widget);
 	gtk_table_attach (GTK_TABLE (table), widget, 1, 2, 1, 2,
 			  GTK_FILL | GTK_EXPAND, 0, 0, 0);
 	gtk_entry_set_text (GTK_ENTRY (widget), e->data + strlen (e->data) + 1);
-	gtk_signal_connect (GTK_OBJECT (widget), "changed",
-			    GTK_SIGNAL_FUNC (on_text_changed), entry);
+	g_signal_connect (GTK_OBJECT (widget), "changed",
+			    G_CALLBACK (on_text_changed), entry);
 	entry->priv->editor = GTK_ENTRY (widget);
 
 	return (GTK_WIDGET (entry));

@@ -21,16 +21,49 @@
 #include <config.h>
 #include "gtk-exif-content-list.h"
 
+#include <string.h>
+
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkmenuitem.h>
+#include <gtk/gtkliststore.h>
+#include <gtk/gtkcellrenderertext.h>
+#include <gtk/gtktreeselection.h>
+#include <gtk/gtktreestore.h>
 
 #include "gtk-exif-tag-menu.h"
 
+#ifdef ENABLE_NLS
+#  include <libintl.h>
+#  undef _
+#  define _(String) dgettext (PACKAGE, String)
+#  ifdef gettext_noop
+#    define N_(String) gettext_noop (String)
+#  else
+#    define N_(String) (String)
+#  endif
+#else
+#  define textdomain(String) (String)
+#  define gettext(String) (String)
+#  define dgettext(Domain,Message) (Message)
+#  define dcgettext(Domain,Message,Type) (Message)
+#  define bindtextdomain(Domain,Directory) (Domain)
+#  define _(String) (String)
+#  define N_(String) (String)
+#endif
+
 struct _GtkExifContentListPrivate {
+	GtkListStore *store;
 };
 
-#define PARENT_TYPE GTK_TYPE_CLIST
-static GtkCListClass *parent_class;
+#define PARENT_TYPE GTK_TYPE_TREE_VIEW
+static GtkTreeViewClass *parent_class;
+
+enum {
+	NAME_COLUMN = 0,
+	VALUE_COLUMN,
+	ENTRY_COLUMN,
+	NUM_COLUMNS
+};
 
 enum {
 	ENTRY_ADDED,
@@ -56,91 +89,159 @@ gtk_exif_content_list_destroy (GtkObject *object)
 }
 
 static void
-gtk_exif_content_list_finalize (GtkObject *object)
+gtk_exif_content_list_finalize (GObject *object)
 {
 	GtkExifContentList *list = GTK_EXIF_CONTENT_LIST (object);
 
 	g_free (list->priv);
 
-	GTK_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
-gtk_exif_content_list_class_init (GtkExifContentListClass *klass)
+gtk_exif_content_list_class_init (gpointer g_class, gpointer class_data)
 {
 	GtkObjectClass *object_class;
+	GObjectClass *gobject_class;
 
-	object_class = GTK_OBJECT_CLASS (klass);
+	object_class = GTK_OBJECT_CLASS (g_class);
 	object_class->destroy  = gtk_exif_content_list_destroy;
-	object_class->finalize = gtk_exif_content_list_finalize;
 
-	signals[ENTRY_SELECTED] = gtk_signal_new ("entry_selected",
-		GTK_RUN_LAST, object_class->type,
-		GTK_SIGNAL_OFFSET (GtkExifContentListClass, entry_selected),
-		gtk_marshal_NONE__POINTER, GTK_TYPE_NONE, 1, GTK_TYPE_POINTER);
-	signals[ENTRY_ADDED] = gtk_signal_new ("entry_added",
-		GTK_RUN_FIRST, object_class->type,
-		GTK_SIGNAL_OFFSET (GtkExifContentListClass, entry_added),
-		gtk_marshal_NONE__POINTER, GTK_TYPE_NONE, 1, GTK_TYPE_POINTER);
-	signals[ENTRY_CHANGED] = gtk_signal_new ("entry_changed",
-		GTK_RUN_FIRST, object_class->type,
-		GTK_SIGNAL_OFFSET (GtkExifContentListClass, entry_changed),
-		gtk_marshal_NONE__POINTER, GTK_TYPE_NONE, 1, GTK_TYPE_POINTER);
-	signals[ENTRY_REMOVED] = gtk_signal_new ("entry_removed",
-		GTK_RUN_FIRST, object_class->type,
-		GTK_SIGNAL_OFFSET (GtkExifContentListClass, entry_removed),
-		gtk_marshal_NONE__POINTER, GTK_TYPE_NONE, 1, GTK_TYPE_POINTER);
-	gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
+	gobject_class = G_OBJECT_CLASS (g_class);
+	gobject_class->finalize = gtk_exif_content_list_finalize;
 
-	parent_class = gtk_type_class (PARENT_TYPE);
+	signals[ENTRY_SELECTED] = g_signal_new ("entry_selected",
+		G_SIGNAL_RUN_LAST, G_TYPE_FROM_CLASS (g_class),
+		G_STRUCT_OFFSET (GtkExifContentListClass, entry_selected),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__POINTER, G_TYPE_NONE, 1,
+		G_TYPE_POINTER);
+	signals[ENTRY_ADDED] = g_signal_new ("entry_added",
+		G_SIGNAL_RUN_FIRST, G_TYPE_FROM_CLASS (g_class),
+		G_STRUCT_OFFSET (GtkExifContentListClass, entry_added),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__POINTER, G_TYPE_NONE, 1,
+		G_TYPE_POINTER);
+	signals[ENTRY_CHANGED] = g_signal_new ("entry_changed",
+		G_SIGNAL_RUN_FIRST, G_TYPE_FROM_CLASS (g_class),
+		G_STRUCT_OFFSET (GtkExifContentListClass, entry_changed),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__POINTER, G_TYPE_NONE, 1,
+		G_TYPE_POINTER);
+	signals[ENTRY_REMOVED] = g_signal_new ("entry_removed",
+		G_SIGNAL_RUN_FIRST, G_TYPE_FROM_CLASS (g_class),
+		G_STRUCT_OFFSET (GtkExifContentListClass, entry_removed),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__POINTER, G_TYPE_NONE, 1,
+		G_TYPE_POINTER);
+
+	parent_class = g_type_class_peek_parent (g_class);
+}
+
+static gboolean
+selection_func (GtkTreeSelection *sel, GtkTreeModel *model,
+		GtkTreePath *path, gboolean path_cur_selected,
+		gpointer data)
+{
+	GtkExifContentList *list = GTK_EXIF_CONTENT_LIST (data);
+	GValue value = {0};
+	GtkTreeIter iter;
+
+	if (path_cur_selected)
+		return (TRUE);
+
+	gtk_tree_model_get_iter (model, &iter, path);
+	gtk_tree_model_get_value (model, &iter, ENTRY_COLUMN, &value);
+	g_signal_emit (G_OBJECT (list), signals[ENTRY_SELECTED],
+		0, g_value_peek_pointer (&value));
+	g_value_unset (&value);
+
+	return (TRUE);
 }
 
 static void
-gtk_exif_content_list_init (GtkExifContentList *list)
+gtk_exif_content_list_init (GTypeInstance *instance, gpointer g_class)
 {
+	GtkExifContentList *list = GTK_EXIF_CONTENT_LIST (instance);
+	GtkCellRenderer *renderer;
+	GtkTreeViewColumn *col;
+	GtkTreeSelection *sel;
+
+	/* Column for tags */
+	renderer = gtk_cell_renderer_text_new ();
+	col = gtk_tree_view_column_new_with_attributes (_("Tag"), renderer,
+						"text", NAME_COLUMN, NULL);
+	gtk_tree_view_append_column (GTK_TREE_VIEW (list), col);
+
+	/* Column for values */
+	renderer = gtk_cell_renderer_text_new ();
+	col = gtk_tree_view_column_new_with_attributes (_("Value"), renderer,
+						"text", VALUE_COLUMN, NULL);
+	gtk_tree_view_append_column (GTK_TREE_VIEW (list), col);
+
+	/* Catch selections */
+	sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (list));
+	gtk_tree_selection_set_select_function (sel, selection_func, list,
+						NULL);
+
 	list->priv = g_new0 (GtkExifContentListPrivate, 1);
+
+	list->priv->store = gtk_list_store_new (NUM_COLUMNS,
+				G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER);
 }
 
-GtkType
+GType
 gtk_exif_content_list_get_type (void)
 {
-	static GtkType content_list_type = 0;
+	static GtkType t = 0;
 
-	if (!content_list_type) {
-		static const GtkTypeInfo list_info = {
-			"GtkExifContentList",
-			sizeof (GtkExifContentList),
-			sizeof (GtkExifContentListClass),
-			(GtkClassInitFunc)  gtk_exif_content_list_class_init,
-			(GtkObjectInitFunc) gtk_exif_content_list_init,
-			NULL, NULL, NULL};
-		content_list_type = gtk_type_unique (PARENT_TYPE, &list_info);
+	if (!t) {
+		GTypeInfo ti;
+
+		memset (&ti, 0, sizeof (GTypeInfo));
+		ti.class_size     = sizeof (GtkExifContentListClass);
+		ti.class_init     = gtk_exif_content_list_class_init;
+		ti.instance_size  = sizeof (GtkExifContentList);
+		ti.instance_init  = gtk_exif_content_list_init;
+
+		t = g_type_register_static (PARENT_TYPE,
+					    "GtkExifContentList", &ti, 0);
 	}
 
-	return (content_list_type);
+	return (t);
 }
 
 static void
 on_hide (GtkWidget *widget, GtkMenu *menu)
 {
-	gtk_object_unref (GTK_OBJECT (menu));
+	g_object_unref (G_OBJECT (menu));
+}
+
+static void
+remove_foreach_func (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
+		     gpointer data)
+{
+	GValue value = {0};
+	ExifEntry *entry;
+	GtkExifContentList *list = GTK_EXIF_CONTENT_LIST (data);
+
+	gtk_tree_model_get_value (model, iter, ENTRY_COLUMN, &value);
+	g_assert (G_VALUE_HOLDS (&value, G_TYPE_POINTER));
+	entry = g_value_peek_pointer (&value);
+	exif_entry_ref (entry);
+	g_value_unset (&value);
+	gtk_list_store_remove (list->priv->store, iter);
+
+	g_signal_emit (G_OBJECT (list), signals[ENTRY_REMOVED], 0, entry);
+	exif_entry_unref (entry);
 }
 
 static void
 on_remove_activate (GtkMenuItem *item, GtkExifContentList *list)
 {
-	ExifEntry *entry;
-	guint row;
-
-	while (GTK_CLIST (list)->selection) {
-		row = GPOINTER_TO_INT (GTK_CLIST (list)->selection->data);
-		entry = gtk_clist_get_row_data (GTK_CLIST (list), row);
-		exif_entry_ref (entry);
-		gtk_clist_remove (GTK_CLIST (list), row);
-		gtk_signal_emit (GTK_OBJECT (list), signals[ENTRY_REMOVED],
-				 entry);
-		exif_entry_unref (entry);
-	}
+	gtk_tree_selection_selected_foreach (
+			gtk_tree_view_get_selection (GTK_TREE_VIEW (list)),
+			remove_foreach_func, NULL);
 }
 
 static void
@@ -169,23 +270,23 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event,
 		gtk_widget_show (menu);
 		gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
 				event->button, event->time);
-		gtk_signal_connect (GTK_OBJECT (menu), "hide",
+		g_signal_connect (GTK_OBJECT (menu), "hide",
 				    GTK_SIGNAL_FUNC (on_hide), menu);
 
 		/* Add */
 		item = gtk_menu_item_new_with_label ("Add");
 		gtk_widget_show (item);
-		gtk_menu_append (GTK_MENU (menu), item);
+		gtk_container_add (GTK_CONTAINER (menu), item);
 		smenu = gtk_exif_tag_menu_new ();
 		gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), smenu);
-		gtk_signal_connect (GTK_OBJECT (smenu), "tag_selected",
+		g_signal_connect (GTK_OBJECT (smenu), "tag_selected",
 				GTK_SIGNAL_FUNC (on_tag_selected), list);
 
 		/* Remove */
 		item = gtk_menu_item_new_with_label ("Remove");
 		gtk_widget_show (item);
-		gtk_menu_append (GTK_MENU (menu), item);
-		gtk_signal_connect (GTK_OBJECT (item), "activate",
+		gtk_container_add (GTK_CONTAINER (menu), item);
+		g_signal_connect (GTK_OBJECT (item), "activate",
 				GTK_SIGNAL_FUNC (on_remove_activate), list);
 
 		return (TRUE);
@@ -194,51 +295,59 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event,
 	}
 }
 
-static void
-on_select_row (GtkCList *list, gint row, gint col, GdkEvent *event)
-{
-	gtk_signal_emit (GTK_OBJECT (list), signals[ENTRY_SELECTED],
-			 gtk_clist_get_row_data (list, row));
-}
-
 GtkWidget *
 gtk_exif_content_list_new (void)
 {
 	GtkExifContentList *list;
-	const gchar *titles[] = {"Tag", "Value"};
 
-	list = gtk_type_new (GTK_EXIF_TYPE_CONTENT_LIST);
-	gtk_clist_construct (GTK_CLIST (list), 2, (gchar **) titles);
-	gtk_clist_set_sort_column (GTK_CLIST (list), 0);
-	gtk_clist_set_auto_sort (GTK_CLIST (list), TRUE);
-
-	gtk_signal_connect (GTK_OBJECT (list), "select_row",
-			    GTK_SIGNAL_FUNC (on_select_row), list);
-	gtk_signal_connect (GTK_OBJECT (list), "button_press_event",
-			    GTK_SIGNAL_FUNC (on_button_press_event), list);
+	list = g_object_new (GTK_EXIF_TYPE_CONTENT_LIST, NULL);
+	g_signal_connect (G_OBJECT (list), "button_press_event",
+			  G_CALLBACK (on_button_press_event), list);
 
 	return (GTK_WIDGET (list));
 }
 
-static void
-row_destroy_notify (gpointer data)
+static gboolean
+update_foreach_func (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
+		     void *data)
 {
-	exif_entry_unref ((ExifEntry *) data);
+	ExifEntry *e = data;
+	GValue value = {0};
+
+	gtk_tree_model_get_value (model, iter, ENTRY_COLUMN, &value);
+	if (g_value_peek_pointer (&value) == e) {
+		g_value_unset (&value);
+		gtk_list_store_set (GTK_LIST_STORE (model), iter,
+				VALUE_COLUMN, exif_entry_get_value (e), NULL);
+		return (TRUE);
+	}
+	g_value_unset (&value);
+	return (FALSE);
+}
+
+void
+gtk_exif_content_list_update_entry (GtkExifContentList *list, ExifEntry *entry)
+{
+	g_return_if_fail (GTK_EXIF_IS_CONTENT_LIST (list));
+	g_return_if_fail (entry != NULL);
+
+	gtk_tree_model_foreach (GTK_TREE_MODEL (list->priv->store),
+				update_foreach_func, entry);
 }
 
 void
 gtk_exif_content_list_add_entry (GtkExifContentList *list, ExifEntry *entry)
 {
-	gint row;
-	const gchar *text[2];
+	GtkTreeIter iter;
 
-	text[0] = exif_tag_get_name (entry->tag);
-	text[1] = exif_entry_get_value (entry);
-	row = gtk_clist_append (GTK_CLIST (list), (gchar **) text);
-	exif_entry_ref (entry);
-	gtk_clist_set_row_data_full (GTK_CLIST (list), row, entry,
-				     row_destroy_notify);
-	gtk_signal_emit (GTK_OBJECT (list), signals[ENTRY_ADDED], entry);
+	g_return_if_fail (GTK_EXIF_IS_CONTENT_LIST (list));
+
+	gtk_list_store_append (list->priv->store, &iter);
+	gtk_tree_store_set (GTK_TREE_STORE (list->priv->store), &iter,
+			NAME_COLUMN, exif_tag_get_name (entry->tag),
+			VALUE_COLUMN, exif_entry_get_value (entry),
+			ENTRY_COLUMN, entry);
+	g_signal_emit (G_OBJECT (list), signals[ENTRY_ADDED], 0, entry);
 }
 
 void
@@ -255,11 +364,8 @@ gtk_exif_content_list_set_content (GtkExifContentList *list,
 	list->content = content;
 	exif_content_ref (content);
 
-	gtk_clist_clear (GTK_CLIST (list));
+	gtk_list_store_clear (list->priv->store);
 
 	for (i = 0; i < content->count; i++)
 		gtk_exif_content_list_add_entry (list, content->entries[i]);
-	gtk_clist_set_column_auto_resize (GTK_CLIST (list), 0, TRUE);
-	gtk_clist_set_column_auto_resize (GTK_CLIST (list), 1, TRUE);
-	gtk_clist_sort (GTK_CLIST (list));
 }

@@ -1,5 +1,6 @@
-INCLUDES =		\
-	-I$(top_srcdir)	\
+INCLUDES =				\
+	-I$(top_srcdir)			\
+	-DGTK_DISABLE_DEPRECATED	\
 	$(GTK_CFLAGS)
 
 noinst_LTLIBRARIES = libgtk-extensions.la

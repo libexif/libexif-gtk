@@ -21,6 +21,8 @@
 #include <config.h>
 #include "gtk-exif-entry.h"
 
+#include <string.h>
+
 #include <gtk/gtksignal.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkscrolledwindow.h>
@@ -53,64 +55,73 @@ gtk_exif_entry_destroy (GtkObject *object)
 }
 
 static void
-gtk_exif_entry_finalize (GtkObject *object)
+gtk_exif_entry_finalize (GObject *object)
 {
 	GtkExifEntry *entry = GTK_EXIF_ENTRY (object);
 
 	g_free (entry->priv);
 
-	GTK_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
-gtk_exif_entry_class_init (GtkExifEntryClass *klass)
+gtk_exif_entry_class_init (gpointer g_class, gpointer class_data)
 {
 	GtkObjectClass *object_class;
+	GObjectClass *gobject_class;
 
-	object_class = GTK_OBJECT_CLASS (klass);
+	object_class = GTK_OBJECT_CLASS (g_class);
 	object_class->destroy  = gtk_exif_entry_destroy;
-	object_class->finalize = gtk_exif_entry_finalize;
 
-	signals[ENTRY_ADDED] = gtk_signal_new ("entry_added", GTK_RUN_FIRST,
-		object_class->type,
-		GTK_SIGNAL_OFFSET (GtkExifEntryClass, entry_added),
-		gtk_marshal_NONE__POINTER, GTK_TYPE_NONE, 1, GTK_TYPE_POINTER);
-	signals[ENTRY_REMOVED] = gtk_signal_new ("entry_removed",
-		GTK_RUN_FIRST, object_class->type,
-		GTK_SIGNAL_OFFSET (GtkExifEntryClass, entry_removed),
-		gtk_marshal_NONE__POINTER, GTK_TYPE_NONE, 1, GTK_TYPE_POINTER);
-	signals[ENTRY_CHANGED] = gtk_signal_new ("entry_changed",
-		GTK_RUN_FIRST, object_class->type,
-		GTK_SIGNAL_OFFSET (GtkExifEntryClass, entry_changed),
-		gtk_marshal_NONE__POINTER, GTK_TYPE_NONE, 1, GTK_TYPE_POINTER);
-	gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
+	gobject_class = G_OBJECT_CLASS (g_class);
+	gobject_class->finalize = gtk_exif_entry_finalize;
 
-	parent_class = gtk_type_class (PARENT_TYPE);
+	signals[ENTRY_ADDED] = g_signal_new ("entry_added", G_SIGNAL_RUN_FIRST,
+		G_TYPE_FROM_CLASS (g_class),
+		G_STRUCT_OFFSET (GtkExifEntryClass, entry_added), NULL, NULL,
+		g_cclosure_marshal_VOID__POINTER, G_TYPE_NONE, 1,
+		G_TYPE_POINTER);
+	signals[ENTRY_REMOVED] = g_signal_new ("entry_removed",
+		G_SIGNAL_RUN_FIRST, G_TYPE_FROM_CLASS (g_class),
+		G_STRUCT_OFFSET (GtkExifEntryClass, entry_removed), NULL, NULL,
+		g_cclosure_marshal_VOID__POINTER, G_TYPE_NONE, 1,
+		G_TYPE_POINTER);
+	signals[ENTRY_CHANGED] = g_signal_new ("entry_changed",
+		G_SIGNAL_RUN_FIRST, G_TYPE_FROM_CLASS (g_class),
+		G_STRUCT_OFFSET (GtkExifEntryClass, entry_changed), NULL, NULL,
+		g_cclosure_marshal_VOID__POINTER, G_TYPE_NONE, 1,
+		G_TYPE_POINTER);
+
+	parent_class = g_type_class_peek_parent (g_class);
 }
 
 static void
-gtk_exif_entry_init (GtkExifEntry *entry)
+gtk_exif_entry_init (GTypeInstance *instance, gpointer g_class)
 {
+	GtkExifEntry *entry = GTK_EXIF_ENTRY (instance);
+
 	entry->priv = g_new0 (GtkExifEntryPrivate, 1);
 }
 
 GtkType
 gtk_exif_entry_get_type (void)
 {
-	static GtkType entry_type = 0;
+	static GtkType t = 0;
 
-	if (!entry_type) {
-		static const GtkTypeInfo entry_info = {
-			"GtkExifEntry",
-			sizeof (GtkExifEntry),
-			sizeof (GtkExifEntryClass),
-			(GtkClassInitFunc)  gtk_exif_entry_class_init,
-			(GtkObjectInitFunc) gtk_exif_entry_init,
-			NULL, NULL, NULL};
-		entry_type = gtk_type_unique (PARENT_TYPE, &entry_info);
+	if (!t) {
+		GTypeInfo ti;
+
+		memset (&ti, 0, sizeof (GTypeInfo));
+		ti.class_size    = sizeof (GtkExifEntry);
+		ti.class_init    = gtk_exif_entry_class_init;
+		ti.instance_size = sizeof (GtkExifEntry);
+		ti.instance_init = gtk_exif_entry_init;
+
+		t = g_type_register_static (PARENT_TYPE, "GtkExifEntry",
+					    &ti, 0);
 	}
 
-	return (entry_type);
+	return (t);
 }
 
 void

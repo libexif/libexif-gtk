@@ -22,6 +22,7 @@
 #include "gtk-exif-browser.h"
 
 #include <stdio.h>
+#include <string.h>
 
 #include <gtk/gtksignal.h>
 #include <gtk/gtklabel.h>
@@ -36,9 +37,7 @@
 #include <gtk/gtkfilesel.h>
 #include <gtk/gtkscrolledwindow.h>
 
-#ifdef HAVE_GDK_PIXBUF
-#  include <gdk-pixbuf/gdk-pixbuf-loader.h>
-#endif
+#include <gdk-pixbuf/gdk-pixbuf-loader.h>
 
 #include "gtk-exif-content-list.h"
 #include "gtk-exif-entry-ascii.h"
@@ -106,7 +105,7 @@ gtk_exif_browser_destroy (GtkObject *object)
 	}
 
 	if (browser->priv->tooltips) {
-		gtk_object_unref (GTK_OBJECT (browser->priv->tooltips));
+		g_object_unref (G_OBJECT (browser->priv->tooltips));
 		browser->priv->tooltips = NULL;
 	}
 
@@ -114,59 +113,67 @@ gtk_exif_browser_destroy (GtkObject *object)
 }
 
 static void
-gtk_exif_browser_finalize (GtkObject *object)
+gtk_exif_browser_finalize (GObject *object)
 {
 	GtkExifBrowser *browser = GTK_EXIF_BROWSER (object);
 
 	g_free (browser->priv);
 
-	GTK_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
-gtk_exif_browser_class_init (GtkExifBrowserClass *klass)
+gtk_exif_browser_class_init (gpointer g_class, gpointer class_data)
 {
 	GtkObjectClass *object_class;
+	GObjectClass *gobject_class;
 
-	object_class = GTK_OBJECT_CLASS (klass);
+	object_class = GTK_OBJECT_CLASS (g_class);
 	object_class->destroy  = gtk_exif_browser_destroy;
-	object_class->finalize = gtk_exif_browser_finalize;
 
-	parent_class = gtk_type_class (PARENT_TYPE);
+	gobject_class = G_OBJECT_CLASS (g_class);
+	gobject_class->finalize = gtk_exif_browser_finalize;
+
+	parent_class = g_type_class_peek_parent (g_class);
 }
 
 static void
-gtk_exif_browser_init (GtkExifBrowser *browser)
+gtk_exif_browser_init (GTypeInstance *instance, gpointer g_class)
 {
+	GtkExifBrowser *browser = GTK_EXIF_BROWSER (instance);
+
 	browser->priv = g_new0 (GtkExifBrowserPrivate, 1);
 
 	browser->priv->tooltips = gtk_tooltips_new ();
+	g_object_ref (G_OBJECT (browser->priv->tooltips));
+	gtk_object_sink (GTK_OBJECT (browser->priv->tooltips));
 
 	/* Placeholder */
 	browser->priv->empty = gtk_label_new ("Nothing selected.");
 	gtk_widget_show (browser->priv->empty);
-	gtk_object_ref (GTK_OBJECT (browser->priv->empty));
+	g_object_ref (G_OBJECT (browser->priv->empty));
 }
 
-GtkType
+GType
 gtk_exif_browser_get_type (void)
 {
-	static GtkType browser_type = 0;
+	static GType t = 0;
 
-	if (!browser_type) {
-		static const GtkTypeInfo browser_info = {
-			"GtkExifBrowser",
-			sizeof (GtkExifBrowser),
-			sizeof (GtkExifBrowserClass),
-			(GtkClassInitFunc)  gtk_exif_browser_class_init,
-			(GtkObjectInitFunc) gtk_exif_browser_init,
-			NULL, NULL, NULL};
-		browser_type = gtk_type_unique (PARENT_TYPE, &browser_info);
+	if (!t) {
+		GTypeInfo ti;
+
+		memset (&ti, 0, sizeof (GTypeInfo));
+		ti.class_size    = sizeof (GtkExifBrowserClass);
+		ti.class_init    = gtk_exif_browser_class_init;
+		ti.instance_size = sizeof (GtkExifBrowser);
+		ti.instance_init = gtk_exif_browser_init;
+		t = g_type_register_static (PARENT_TYPE, "GtkExifBrowser",
+					    &ti, 0);
 	}
 
-	return (browser_type);
+	return (t);
 }
-
+		
 static GtkExifContentList *
 gtk_exif_browser_get_content_list (GtkExifBrowser *b, ExifEntry *entry)
 {
@@ -201,16 +208,14 @@ gtk_exif_browser_set_widget (GtkExifBrowser *browser, GtkWidget *w)
 static void
 on_entry_changed (GtkExifEntry *entry, ExifEntry *e, GtkExifBrowser *b)
 {
-        GtkExifContentList *list;
-	gint row;
+	GtkExifContentList *list;
+
+	g_return_if_fail (GTK_EXIF_IS_BROWSER (b));
 
 	list = gtk_exif_browser_get_content_list (b, e);
 	if (!list)
 		return;
-
-        row = gtk_clist_find_row_from_data (GTK_CLIST (list), e);
-        gtk_clist_set_text (GTK_CLIST (list), row, 1,
-			    exif_entry_get_value (e));
+	gtk_exif_content_list_update_entry (list, e);
 }
 
 static void
@@ -307,12 +312,12 @@ gtk_exif_browser_show_entry (GtkExifBrowser *browser, ExifEntry *entry)
 	}
 	gtk_widget_show (w);
 	gtk_exif_browser_set_widget (browser, w);
-	gtk_signal_connect (GTK_OBJECT (w), "entry_added",
-			    GTK_SIGNAL_FUNC (on_entry_added), browser);
-	gtk_signal_connect (GTK_OBJECT (w), "entry_removed",
-			    GTK_SIGNAL_FUNC (on_entry_removed), browser);
-	gtk_signal_connect (GTK_OBJECT (w), "entry_changed",
-			    GTK_SIGNAL_FUNC (on_entry_changed), browser);
+	g_signal_connect (GTK_OBJECT (w), "entry_added",
+			    G_CALLBACK (on_entry_added), browser);
+	g_signal_connect (GTK_OBJECT (w), "entry_removed",
+			    G_CALLBACK (on_entry_removed), browser);
+	g_signal_connect (GTK_OBJECT (w), "entry_changed",
+			    G_CALLBACK (on_entry_changed), browser);
 }
 
 static void
@@ -337,8 +342,8 @@ gtk_exif_browser_add_content (GtkExifBrowser *browser,
         gtk_widget_show (et);
 	gtk_exif_content_list_set_content (GTK_EXIF_CONTENT_LIST (et), content);
         gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (swin), et);
-        gtk_signal_connect (GTK_OBJECT (et), "entry_selected",
-                            GTK_SIGNAL_FUNC (on_entry_selected), browser);
+        g_signal_connect (GTK_OBJECT (et), "entry_selected",
+                            G_CALLBACK (on_entry_selected), browser);
 }
 
 GtkWidget *
@@ -347,7 +352,7 @@ gtk_exif_browser_new (void)
 	GtkWidget *vbox, *notebook;
 	GtkExifBrowser *browser;
 
-	browser = gtk_type_new (GTK_EXIF_TYPE_BROWSER);
+	browser = g_object_new (GTK_EXIF_TYPE_BROWSER, NULL);
 	gtk_widget_set_sensitive (GTK_WIDGET (browser), FALSE);
 
 	vbox = gtk_vbox_new (FALSE, 0);
@@ -399,15 +404,9 @@ gtk_exif_browser_show_thumbnail (GtkExifBrowser *b)
 							"thumbnail data."));
 		} else {
 			gdk_pixbuf_loader_close (loader);
-			gdk_pixbuf_render_pixmap_and_mask (
-				gdk_pixbuf_loader_get_pixbuf (loader),
-				&pixmap, &bitmap, 127);
-			image = gtk_pixmap_new (pixmap, bitmap);
+			image = gtk_image_new_from_pixbuf (
+					gdk_pixbuf_loader_get_pixbuf (loader));
 			gtk_widget_show (image);
-			if (pixmap)
-				gdk_pixmap_unref (pixmap);
-			if (bitmap)
-				gdk_bitmap_unref (bitmap);
 			b->priv->thumb = gtk_scrolled_window_new (NULL, NULL);
 			gtk_scrolled_window_set_policy (
 				GTK_SCROLLED_WINDOW (b->priv->thumb),
@@ -415,7 +414,7 @@ gtk_exif_browser_show_thumbnail (GtkExifBrowser *b)
 			gtk_scrolled_window_add_with_viewport (
 				GTK_SCROLLED_WINDOW (b->priv->thumb), image);
 		}
-		gtk_object_unref (GTK_OBJECT (loader));
+		g_object_unref (GTK_OBJECT (loader));
 #else
 		b->priv->thumb = gtk_label_new (_("Compiled without "
 					"support for gdk-pixbuf. Can not "
@@ -492,14 +491,14 @@ on_load_clicked (GtkButton *button, GtkExifBrowser *b)
 
 	fsel = gtk_file_selection_new (_("Load..."));
 	gtk_widget_show (fsel);
-	gtk_signal_connect (GTK_OBJECT (fsel), "delete_event",
-			    GTK_SIGNAL_FUNC (gtk_object_destroy), NULL);
-	gtk_signal_connect (
+	g_signal_connect (GTK_OBJECT (fsel), "delete_event",
+			    G_CALLBACK (gtk_object_destroy), NULL);
+	g_signal_connect (
 		GTK_OBJECT (GTK_FILE_SELECTION (fsel)->cancel_button),
-		"clicked", GTK_SIGNAL_FUNC (on_cancel_clicked), fsel);
-	gtk_signal_connect (
+		"clicked", G_CALLBACK (on_cancel_clicked), fsel);
+	g_signal_connect (
 		GTK_OBJECT (GTK_FILE_SELECTION (fsel)->ok_button),
-		"clicked", GTK_SIGNAL_FUNC (on_load_ok_clicked), b);
+		"clicked", G_CALLBACK (on_load_ok_clicked), b);
 }
 
 static void
@@ -532,14 +531,14 @@ on_save_clicked (GtkButton *button, GtkExifBrowser *b)
 
 	fsel = gtk_file_selection_new (_("Save As..."));
 	gtk_widget_show (fsel);
-	gtk_signal_connect (GTK_OBJECT (fsel), "delete_event",
-			    GTK_SIGNAL_FUNC (gtk_object_destroy), NULL);
-	gtk_signal_connect (
+	g_signal_connect (GTK_OBJECT (fsel), "delete_event",
+			    G_CALLBACK (gtk_object_destroy), NULL);
+	g_signal_connect (
 		GTK_OBJECT (GTK_FILE_SELECTION (fsel)->cancel_button),
-		"clicked", GTK_SIGNAL_FUNC (on_cancel_clicked), fsel);
-	gtk_signal_connect (
+		"clicked", G_CALLBACK (on_cancel_clicked), fsel);
+	g_signal_connect (
 		GTK_OBJECT (GTK_FILE_SELECTION (fsel)->ok_button),
-		"clicked", GTK_SIGNAL_FUNC (on_save_ok_clicked), b);
+		"clicked", G_CALLBACK (on_save_ok_clicked), b);
 }
 
 static void
@@ -597,23 +596,23 @@ gtk_exif_browser_set_data (GtkExifBrowser *b, ExifData *data)
 	gtk_widget_show (bbox);
 	gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_SPREAD);
 	gtk_container_set_border_width (GTK_CONTAINER (bbox), 5);
-	gtk_button_box_set_spacing (GTK_BUTTON_BOX (bbox), 5);
+	gtk_box_set_spacing (GTK_BOX (bbox), 5);
 	gtk_box_pack_end (GTK_BOX (vbox), bbox, FALSE, FALSE, 0);
 	button = gtk_button_new_with_label (_("Load"));
 	gtk_widget_show (button);
 	gtk_container_add (GTK_CONTAINER (bbox), button);
-	gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			    GTK_SIGNAL_FUNC (on_load_clicked), b);
+	g_signal_connect (GTK_OBJECT (button), "clicked",
+			    G_CALLBACK (on_load_clicked), b);
 	button = gtk_button_new_with_label (_("Save"));
 	gtk_widget_show (button);
 	gtk_container_add (GTK_CONTAINER (bbox), button);
-	gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			    GTK_SIGNAL_FUNC (on_save_clicked), b);
+	g_signal_connect (GTK_OBJECT (button), "clicked",
+			    G_CALLBACK (on_save_clicked), b);
 	button = gtk_button_new_with_label (_("Delete"));
 	gtk_widget_show (button);
 	gtk_container_add (GTK_CONTAINER (bbox), button);
-	gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			    GTK_SIGNAL_FUNC (on_delete_clicked), b);
+	g_signal_connect (GTK_OBJECT (button), "clicked",
+			    G_CALLBACK (on_delete_clicked), b);
 
 	/* Show the current thumbnail */
 	gtk_exif_browser_show_thumbnail (b);

@@ -1,3 +1,4 @@
+AC_PREREQ(2.50)
 AC_INIT(libexif-gtk/gtk-exif-browser.c)
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE(libexif-gtk, 0.3.0)
@@ -33,24 +34,12 @@ dnl AM_GNU_GETTEXT
 dnl ---------------------------------------------------------------------------
 dnl libraries needed
 dnl ---------------------------------------------------------------------------
-PKG_CHECK_MODULES(LIBEXIF_GTK, gtk libexif >= 0.5.0)
+PKG_CHECK_MODULES(LIBEXIF_GTK, gtk+-2.0 libexif >= 0.5.0)
 AC_SUBST(LIBEXIF_GTK_LIBS)
 AC_SUBST(LIBEXIF_GTK_CFLAGS)
 PKG_CHECK_MODULES(GTK, gtk)
 AC_SUBST(GTK_LIBS)
 AC_SUBST(GTK_CFLAGS)
-
-dnl ---------------------------------------------------------------------------
-dnl gdk-pixbuf
-dnl ---------------------------------------------------------------------------
-AC_PATH_PROG(GDK_PIXBUF_CONFIG,gdk-pixbuf-config)
-if test -n "${GDK_PIXBUF_CONFIG}"; then
-	GDK_PIXBUF_CFLAGS=`$GDK_PIXBUF_CONFIG --cflags`
-	GDK_PIXBUF_LIBS=`$GDK_PIXBUF_CONFIG --libs`
-	AC_DEFINE(HAVE_GDK_PIXBUF)
-fi
-AC_SUBST(GDK_PIXBUF_CFLAGS)
-AC_SUBST(GDK_PIXBUF_LIBS)
 
 CFLAGS="$CFLAGS -Wall -Wchar-subscripts -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wpointer-arith -Werror"
 AC_SUBST(CFLAGS)
