@@ -1,6 +1,6 @@
 /* gtk-exif-entry-resolution.c
  *
- * Copyright (C) 2001 Lutz Müller <lutz@users.sourceforge.net>
+ * Copyright © 2001 Lutz Müller <lutz@users.sourceforge.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -398,11 +398,11 @@ gtk_exif_entry_resolution_new (ExifContent *content, gboolean focal_plane)
 	gtk_widget_show (hbox);
 	gtk_box_pack_start (GTK_BOX (entry), hbox, TRUE, FALSE, 0);
 	c = gtk_check_button_new_with_label (_("Image width direction:"));
-	gtk_widget_show (c);
+	gtk_widget_show ©;
 	gtk_box_pack_start (GTK_BOX (hbox), c, FALSE, FALSE, 0);
-	entry->priv->ox.check = GTK_TOGGLE_BUTTON (c);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (c), (e != NULL));
-	g_signal_connect (GTK_OBJECT (c), "toggled",
+	entry->priv->ox.check = GTK_TOGGLE_BUTTON ©;
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON ©, (e != NULL));
+	g_signal_connect (GTK_OBJECT ©, "toggled",
 			    G_CALLBACK (on_cw_toggled), entry);
 	ap = gtk_adjustment_new (0, 0, 0xffffffff, 1, 0xffff, 0);
 	entry->priv->ox.ap = GTK_ADJUSTMENT (ap);
@@ -434,11 +434,11 @@ gtk_exif_entry_resolution_new (ExifContent *content, gboolean focal_plane)
 	gtk_widget_show (hbox);
 	gtk_box_pack_start (GTK_BOX (entry), hbox, TRUE, FALSE, 0);
 	c = gtk_check_button_new_with_label (_("Image height direction:"));
-	gtk_widget_show (c);
+	gtk_widget_show ©;
 	gtk_box_pack_start (GTK_BOX (hbox), c, FALSE, FALSE, 0);
-	entry->priv->oy.check = GTK_TOGGLE_BUTTON (c);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (c), (e != NULL));
-	g_signal_connect (GTK_OBJECT (c), "toggled",
+	entry->priv->oy.check = GTK_TOGGLE_BUTTON ©;
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON ©, (e != NULL));
+	g_signal_connect (GTK_OBJECT ©, "toggled",
 			    G_CALLBACK (on_ch_toggled), entry);
 	ap = gtk_adjustment_new (0, 0, 0xffffffff, 1, 0xffff, 0);
 	entry->priv->oy.ap = GTK_ADJUSTMENT (ap);
@@ -470,11 +470,11 @@ gtk_exif_entry_resolution_new (ExifContent *content, gboolean focal_plane)
 	gtk_widget_show (hbox);
 	gtk_box_pack_start (GTK_BOX (entry), hbox, TRUE, FALSE, 0);
 	c = gtk_check_button_new_with_label (_("Unit:"));
-	gtk_widget_show (c);
+	gtk_widget_show ©;
 	gtk_box_pack_start (GTK_BOX (hbox), c, FALSE, FALSE, 0);
-	entry->priv->check = GTK_TOGGLE_BUTTON (c);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (c), (e != NULL));
-	g_signal_connect (GTK_OBJECT (c), "toggled",
+	entry->priv->check = GTK_TOGGLE_BUTTON ©;
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON ©, (e != NULL));
+	g_signal_connect (GTK_OBJECT ©, "toggled",
 			  G_CALLBACK (on_unit_toggled), entry);
 	o = gtk_option_menu_new ();
 	gtk_widget_show (o);

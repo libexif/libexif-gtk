@@ -1,6 +1,6 @@
 /* gtk-exif-entry-date.c
  *
- * Copyright (C) 2001 Lutz Müller <lutz@users.sourceforge.net>
+ * Copyright © 2001 Lutz Müller <lutz@users.sourceforge.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -190,10 +190,10 @@ gtk_exif_entry_date_new (ExifEntry *e)
 		exif_tag_get_description (e->tag));
 
 	c = gtk_calendar_new ();
-	gtk_widget_show (c);
+	gtk_widget_show ©;
 	gtk_box_pack_start (GTK_BOX (entry), c, TRUE, FALSE, 0);
-	entry->priv->cal = GTK_CALENDAR (c);
-	g_signal_connect (GTK_OBJECT (c), "day_selected",
+	entry->priv->cal = GTK_CALENDAR ©;
+	g_signal_connect (GTK_OBJECT ©, "day_selected",
 			    G_CALLBACK (on_day_selected), entry);
 
 	hbox = gtk_hbox_new (FALSE, 5);

@@ -1,6 +1,6 @@
 /* gtk-exif-entry-user-comment.
  *
- * Copyright (C) 2002 Lutz Müller <lutz@users.sourceforge.net>
+ * Copyright © 2002 Lutz Müller <lutz@users.sourceforge.net>
  */
 
 #include <config.h>
