@@ -1,0 +1,14 @@
+              libexif-gtk
+	      ===========
+
+WHAT IT IS
+==========
+
+libexif-gtk is a library of widgets to help displaying EXIF tags in GTK programs.
+
+
+REQUIREMENTS
+============
+
+libexif-gtk requires libexif and gtk+.
+
