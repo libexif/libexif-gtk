@@ -32,6 +32,8 @@
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtktable.h>
 
+#include <libexif/exif-utils.h>
+
 #ifdef ENABLE_NLS
 #  include <libintl.h>
 #  undef _
@@ -140,9 +142,11 @@ gtk_exif_entry_rational_load (GtkExifEntryRational *entry)
 	GtkAdjustment *ap, *aq;
 	ExifEntry *e;
 	guint i;
+	ExifByteOrder o;
 
 	g_return_if_fail (GTK_EXIF_IS_ENTRY_RATIONAL (entry));
 
+	o = exif_data_get_byte_order (entry->priv->entry->parent->parent);
 	e = entry->priv->entry;
 	for (i = 0; i < e->components; i++) {
 		ap = entry->priv->ap->pdata[i];
@@ -151,12 +155,12 @@ gtk_exif_entry_rational_load (GtkExifEntryRational *entry)
 		gtk_signal_handler_block_by_data (GTK_OBJECT (aq), entry);
 		switch (e->format) {
 		case EXIF_FORMAT_RATIONAL:
-			r = exif_get_rational (e->data + 8 * i, e->order);
+			r = exif_get_rational (e->data + 8 * i, o);
 			gtk_adjustment_set_value (ap, r.numerator);
 			gtk_adjustment_set_value (aq, r.denominator);
 			break;
 		case EXIF_FORMAT_SRATIONAL:
-			sr = exif_get_srational (e->data + 8 * i, e->order);
+			sr = exif_get_srational (e->data + 8 * i, o);
 			gtk_adjustment_set_value (ap, sr.numerator);
 			gtk_adjustment_set_value (aq, sr.denominator);
 			break;
@@ -177,9 +181,11 @@ gtk_exif_entry_rational_save (GtkExifEntryRational *entry)
 	ExifEntry *e;
 	GtkAdjustment *ap, *aq;
 	guint i;
+	ExifByteOrder o;
 
 	g_return_if_fail (GTK_EXIF_IS_ENTRY_RATIONAL (entry));
 
+	o = exif_data_get_byte_order (entry->priv->entry->parent->parent);
 	e = entry->priv->entry;
 	for (i = 0; i < e->components; i++) {
 		ap = entry->priv->ap->pdata[i];
@@ -188,12 +194,12 @@ gtk_exif_entry_rational_save (GtkExifEntryRational *entry)
 		case EXIF_FORMAT_RATIONAL:
 			r.numerator = ap->value;
 			r.denominator = aq->value;
-			exif_set_rational (e->data + 8 * i, e->order, r);
+			exif_set_rational (e->data + 8 * i, o, r);
 			break;
 		case EXIF_FORMAT_SRATIONAL:
 			sr.numerator = ap->value;
 			sr.denominator = aq->value;
-			exif_set_srational (e->data + 8 * i, e->order, sr);
+			exif_set_srational (e->data + 8 * i, o, sr);
 			break;
 		default:
 			g_warning ("Invalid format!");

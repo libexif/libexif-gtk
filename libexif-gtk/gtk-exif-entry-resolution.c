@@ -32,6 +32,8 @@
 #include <gtk/gtkmenu.h>
 #include <gtk/gtklabel.h>
 
+#include <libexif/exif-utils.h>
+
 #ifdef ENABLE_NLS
 #  include <libintl.h>
 #  undef _
@@ -144,11 +146,13 @@ static void
 on_inch_activate (GtkMenuItem *item, GtkExifEntryResolution *entry)
 {
 	ExifEntry *e;
+	ExifByteOrder o;
 
 	e = exif_content_get_entry (entry->priv->content,
 				    entry->priv->tag_u);
 	g_return_if_fail (e != NULL);
-	exif_set_short (e->data, e->order, 2);
+	o = exif_data_get_byte_order (e->parent->parent);
+	exif_set_short (e->data, o, 2);
 	gtk_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed", e);
 }
 
@@ -156,11 +160,13 @@ static void
 on_centimeter_activate (GtkMenuItem *item, GtkExifEntryResolution *entry)
 {
 	ExifEntry *e;
+	ExifByteOrder o;
 
 	e = exif_content_get_entry (entry->priv->content,
 				    entry->priv->tag_u);
 	g_return_if_fail (e != NULL);
-	exif_set_short (e->data, e->order, 3);
+	o = exif_data_get_byte_order (e->parent->parent);
+	exif_set_short (e->data, o, 3);
 	gtk_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed", e);
 }
 
@@ -170,20 +176,22 @@ on_w_value_changed (GtkAdjustment *a, GtkExifEntryResolution *entry)
 	ExifEntry *e;
 	ExifRational r;
 	ExifSRational sr;
+	ExifByteOrder o;
 
 	e = exif_content_get_entry (entry->priv->content,
 				    entry->priv->tag_x);
 	g_return_if_fail (e != NULL);
+	o = exif_data_get_byte_order (e->parent->parent);
 	switch (e->format) {
 	case EXIF_FORMAT_RATIONAL:
 		r.numerator   = entry->priv->ox.ap->value;
 		r.denominator = entry->priv->ox.aq->value;
-		exif_set_rational (e->data, e->order, r);
+		exif_set_rational (e->data, o, r);
 		break;
 	case EXIF_FORMAT_SRATIONAL:
 		sr.numerator   = entry->priv->ox.ap->value;
 		sr.denominator = entry->priv->ox.aq->value;
-		exif_set_srational (e->data, e->order, sr);
+		exif_set_srational (e->data, o, sr);
 		break;
 	default:
 		g_warning ("Invalid format!");
@@ -198,20 +206,22 @@ on_h_value_changed (GtkAdjustment *a, GtkExifEntryResolution *entry)
 	ExifEntry *e;
 	ExifRational r;
 	ExifSRational sr;
+	ExifByteOrder o;
 
 	e = exif_content_get_entry (entry->priv->content,
 				    entry->priv->tag_y);
 	g_return_if_fail (e != NULL);
+	o = exif_data_get_byte_order (e->parent->parent);
 	switch (e->format) {
 	case EXIF_FORMAT_RATIONAL:
 		r.numerator   = entry->priv->oy.ap->value;
 		r.denominator = entry->priv->oy.aq->value;
-		exif_set_rational (e->data, e->order, r);
+		exif_set_rational (e->data, o, r);
 		break;
 	case EXIF_FORMAT_SRATIONAL:
 		sr.numerator   = entry->priv->oy.ap->value;
 		sr.denominator = entry->priv->oy.aq->value;
-		exif_set_srational (e->data, e->order, sr);
+		exif_set_srational (e->data, o, sr);
 		break;
 	default:
 		g_warning ("Invalid format!");
@@ -224,9 +234,12 @@ static void
 gtk_exif_entry_resolution_load_unit (GtkExifEntryResolution *entry,
 				     ExifEntry *e)
 {
+	ExifByteOrder o;
+
+	o = exif_data_get_byte_order (e->parent->parent);
 	switch (e->format) {
 	case EXIF_FORMAT_SHORT:
-		switch (exif_get_short (e->data, e->order)) {
+		switch (exif_get_short (e->data, o)) {
 		case 2:
 			gtk_option_menu_set_history (entry->priv->u.menu, 1);
 			break;
@@ -248,6 +261,7 @@ gtk_exif_entry_resolution_load (GtkExifEntryResolution *entry, ExifEntry *e)
 	ExifRational  r;
 	ExifSRational sr;
 	ResolutionObjects o;
+	ExifByteOrder order;
 
 	g_return_if_fail (GTK_EXIF_IS_ENTRY_RESOLUTION (entry));
 	g_return_if_fail (e != NULL);
@@ -268,14 +282,15 @@ gtk_exif_entry_resolution_load (GtkExifEntryResolution *entry, ExifEntry *e)
 
 	gtk_signal_handler_block_by_data (GTK_OBJECT (o.ap), entry);
 	gtk_signal_handler_block_by_data (GTK_OBJECT (o.aq), entry);
+	order = exif_data_get_byte_order (e->parent->parent);
 	switch (e->format) {
 	case EXIF_FORMAT_RATIONAL:
-		r = exif_get_rational (e->data, e->order);
+		r = exif_get_rational (e->data, order);
 		gtk_adjustment_set_value (o.ap, r.numerator);
 		gtk_adjustment_set_value (o.aq, r.denominator);
 		break;
 	case EXIF_FORMAT_SRATIONAL:
-		sr = exif_get_srational (e->data, e->order);
+		sr = exif_get_srational (e->data, order);
 		gtk_adjustment_set_value (o.ap, sr.numerator);
 		gtk_adjustment_set_value (o.aq, sr.denominator);
 		break;

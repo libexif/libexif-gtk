@@ -32,6 +32,8 @@
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtktable.h>
 
+#include <libexif/exif-utils.h>
+
 #ifdef ENABLE_NLS
 #  include <libintl.h>
 #  undef _
@@ -136,9 +138,11 @@ gtk_exif_entry_number_load (GtkExifEntryNumber *entry)
 	GtkAdjustment *a;
 	ExifEntry *e;
 	guint i;
+	ExifByteOrder o;
 
 	g_return_if_fail (GTK_EXIF_IS_ENTRY_NUMBER (entry));
 
+	o = exif_data_get_byte_order (entry->priv->entry->parent->parent);
 	e = entry->priv->entry;
 	for (i = 0; i < e->components; i++) {
 		a = entry->priv->a->pdata[i];
@@ -149,15 +153,15 @@ gtk_exif_entry_number_load (GtkExifEntryNumber *entry)
 			gtk_adjustment_set_value (a, v_byte);
 			break;
 		case EXIF_FORMAT_SHORT:
-			v_short = exif_get_short (e->data + 2 * i, e->order);
+			v_short = exif_get_short (e->data + 2 * i, o);
 			gtk_adjustment_set_value (a, v_short);
 			break;
 		case EXIF_FORMAT_LONG:
-			v_long = exif_get_long (e->data + 4 * i, e->order);
+			v_long = exif_get_long (e->data + 4 * i, o);
 			gtk_adjustment_set_value (a, v_long);
 			break;
 		case EXIF_FORMAT_SLONG:
-			v_slong = exif_get_slong (e->data + 4 * i, e->order);
+			v_slong = exif_get_slong (e->data + 4 * i, o);
 			gtk_adjustment_set_value (a, v_slong);
 			break;
 		default:
@@ -174,9 +178,11 @@ gtk_exif_entry_number_save (GtkExifEntryNumber *entry)
 	ExifEntry *e;
 	GtkAdjustment *a;
 	guint i;
+	ExifByteOrder o;
 
 	g_return_if_fail (GTK_EXIF_IS_ENTRY_NUMBER (entry));
 
+	o = exif_data_get_byte_order (entry->priv->entry->parent->parent);
 	e = entry->priv->entry;
 	for (i = 0; i < e->components; i++) {
 		a = entry->priv->a->pdata[i];
@@ -185,13 +191,13 @@ gtk_exif_entry_number_save (GtkExifEntryNumber *entry)
 			e->data[i] = a->value;
 			break;
 		case EXIF_FORMAT_SHORT:
-			exif_set_short (e->data + 2 * i, e->order, a->value);
+			exif_set_short (e->data + 2 * i, o, a->value);
 			break;
 		case EXIF_FORMAT_LONG:
-			exif_set_long (e->data + 4 * i, e->order, a->value);
+			exif_set_long (e->data + 4 * i, o, a->value);
 			break;
 		case EXIF_FORMAT_SLONG:
-			exif_set_slong (e->data + 4 * i, e->order, a->value);
+			exif_set_slong (e->data + 4 * i, o, a->value);
 			break;
 		default:
 			g_warning ("Invalid format!");

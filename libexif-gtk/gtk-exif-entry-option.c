@@ -33,6 +33,8 @@
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkhbox.h>
 
+#include <libexif/exif-utils.h>
+
 #include "gtk-extensions/gtk-option-menu-option.h"
 #include "gtk-extensions/gtk-options.h"
 
@@ -128,11 +130,12 @@ static void
 gtk_exif_entry_option_load (GtkExifEntryOption *entry)
 {
 	ExifShort value;
+	ExifByteOrder o;
 
 	g_return_if_fail (GTK_EXIF_IS_ENTRY_OPTION (entry));
 
-	value = exif_get_short (entry->priv->entry->data,
-				entry->priv->entry->order);
+	o = exif_data_get_byte_order (entry->priv->entry->parent->parent);
+	value = exif_get_short (entry->priv->entry->data, o);
 	gtk_option_menu_option_set (entry->priv->menu, value);
 }
 
@@ -140,10 +143,11 @@ static void
 gtk_exif_entry_option_save (GtkExifEntryOption *entry)
 {
 	ExifShort value;
+	ExifByteOrder o;
 
+	o = exif_data_get_byte_order (entry->priv->entry->parent->parent);
 	value = gtk_option_menu_option_get (entry->priv->menu);
-	exif_set_short (entry->priv->entry->data, entry->priv->entry->order,
-			value);
+	exif_set_short (entry->priv->entry->data, o, value);
 	gtk_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed",
 				 entry->priv->entry);
 }
