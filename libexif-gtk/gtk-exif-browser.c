@@ -51,6 +51,7 @@
 #include "gtk-exif-entry-rational.h"
 #include "gtk-exif-entry-resolution.h"
 #include "gtk-exif-entry-version.h"
+#include "gtk-exif-util.h"
 
 #ifdef ENABLE_NLS
 #  include <libintl.h>
@@ -112,15 +113,7 @@ gtk_exif_browser_destroy (GtkObject *object)
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
-static void
-gtk_exif_browser_finalize (GObject *object)
-{
-	GtkExifBrowser *browser = GTK_EXIF_BROWSER (object);
-
-	g_free (browser->priv);
-
-	G_OBJECT_CLASS (parent_class)->finalize (object);
-}
+GTK_EXIF_FINALIZE (browser, Browser)
 
 static void
 gtk_exif_browser_class_init (gpointer g_class, gpointer class_data)
@@ -154,26 +147,8 @@ gtk_exif_browser_init (GTypeInstance *instance, gpointer g_class)
 	g_object_ref (G_OBJECT (browser->priv->empty));
 }
 
-GType
-gtk_exif_browser_get_type (void)
-{
-	static GType t = 0;
+GTK_EXIF_CLASS (browser, Browser, "Browser")
 
-	if (!t) {
-		GTypeInfo ti;
-
-		memset (&ti, 0, sizeof (GTypeInfo));
-		ti.class_size    = sizeof (GtkExifBrowserClass);
-		ti.class_init    = gtk_exif_browser_class_init;
-		ti.instance_size = sizeof (GtkExifBrowser);
-		ti.instance_init = gtk_exif_browser_init;
-		t = g_type_register_static (PARENT_TYPE, "GtkExifBrowser",
-					    &ti, 0);
-	}
-
-	return (t);
-}
-		
 static GtkExifContentList *
 gtk_exif_browser_get_content_list (GtkExifBrowser *b, ExifEntry *entry)
 {

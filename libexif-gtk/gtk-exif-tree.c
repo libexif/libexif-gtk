@@ -24,6 +24,7 @@
 #include <gtk/gtksignal.h>
 
 #include "gtk-exif-tree-item.h"
+#include "gtk-exif-util.h"
 
 struct _GtkExifTreePrivate {
 	ExifData *data;
@@ -52,18 +53,10 @@ gtk_exif_tree_destroy (GtkObject *object)
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
-static void
-gtk_exif_tree_finalize (GtkObject *object)
-{
-	GtkExifTree *tree = GTK_EXIF_TREE (object);
-
-	g_free (tree->priv);
-
-	GTK_OBJECT_CLASS (parent_class)->finalize (object);
-}
+GTK_EXIF_FINALIZE (tree, Tree)
 
 static void
-gtk_exif_tree_class_init (GtkExifTreeClass *klass)
+gtk_exif_tree_class_init (gpointer g_class, gpointer class_data)
 {
 	GtkObjectClass *object_class;
 
@@ -78,7 +71,7 @@ gtk_exif_tree_class_init (GtkExifTreeClass *klass)
 		GTK_TYPE_POINTER);
 	gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
 
-	parent_class = gtk_type_class (PARENT_TYPE);
+	parent_class = g_type_class_peek_parent (g_class);
 }
 
 static void
@@ -87,24 +80,7 @@ gtk_exif_tree_init (GtkExifTree *tree)
 	tree->priv = g_new0 (GtkExifTreePrivate, 1);
 }
 
-GtkType
-gtk_exif_tree_get_type (void)
-{
-	static GtkType tree_type = 0;
-
-	if (!tree_type) {
-		static const GtkTypeInfo tree_info = {
-			"GtkExifTree",
-			sizeof (GtkExifTree),
-			sizeof (GtkExifTreeClass),
-			(GtkClassInitFunc)  gtk_exif_tree_class_init,
-			(GtkObjectInitFunc) gtk_exif_tree_init,
-			NULL, NULL, NULL};
-		tree_type = gtk_type_unique (PARENT_TYPE, &tree_info);
-	}
-
-	return (tree_type);
-}
+GTK_EXIF_CLASS (tree, Tree, "Tree")
 
 static void
 on_select_child (GtkTree *tree, GtkWidget *item, GtkExifTree *etree)

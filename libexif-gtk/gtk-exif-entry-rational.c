@@ -21,6 +21,8 @@
 #include <config.h>
 #include "gtk-exif-entry-rational.h"
 
+#include <string.h>
+
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtkradiobutton.h>
 #include <gtk/gtkvbox.h>
@@ -33,6 +35,8 @@
 #include <gtk/gtktable.h>
 
 #include <libexif/exif-utils.h>
+
+#include "gtk-exif-util.h"
 
 #ifdef ENABLE_NLS
 #  include <libintl.h>
@@ -85,54 +89,34 @@ gtk_exif_entry_rational_destroy (GtkObject *object)
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
-static void
-gtk_exif_entry_rational_finalize (GtkObject *object)
-{
-	GtkExifEntryRational *entry = GTK_EXIF_ENTRY_RATIONAL (object);
-
-	g_free (entry->priv);
-
-	GTK_OBJECT_CLASS (parent_class)->finalize (object);
-}
+GTK_EXIF_FINALIZE (entry_rational, EntryRational)
 
 static void
-gtk_exif_entry_rational_class_init (GtkExifEntryRationalClass *klass)
+gtk_exif_entry_rational_class_init (gpointer g_class, gpointer class_data)
 {
 	GtkObjectClass *object_class;
+	GObjectClass *gobject_class;
 
-	object_class = GTK_OBJECT_CLASS (klass);
+	object_class = GTK_OBJECT_CLASS (g_class);
 	object_class->destroy  = gtk_exif_entry_rational_destroy;
-	object_class->finalize = gtk_exif_entry_rational_finalize;
 
-	parent_class = gtk_type_class (PARENT_TYPE);
+	gobject_class = G_OBJECT_CLASS (g_class);
+	gobject_class->finalize = gtk_exif_entry_rational_finalize;
+
+	parent_class = g_type_class_peek_parent (g_class);
 }
 
 static void
-gtk_exif_entry_rational_init (GtkExifEntryRational *entry)
+gtk_exif_entry_rational_init (GTypeInstance *instance, gpointer g_class)
 {
+	GtkExifEntryRational *entry = GTK_EXIF_ENTRY_RATIONAL (instance);
+
 	entry->priv = g_new0 (GtkExifEntryRationalPrivate, 1);
 	entry->priv->ap = g_ptr_array_new ();
 	entry->priv->aq = g_ptr_array_new ();
 }
 
-GtkType
-gtk_exif_entry_rational_get_type (void)
-{
-	static GtkType entry_type = 0;
-
-	if (!entry_type) {
-		static const GtkTypeInfo entry_info = {
-			"GtkExifEntryRational",
-			sizeof (GtkExifEntryRational),
-			sizeof (GtkExifEntryRationalClass),
-			(GtkClassInitFunc)  gtk_exif_entry_rational_class_init,
-			(GtkObjectInitFunc) gtk_exif_entry_rational_init,
-			NULL, NULL, NULL};
-		entry_type = gtk_type_unique (PARENT_TYPE, &entry_info);
-	}
-
-	return (entry_type);
-}
+GTK_EXIF_CLASS (entry_rational, EntryRational, "EntryRational")
 
 static void
 gtk_exif_entry_rational_load (GtkExifEntryRational *entry)
@@ -151,8 +135,10 @@ gtk_exif_entry_rational_load (GtkExifEntryRational *entry)
 	for (i = 0; i < e->components; i++) {
 		ap = entry->priv->ap->pdata[i];
 		aq = entry->priv->aq->pdata[i];
-		gtk_signal_handler_block_by_data (GTK_OBJECT (ap), entry);
-		gtk_signal_handler_block_by_data (GTK_OBJECT (aq), entry);
+		g_signal_handlers_block_matched (G_OBJECT (ap),
+				G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, entry);
+		g_signal_handlers_block_matched (G_OBJECT (aq),
+				G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, entry);
 		switch (e->format) {
 		case EXIF_FORMAT_RATIONAL:
 			r = exif_get_rational (e->data + 8 * i, o);
@@ -168,8 +154,10 @@ gtk_exif_entry_rational_load (GtkExifEntryRational *entry)
 			g_warning ("Invalid format!");
 			break;
 		}
-		gtk_signal_handler_unblock_by_data (GTK_OBJECT (ap), entry);
-		gtk_signal_handler_unblock_by_data (GTK_OBJECT (aq), entry);
+		g_signal_handlers_unblock_matched (G_OBJECT (ap),
+				G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, entry);
+		g_signal_handlers_unblock_matched (G_OBJECT (aq),
+				G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, entry);
 	}
 }
 
@@ -206,7 +194,7 @@ gtk_exif_entry_rational_save (GtkExifEntryRational *entry)
 			return;
 		}
 	}
-	gtk_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed", e);
+	g_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed", e);
 }
 
 static void
@@ -228,7 +216,7 @@ gtk_exif_entry_rational_new (ExifEntry *e)
 	g_return_val_if_fail ((e->format == EXIF_FORMAT_RATIONAL) ||
 			      (e->format == EXIF_FORMAT_SRATIONAL), NULL);
 
-	entry = gtk_type_new (GTK_EXIF_TYPE_ENTRY_RATIONAL);
+	entry = g_object_new (GTK_EXIF_TYPE_ENTRY_RATIONAL, NULL);
 	entry->priv->entry = e;
 	exif_entry_ref (e);
 	gtk_exif_entry_construct (GTK_EXIF_ENTRY (entry),
@@ -262,8 +250,8 @@ gtk_exif_entry_rational_new (ExifEntry *e)
 		gtk_table_attach (GTK_TABLE (table), spin, 1, 2, i, i + 1,
 				  GTK_FILL | GTK_EXPAND, 0, 0, 0);
 		entry->priv->ap->pdata[i] = a;
-		gtk_signal_connect (a, "value_changed",
-			GTK_SIGNAL_FUNC (on_adjustment_value_changed), entry);
+		g_signal_connect (a, "value_changed",
+			G_CALLBACK (on_adjustment_value_changed), entry);
 
 		label = gtk_label_new ("/");
 		gtk_widget_show (label);
@@ -276,8 +264,8 @@ gtk_exif_entry_rational_new (ExifEntry *e)
 		gtk_table_attach (GTK_TABLE (table), spin, 3, 4, i, i + 1,
 				  GTK_FILL | GTK_EXPAND, 0, 0, 0);
 		entry->priv->aq->pdata[i] = a;
-		gtk_signal_connect (a, "value_changed",
-			GTK_SIGNAL_FUNC (on_adjustment_value_changed), entry);
+		g_signal_connect (a, "value_changed",
+			G_CALLBACK (on_adjustment_value_changed), entry);
 	}
 
 	gtk_exif_entry_rational_load (entry);

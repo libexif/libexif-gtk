@@ -21,6 +21,8 @@
 #include <config.h>
 #include "gtk-exif-entry-resolution.h"
 
+#include <string.h>
+
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtkradiobutton.h>
 #include <gtk/gtkvbox.h>
@@ -33,6 +35,8 @@
 #include <gtk/gtklabel.h>
 
 #include <libexif/exif-utils.h>
+
+#include "gtk-exif-util.h"
 
 #ifdef ENABLE_NLS
 #  include <libintl.h>
@@ -95,52 +99,32 @@ gtk_exif_entry_resolution_destroy (GtkObject *object)
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
-static void
-gtk_exif_entry_resolution_finalize (GtkObject *object)
-{
-	GtkExifEntryResolution *entry = GTK_EXIF_ENTRY_RESOLUTION (object);
-
-	g_free (entry->priv);
-
-	GTK_OBJECT_CLASS (parent_class)->finalize (object);
-}
+GTK_EXIF_FINALIZE (entry_resolution, EntryResolution)
 
 static void
-gtk_exif_entry_resolution_class_init (GtkExifEntryResolutionClass *klass)
+gtk_exif_entry_resolution_class_init (gpointer g_class, gpointer class_data)
 {
 	GtkObjectClass *object_class;
+	GObjectClass *gobject_class;
 
-	object_class = GTK_OBJECT_CLASS (klass);
+	object_class = GTK_OBJECT_CLASS (g_class);
 	object_class->destroy  = gtk_exif_entry_resolution_destroy;
-	object_class->finalize = gtk_exif_entry_resolution_finalize;
 
-	parent_class = gtk_type_class (PARENT_TYPE);
+	gobject_class = G_OBJECT_CLASS (g_class);
+	gobject_class->finalize = gtk_exif_entry_resolution_finalize;
+
+	parent_class = g_type_class_peek_parent (g_class);
 }
 
 static void
-gtk_exif_entry_resolution_init (GtkExifEntryResolution *entry)
+gtk_exif_entry_resolution_init (GTypeInstance *instance, gpointer g_class)
 {
+	GtkExifEntryResolution *entry = GTK_EXIF_ENTRY_RESOLUTION (instance);
+
 	entry->priv = g_new0 (GtkExifEntryResolutionPrivate, 1);
 }
 
-GtkType
-gtk_exif_entry_resolution_get_type (void)
-{
-	static GtkType entry_type = 0;
-
-	if (!entry_type) {
-		static const GtkTypeInfo entry_info = {
-			"GtkExifEntryResolution",
-			sizeof (GtkExifEntryResolution),
-			sizeof (GtkExifEntryResolutionClass),
-			(GtkClassInitFunc)  gtk_exif_entry_resolution_class_init,
-			(GtkObjectInitFunc) gtk_exif_entry_resolution_init,
-			NULL, NULL, NULL};
-		entry_type = gtk_type_unique (PARENT_TYPE, &entry_info);
-	}
-
-	return (entry_type);
-}
+GTK_EXIF_CLASS (entry_resolution, EntryResolution, "EntryResolution")
 
 static void
 on_inch_activate (GtkMenuItem *item, GtkExifEntryResolution *entry)
@@ -153,7 +137,7 @@ on_inch_activate (GtkMenuItem *item, GtkExifEntryResolution *entry)
 	g_return_if_fail (e != NULL);
 	o = exif_data_get_byte_order (e->parent->parent);
 	exif_set_short (e->data, o, 2);
-	gtk_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed", e);
+	g_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed", e);
 }
 
 static void
@@ -167,7 +151,7 @@ on_centimeter_activate (GtkMenuItem *item, GtkExifEntryResolution *entry)
 	g_return_if_fail (e != NULL);
 	o = exif_data_get_byte_order (e->parent->parent);
 	exif_set_short (e->data, o, 3);
-	gtk_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed", e);
+	g_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed", e);
 }
 
 static void
@@ -197,7 +181,7 @@ on_w_value_changed (GtkAdjustment *a, GtkExifEntryResolution *entry)
 		g_warning ("Invalid format!");
 		return;
 	}
-	gtk_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed", e);
+	g_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed", e);
 }
 
 static void
@@ -227,7 +211,7 @@ on_h_value_changed (GtkAdjustment *a, GtkExifEntryResolution *entry)
 		g_warning ("Invalid format!");
 		return;
 	}
-	gtk_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed", e);
+	g_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed", e);
 }
 
 static void
@@ -280,8 +264,10 @@ gtk_exif_entry_resolution_load (GtkExifEntryResolution *entry, ExifEntry *e)
 		return;
 	}
 
-	gtk_signal_handler_block_by_data (GTK_OBJECT (o.ap), entry);
-	gtk_signal_handler_block_by_data (GTK_OBJECT (o.aq), entry);
+	g_signal_handlers_block_matched (G_OBJECT (o.ap),
+			G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, entry);
+	g_signal_handlers_block_matched (G_OBJECT (o.aq),
+			G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, entry);
 	order = exif_data_get_byte_order (e->parent->parent);
 	switch (e->format) {
 	case EXIF_FORMAT_RATIONAL:
@@ -298,8 +284,10 @@ gtk_exif_entry_resolution_load (GtkExifEntryResolution *entry, ExifEntry *e)
 		g_warning ("Invalid format!");
 		break;
 	}
-	gtk_signal_handler_unblock_by_data (GTK_OBJECT (o.ap), entry);
-	gtk_signal_handler_unblock_by_data (GTK_OBJECT (o.aq), entry);
+	g_signal_handlers_unblock_matched (G_OBJECT (o.ap),
+			G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, entry);
+	g_signal_handlers_unblock_matched (G_OBJECT (o.aq),
+			G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, entry);
 }
 
 static void
@@ -317,11 +305,11 @@ on_cw_toggled (GtkToggleButton *toggle, GtkExifEntryResolution *entry)
 		exif_content_add_entry (entry->priv->content, e);
 		gtk_exif_entry_resolution_load (entry, e);
 		exif_entry_unref (e);
-		gtk_signal_emit_by_name (GTK_OBJECT (entry), "entry_added", e);
+		g_signal_emit_by_name (GTK_OBJECT (entry), "entry_added", e);
 	} else if (!toggle->active && e) {
 		exif_entry_ref (e);
 		exif_content_remove_entry (entry->priv->content, e);
-		gtk_signal_emit_by_name (GTK_OBJECT (entry), "entry_removed",e);
+		g_signal_emit_by_name (GTK_OBJECT (entry), "entry_removed",e);
 		exif_entry_unref (e);
 	}
 }
@@ -341,11 +329,11 @@ on_ch_toggled (GtkToggleButton *toggle, GtkExifEntryResolution *entry)
 		exif_content_add_entry (entry->priv->content, e);
 		gtk_exif_entry_resolution_load (entry, e);
 		exif_entry_unref (e);
-		gtk_signal_emit_by_name (GTK_OBJECT (entry), "entry_added", e);
+		g_signal_emit_by_name (GTK_OBJECT (entry), "entry_added", e);
         } else if (!toggle->active && e) {
 		exif_entry_ref (e);
 		exif_content_remove_entry (entry->priv->content, e);
-		gtk_signal_emit_by_name (GTK_OBJECT (entry), "entry_removed",e);
+		g_signal_emit_by_name (GTK_OBJECT (entry), "entry_removed",e);
 		exif_entry_unref (e);
         }
 }
@@ -365,11 +353,11 @@ on_unit_toggled (GtkToggleButton *toggle, GtkExifEntryResolution *entry)
 		exif_content_add_entry (entry->priv->content, e);
 		gtk_exif_entry_resolution_load_unit (entry, e);
 		exif_entry_unref (e);
-		gtk_signal_emit_by_name (GTK_OBJECT (entry), "entry_added", e);
+		g_signal_emit_by_name (GTK_OBJECT (entry), "entry_added", e);
 	} else if (!toggle->active && e) {
 		exif_entry_ref (e);
 		exif_content_remove_entry (entry->priv->content, e);
-		gtk_signal_emit_by_name (GTK_OBJECT (entry), "entry_removed",e);
+		g_signal_emit_by_name (GTK_OBJECT (entry), "entry_removed",e);
 		exif_entry_unref (e);
 	}
 }
@@ -384,7 +372,7 @@ gtk_exif_entry_resolution_new (ExifContent *content, gboolean focal_plane)
 
 	g_return_val_if_fail (content != NULL, NULL);
 
-	entry = gtk_type_new (GTK_EXIF_TYPE_ENTRY_RESOLUTION);
+	entry = g_object_new (GTK_EXIF_TYPE_ENTRY_RESOLUTION, NULL);
 	entry->priv->content = content;
 	exif_content_ref (content);
 
@@ -414,8 +402,8 @@ gtk_exif_entry_resolution_new (ExifContent *content, gboolean focal_plane)
 	gtk_box_pack_start (GTK_BOX (hbox), c, FALSE, FALSE, 0);
 	entry->priv->ox.check = GTK_TOGGLE_BUTTON (c);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (c), (e != NULL));
-	gtk_signal_connect (GTK_OBJECT (c), "toggled",
-			    GTK_SIGNAL_FUNC (on_cw_toggled), entry);
+	g_signal_connect (GTK_OBJECT (c), "toggled",
+			    G_CALLBACK (on_cw_toggled), entry);
 	ap = gtk_adjustment_new (0, 0, 0xffffffff, 1, 0xffff, 0);
 	entry->priv->ox.ap = GTK_ADJUSTMENT (ap);
 	sp = gtk_spin_button_new (GTK_ADJUSTMENT (ap), 0, 0);
@@ -423,8 +411,8 @@ gtk_exif_entry_resolution_new (ExifContent *content, gboolean focal_plane)
 	gtk_box_pack_start (GTK_BOX (hbox), sp, TRUE, TRUE, 0);
 	gtk_widget_set_sensitive (sp, (e != NULL));
 	entry->priv->ox.sp = sp;
-	gtk_signal_connect (ap, "value_changed",
-			    GTK_SIGNAL_FUNC (on_w_value_changed), entry);
+	g_signal_connect (ap, "value_changed",
+			    G_CALLBACK (on_w_value_changed), entry);
 	label = gtk_label_new ("/");
 	gtk_widget_show (label);
 	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
@@ -435,8 +423,8 @@ gtk_exif_entry_resolution_new (ExifContent *content, gboolean focal_plane)
 	gtk_box_pack_start (GTK_BOX (hbox), sq, TRUE, TRUE, 0);
 	gtk_widget_set_sensitive (sq, (e != NULL));
 	entry->priv->ox.sq = sq;
-	gtk_signal_connect (aq, "value_changed",
-			    GTK_SIGNAL_FUNC (on_w_value_changed), entry);
+	g_signal_connect (aq, "value_changed",
+			    G_CALLBACK (on_w_value_changed), entry);
 	if (e)
 		gtk_exif_entry_resolution_load (entry, e);
 
@@ -450,8 +438,8 @@ gtk_exif_entry_resolution_new (ExifContent *content, gboolean focal_plane)
 	gtk_box_pack_start (GTK_BOX (hbox), c, FALSE, FALSE, 0);
 	entry->priv->oy.check = GTK_TOGGLE_BUTTON (c);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (c), (e != NULL));
-	gtk_signal_connect (GTK_OBJECT (c), "toggled",
-			    GTK_SIGNAL_FUNC (on_ch_toggled), entry);
+	g_signal_connect (GTK_OBJECT (c), "toggled",
+			    G_CALLBACK (on_ch_toggled), entry);
 	ap = gtk_adjustment_new (0, 0, 0xffffffff, 1, 0xffff, 0);
 	entry->priv->oy.ap = GTK_ADJUSTMENT (ap);
 	sp = gtk_spin_button_new (GTK_ADJUSTMENT (ap), 0, 0);
@@ -459,8 +447,8 @@ gtk_exif_entry_resolution_new (ExifContent *content, gboolean focal_plane)
 	gtk_box_pack_start (GTK_BOX (hbox), sp, TRUE, TRUE, 0);
 	entry->priv->oy.sp = sp;
 	gtk_widget_set_sensitive (sp, (e != NULL));
-	gtk_signal_connect (ap, "value_changed",
-			    GTK_SIGNAL_FUNC (on_h_value_changed), entry);
+	g_signal_connect (ap, "value_changed",
+			    G_CALLBACK (on_h_value_changed), entry);
 	label = gtk_label_new ("/");
 	gtk_widget_show (label);
 	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
@@ -471,8 +459,8 @@ gtk_exif_entry_resolution_new (ExifContent *content, gboolean focal_plane)
 	gtk_box_pack_start (GTK_BOX (hbox), sq, TRUE, TRUE, 0);
 	entry->priv->oy.sq = sq;
 	gtk_widget_set_sensitive (sq, (e != NULL));
-	gtk_signal_connect (aq, "value_changed",
-			    GTK_SIGNAL_FUNC (on_h_value_changed), entry);
+	g_signal_connect (aq, "value_changed",
+			    G_CALLBACK (on_h_value_changed), entry);
 	if (e)
 		gtk_exif_entry_resolution_load (entry, e);
 
@@ -486,8 +474,8 @@ gtk_exif_entry_resolution_new (ExifContent *content, gboolean focal_plane)
 	gtk_box_pack_start (GTK_BOX (hbox), c, FALSE, FALSE, 0);
 	entry->priv->check = GTK_TOGGLE_BUTTON (c);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (c), (e != NULL));
-	gtk_signal_connect (GTK_OBJECT (c), "toggled",
-			    GTK_SIGNAL_FUNC (on_unit_toggled), entry);
+	g_signal_connect (GTK_OBJECT (c), "toggled",
+			  G_CALLBACK (on_unit_toggled), entry);
 	o = gtk_option_menu_new ();
 	gtk_widget_show (o);
 	gtk_box_pack_start (GTK_BOX (hbox), o, TRUE, TRUE, 0);
@@ -496,14 +484,14 @@ gtk_exif_entry_resolution_new (ExifContent *content, gboolean focal_plane)
 	gtk_widget_show (menu);
 	item = gtk_menu_item_new_with_label (_("Centimeter"));
 	gtk_widget_show (item);
-	gtk_menu_append (GTK_MENU (menu), item);
-	gtk_signal_connect (GTK_OBJECT (item), "activate",
-			    GTK_SIGNAL_FUNC (on_centimeter_activate), entry);
+	gtk_container_add (GTK_CONTAINER (menu), item);
+	g_signal_connect (GTK_OBJECT (item), "activate",
+			  G_CALLBACK (on_centimeter_activate), entry);
 	item = gtk_menu_item_new_with_label (_("Inch"));
 	gtk_widget_show (item);
-	gtk_menu_append (GTK_MENU (menu), item);
-	gtk_signal_connect (GTK_OBJECT (item), "activate",
-			    GTK_SIGNAL_FUNC (on_inch_activate), entry);
+	gtk_container_add (GTK_CONTAINER (menu), item);
+	g_signal_connect (GTK_OBJECT (item), "activate",
+			  G_CALLBACK (on_inch_activate), entry);
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (o), menu);
 	if (e)
 		gtk_exif_entry_resolution_load_unit (entry, e);

@@ -33,6 +33,8 @@
 #include <gtk/gtktable.h>
 #include <gtk/gtkhbox.h>
 
+#include "gtk-exif-util.h"
+
 #ifdef ENABLE_NLS
 #  include <libintl.h>
 #  undef _
@@ -74,15 +76,7 @@ gtk_exif_entry_copyright_destroy (GtkObject *object)
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
-static void
-gtk_exif_entry_copyright_finalize (GObject *object)
-{
-	GtkExifEntryCopyright *entry = GTK_EXIF_ENTRY_COPYRIGHT (object);
-
-	g_free (entry->priv);
-
-	G_OBJECT_CLASS (parent_class)->finalize (object);
-}
+GTK_EXIF_FINALIZE (entry_copyright, EntryCopyright)
 
 static void
 gtk_exif_entry_copyright_class_init (gpointer g_class, gpointer class_data)
@@ -107,26 +101,7 @@ gtk_exif_entry_copyright_init (GTypeInstance *instance, gpointer g_class)
 	entry->priv = g_new0 (GtkExifEntryCopyrightPrivate, 1);
 }
 
-GType
-gtk_exif_entry_copyright_get_type (void)
-{
-        static GType t = 0;
-
-        if (!t) {
-                GTypeInfo ti;
-
-                memset (&ti, 0, sizeof (GTypeInfo));
-                ti.class_size    = sizeof (GtkExifEntryCopyrightClass);
-                ti.class_init    = gtk_exif_entry_copyright_class_init;
-                ti.instance_size = sizeof (GtkExifEntryCopyright);
-                ti.instance_init = gtk_exif_entry_copyright_init;
-
-                t = g_type_register_static (PARENT_TYPE,
-					    "GtkExifEntryCopyright", &ti, 0);
-        }
-
-        return (t); 
-}
+GTK_EXIF_CLASS (entry_copyright, EntryCopyright, "EntryCopyright")
 
 static void
 on_text_changed (GtkEditable *editable, GtkExifEntryCopyright *entry)

@@ -21,6 +21,8 @@
 #include <config.h>
 #include "gtk-exif-entry-generic.h"
 
+#include <string.h>
+
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtkradiobutton.h>
 #include <gtk/gtkvbox.h>
@@ -28,6 +30,8 @@
 #include <gtk/gtkframe.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtktable.h>
+
+#include "gtk-exif-util.h"
 
 struct _GtkExifEntryGenericPrivate {
 	ExifEntry *entry;
@@ -52,52 +56,32 @@ gtk_exif_entry_generic_destroy (GtkObject *object)
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
-static void
-gtk_exif_entry_generic_finalize (GtkObject *object)
-{
-	GtkExifEntryGeneric *entry = GTK_EXIF_ENTRY_GENERIC (object);
-
-	g_free (entry->priv);
-
-	GTK_OBJECT_CLASS (parent_class)->finalize (object);
-}
+GTK_EXIF_FINALIZE (entry_generic, EntryGeneric)
 
 static void
-gtk_exif_entry_generic_class_init (GtkExifEntryGenericClass *klass)
+gtk_exif_entry_generic_class_init (gpointer g_class, gpointer class_data)
 {
 	GtkObjectClass *object_class;
+	GObjectClass *gobject_class;
 
-	object_class = GTK_OBJECT_CLASS (klass);
+	object_class = GTK_OBJECT_CLASS (g_class);
 	object_class->destroy  = gtk_exif_entry_generic_destroy;
-	object_class->finalize = gtk_exif_entry_generic_finalize;
 
-	parent_class = gtk_type_class (PARENT_TYPE);
+	gobject_class = G_OBJECT_CLASS (g_class);
+	gobject_class->finalize = gtk_exif_entry_generic_finalize;
+
+	parent_class = g_type_class_peek_parent (g_class);
 }
 
 static void
-gtk_exif_entry_generic_init (GtkExifEntryGeneric *entry)
+gtk_exif_entry_generic_init (GTypeInstance *instance, gpointer g_class)
 {
+	GtkExifEntryGeneric *entry = GTK_EXIF_ENTRY_GENERIC (instance);
+
 	entry->priv = g_new0 (GtkExifEntryGenericPrivate, 1);
 }
 
-GtkType
-gtk_exif_entry_generic_get_type (void)
-{
-	static GtkType entry_type = 0;
-
-	if (!entry_type) {
-		static const GtkTypeInfo entry_info = {
-			"GtkExifEntryGeneric",
-			sizeof (GtkExifEntryGeneric),
-			sizeof (GtkExifEntryGenericClass),
-			(GtkClassInitFunc)  gtk_exif_entry_generic_class_init,
-			(GtkObjectInitFunc) gtk_exif_entry_generic_init,
-			NULL, NULL, NULL};
-		entry_type = gtk_type_unique (PARENT_TYPE, &entry_info);
-	}
-
-	return (entry_type);
-}
+GTK_EXIF_CLASS (entry_generic, EntryGeneric, "EntryGeneric")
 
 GtkWidget *
 gtk_exif_entry_generic_new (ExifEntry *e)
@@ -108,7 +92,7 @@ gtk_exif_entry_generic_new (ExifEntry *e)
 
 	g_return_val_if_fail (e != NULL, NULL);
 
-	entry = gtk_type_new (GTK_EXIF_TYPE_ENTRY_GENERIC);
+	entry = g_object_new (GTK_EXIF_TYPE_ENTRY_GENERIC, NULL);
 	entry->priv->entry = e;
 	exif_entry_ref (e);
 	gtk_exif_entry_construct (GTK_EXIF_ENTRY (entry),

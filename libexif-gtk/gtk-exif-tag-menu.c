@@ -21,9 +21,11 @@
 #include <config.h>
 #include "gtk-exif-tag-menu.h"
 
+#include <string.h>
+
 #include <gtk/gtksignal.h>
 
-#include <string.h>
+#include "gtk-exif-util.h"
 
 #ifdef ENABLE_NLS
 #  include <libintl.h>
@@ -67,63 +69,43 @@ gtk_exif_tag_menu_destroy (GtkObject *object)
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
-static void
-gtk_exif_tag_menu_finalize (GtkObject *object)
-{
-	GtkExifTagMenu *menu = GTK_EXIF_TAG_MENU (object);
-
-	g_free (menu->priv);
-
-	GTK_OBJECT_CLASS (parent_class)->finalize (object);
-}
+GTK_EXIF_FINALIZE (tag_menu, TagMenu)
 
 static void
-gtk_exif_tag_menu_class_init (GtkExifTagMenuClass *klass)
+gtk_exif_tag_menu_class_init (gpointer g_class, gpointer class_data)
 {
 	GtkObjectClass *object_class;
+	GObjectClass *gobject_class;
 
-	object_class = GTK_OBJECT_CLASS (klass);
+	object_class = GTK_OBJECT_CLASS (g_class);
 	object_class->destroy  = gtk_exif_tag_menu_destroy;
-	object_class->finalize = gtk_exif_tag_menu_finalize;
 
-	signals[TAG_SELECTED] = gtk_signal_new ("tag_selected",
-		GTK_RUN_LAST, object_class->type,
-		GTK_SIGNAL_OFFSET (GtkExifTagMenuClass, tag_selected),
-		gtk_marshal_NONE__UINT, GTK_TYPE_NONE, 1, GTK_TYPE_UINT);
-	gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
+	gobject_class = G_OBJECT_CLASS (g_class);
+	gobject_class->finalize = gtk_exif_tag_menu_finalize;
 
-	parent_class = gtk_type_class (PARENT_TYPE);
+	signals[TAG_SELECTED] = g_signal_new ("tag_selected",
+		G_TYPE_FROM_CLASS (g_class), G_SIGNAL_RUN_LAST,
+		G_STRUCT_OFFSET (GtkExifTagMenuClass, tag_selected),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__UINT, G_TYPE_NONE, 1, G_TYPE_UINT);
+
+	parent_class = g_type_class_peek_parent (g_class);
 }
 
 static void
-gtk_exif_tag_menu_init (GtkExifTagMenu *menu)
+gtk_exif_tag_menu_init (GTypeInstance *instance, gpointer g_class)
 {
+	GtkExifTagMenu *menu = GTK_EXIF_TAG_MENU (instance);
+
 	menu->priv = g_new0 (GtkExifTagMenuPrivate, 1);
 }
 
-GtkType
-gtk_exif_tag_menu_get_type (void)
-{
-	static GtkType menu_type = 0;
-
-	if (!menu_type) {
-		static const GtkTypeInfo menu_info = {
-			"GtkExifTagMenu",
-			sizeof (GtkExifTagMenu),
-			sizeof (GtkExifTagMenuClass),
-			(GtkClassInitFunc)  gtk_exif_tag_menu_class_init,
-			(GtkObjectInitFunc) gtk_exif_tag_menu_init,
-			NULL, NULL, NULL};
-		menu_type = gtk_type_unique (PARENT_TYPE, &menu_info);
-	}
-
-	return (menu_type);
-}
+GTK_EXIF_CLASS (tag_menu, TagMenu, "TagMenu")
 
 static void
 on_option_selected (GtkMenuOption *options, guint option, GtkExifTagMenu *menu)
 {
-	gtk_signal_emit (GTK_OBJECT (menu), signals[TAG_SELECTED],
+	g_signal_emit (GTK_OBJECT (menu), signals[TAG_SELECTED],
 			 option);
 }
 
@@ -137,7 +119,7 @@ gtk_exif_tag_menu_new (void)
 	guint i, t;
 	const gchar *name;
 
-	menu = gtk_type_new (GTK_EXIF_TYPE_TAG_MENU);
+	menu = g_object_new (GTK_EXIF_TYPE_TAG_MENU, NULL);
 
 	t = i = 0;
 	memset (tags, 0, sizeof (GtkOptions) * LIST_SIZE);
@@ -152,8 +134,8 @@ gtk_exif_tag_menu_new (void)
 	}
 
 	gtk_menu_option_construct (GTK_MENU_OPTION (menu), tags);
-	gtk_signal_connect (GTK_OBJECT (menu), "option_selected",
-			    GTK_SIGNAL_FUNC (on_option_selected), menu);
+	g_signal_connect (GTK_OBJECT (menu), "option_selected",
+			  G_CALLBACK (on_option_selected), menu);
 
 	return (GTK_WIDGET (menu));
 }

@@ -21,6 +21,8 @@
 #include <config.h>
 #include "gtk-exif-entry-option.h"
 
+#include <string.h>
+
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtkradiobutton.h>
 #include <gtk/gtkvbox.h>
@@ -37,6 +39,8 @@
 
 #include "gtk-extensions/gtk-option-menu-option.h"
 #include "gtk-extensions/gtk-options.h"
+
+#include "gtk-exif-util.h"
 
 #ifdef ENABLE_NLS
 #  include <libintl.h>
@@ -79,52 +83,32 @@ gtk_exif_entry_option_destroy (GtkObject *object)
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
-static void
-gtk_exif_entry_option_finalize (GtkObject *object)
-{
-	GtkExifEntryOption *entry = GTK_EXIF_ENTRY_OPTION (object);
-
-	g_free (entry->priv);
-
-	GTK_OBJECT_CLASS (parent_class)->finalize (object);
-}
+GTK_EXIF_FINALIZE (entry_option, EntryOption)
 
 static void
-gtk_exif_entry_option_class_init (GtkExifEntryOptionClass *klass)
+gtk_exif_entry_option_class_init (gpointer g_class, gpointer class_data)
 {
 	GtkObjectClass *object_class;
+	GObjectClass *gobject_class;
 
-	object_class = GTK_OBJECT_CLASS (klass);
+	object_class = GTK_OBJECT_CLASS (g_class);
 	object_class->destroy  = gtk_exif_entry_option_destroy;
-	object_class->finalize = gtk_exif_entry_option_finalize;
 
-	parent_class = gtk_type_class (PARENT_TYPE);
+	gobject_class = G_OBJECT_CLASS (g_class);
+	gobject_class->finalize = gtk_exif_entry_option_finalize;
+
+	parent_class = g_type_class_peek_parent (g_class);
 }
 
 static void
-gtk_exif_entry_option_init (GtkExifEntryOption *entry)
+gtk_exif_entry_option_init (GTypeInstance *instance, gpointer g_class)
 {
+	GtkExifEntryOption *entry = GTK_EXIF_ENTRY_OPTION (instance);
+
 	entry->priv = g_new0 (GtkExifEntryOptionPrivate, 1);
 }
 
-GtkType
-gtk_exif_entry_option_get_type (void)
-{
-	static GtkType entry_type = 0;
-
-	if (!entry_type) {
-		static const GtkTypeInfo entry_info = {
-			"GtkExifEntryOption",
-			sizeof (GtkExifEntryOption),
-			sizeof (GtkExifEntryOptionClass),
-			(GtkClassInitFunc)  gtk_exif_entry_option_class_init,
-			(GtkObjectInitFunc) gtk_exif_entry_option_init,
-			NULL, NULL, NULL};
-		entry_type = gtk_type_unique (PARENT_TYPE, &entry_info);
-	}
-
-	return (entry_type);
-}
+GTK_EXIF_CLASS (entry_option, EntryOption, "EntryOption")
 
 static void
 gtk_exif_entry_option_load (GtkExifEntryOption *entry)
@@ -148,7 +132,7 @@ gtk_exif_entry_option_save (GtkExifEntryOption *entry)
 	o = exif_data_get_byte_order (entry->priv->entry->parent->parent);
 	value = gtk_option_menu_option_get (entry->priv->menu);
 	exif_set_short (entry->priv->entry->data, o, value);
-	gtk_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed",
+	g_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed",
 				 entry->priv->entry);
 }
 
@@ -266,7 +250,7 @@ gtk_exif_entry_option_new (ExifEntry *e)
 		return (NULL);
 	}
 
-	entry = gtk_type_new (GTK_EXIF_TYPE_ENTRY_OPTION);
+	entry = g_object_new (GTK_EXIF_TYPE_ENTRY_OPTION, NULL);
 	entry->priv->entry = e;
 	exif_entry_ref (e);
 	gtk_exif_entry_construct (GTK_EXIF_ENTRY (entry),
@@ -283,8 +267,8 @@ gtk_exif_entry_option_new (ExifEntry *e)
 	gtk_widget_show (menu);
 	gtk_box_pack_start (GTK_BOX (hbox), menu, FALSE, FALSE, 0);
 	entry->priv->menu = GTK_OPTION_MENU_OPTION (menu);
-	gtk_signal_connect (GTK_OBJECT (menu), "option_selected",
-			    GTK_SIGNAL_FUNC (on_option_selected), entry);
+	g_signal_connect (GTK_OBJECT (menu), "option_selected",
+			  G_CALLBACK (on_option_selected), entry);
 
 	gtk_exif_entry_option_load (entry);
 

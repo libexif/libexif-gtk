@@ -21,6 +21,8 @@
 #include <config.h>
 #include "gtk-exif-entry-exposure.h"
 
+#include <string.h>
+
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtkradiobutton.h>
 #include <gtk/gtkvbox.h>
@@ -34,6 +36,8 @@
 #include <gtk/gtkhbox.h>
 
 #include <libexif/exif-utils.h>
+
+#include "gtk-exif-util.h"
 
 #ifdef ENABLE_NLS
 #  include <libintl.h>
@@ -78,52 +82,32 @@ gtk_exif_entry_exposure_destroy (GtkObject *object)
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
-static void
-gtk_exif_entry_exposure_finalize (GtkObject *object)
-{
-	GtkExifEntryExposure *entry = GTK_EXIF_ENTRY_EXPOSURE (object);
-
-	g_free (entry->priv);
-
-	GTK_OBJECT_CLASS (parent_class)->finalize (object);
-}
+GTK_EXIF_FINALIZE (entry_exposure, EntryExposure)
 
 static void
-gtk_exif_entry_exposure_class_init (GtkExifEntryExposureClass *klass)
+gtk_exif_entry_exposure_class_init (gpointer g_class, gpointer class_data)
 {
 	GtkObjectClass *object_class;
+	GObjectClass *gobject_class;
 
-	object_class = GTK_OBJECT_CLASS (klass);
+	object_class = GTK_OBJECT_CLASS (g_class);
 	object_class->destroy  = gtk_exif_entry_exposure_destroy;
-	object_class->finalize = gtk_exif_entry_exposure_finalize;
 
-	parent_class = gtk_type_class (PARENT_TYPE);
+	gobject_class = G_OBJECT_CLASS (g_class);
+	gobject_class->finalize = gtk_exif_entry_exposure_finalize;
+
+	parent_class = g_type_class_peek_parent (g_class);
 }
 
 static void
-gtk_exif_entry_exposure_init (GtkExifEntryExposure *entry)
+gtk_exif_entry_exposure_init (GTypeInstance *instance, gpointer g_class)
 {
+	GtkExifEntryExposure *entry = GTK_EXIF_ENTRY_EXPOSURE (instance);
+
 	entry->priv = g_new0 (GtkExifEntryExposurePrivate, 1);
 }
 
-GtkType
-gtk_exif_entry_exposure_get_type (void)
-{
-	static GtkType entry_type = 0;
-
-	if (!entry_type) {
-		static const GtkTypeInfo entry_info = {
-			"GtkExifEntryExposure",
-			sizeof (GtkExifEntryExposure),
-			sizeof (GtkExifEntryExposureClass),
-			(GtkClassInitFunc)  gtk_exif_entry_exposure_class_init,
-			(GtkObjectInitFunc) gtk_exif_entry_exposure_init,
-			NULL, NULL, NULL};
-		entry_type = gtk_type_unique (PARENT_TYPE, &entry_info);
-	}
-
-	return (entry_type);
-}
+GTK_EXIF_CLASS (entry_exposure, EntryExposure, "EntryExposure")
 
 static void
 gtk_exif_entry_exposure_load (GtkExifEntryExposure *entry)
@@ -147,7 +131,7 @@ gtk_exif_entry_exposure_save (GtkExifEntryExposure *entry)
 	o = exif_data_get_byte_order (entry->priv->entry->parent->parent);
 	value = gtk_option_menu_option_get (entry->priv->menu);
 	exif_set_short (entry->priv->entry->data, o, value);
-	gtk_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed",
+	g_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed",
 				 entry->priv->entry);
 }
 
@@ -183,7 +167,7 @@ gtk_exif_entry_exposure_new (ExifEntry *e)
 	g_return_val_if_fail (e->tag == EXIF_TAG_EXPOSURE_PROGRAM, NULL);
 	g_return_val_if_fail (e->format == EXIF_FORMAT_SHORT, NULL);
 
-	entry = gtk_type_new (GTK_EXIF_TYPE_ENTRY_EXPOSURE);
+	entry = g_object_new (GTK_EXIF_TYPE_ENTRY_EXPOSURE, NULL);
 	entry->priv->entry = e;
 	exif_entry_ref (e);
 	gtk_exif_entry_construct (GTK_EXIF_ENTRY (entry),
@@ -200,8 +184,8 @@ gtk_exif_entry_exposure_new (ExifEntry *e)
 	gtk_widget_show (options);
 	gtk_box_pack_start (GTK_BOX (hbox), options, FALSE, FALSE, 0);
 	entry->priv->menu = GTK_OPTION_MENU_OPTION (options);
-	gtk_signal_connect (GTK_OBJECT (options), "option_selected",
-			    GTK_SIGNAL_FUNC (on_option_selected), entry);
+	g_signal_connect (GTK_OBJECT (options), "option_selected",
+			  G_CALLBACK (on_option_selected), entry);
 
 	gtk_exif_entry_exposure_load (entry);
 

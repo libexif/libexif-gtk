@@ -28,9 +28,9 @@
 #include <gtk/gtkliststore.h>
 #include <gtk/gtkcellrenderertext.h>
 #include <gtk/gtktreeselection.h>
-#include <gtk/gtktreestore.h>
 
 #include "gtk-exif-tag-menu.h"
+#include "gtk-exif-util.h"
 
 #ifdef ENABLE_NLS
 #  include <libintl.h>
@@ -88,15 +88,7 @@ gtk_exif_content_list_destroy (GtkObject *object)
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
-static void
-gtk_exif_content_list_finalize (GObject *object)
-{
-	GtkExifContentList *list = GTK_EXIF_CONTENT_LIST (object);
-
-	g_free (list->priv);
-
-	G_OBJECT_CLASS (parent_class)->finalize (object);
-}
+GTK_EXIF_FINALIZE (content_list, ContentList)
 
 static void
 gtk_exif_content_list_class_init (gpointer g_class, gpointer class_data)
@@ -111,25 +103,25 @@ gtk_exif_content_list_class_init (gpointer g_class, gpointer class_data)
 	gobject_class->finalize = gtk_exif_content_list_finalize;
 
 	signals[ENTRY_SELECTED] = g_signal_new ("entry_selected",
-		G_SIGNAL_RUN_LAST, G_TYPE_FROM_CLASS (g_class),
+		G_TYPE_FROM_CLASS (g_class), G_SIGNAL_RUN_LAST,
 		G_STRUCT_OFFSET (GtkExifContentListClass, entry_selected),
 		NULL, NULL,
 		g_cclosure_marshal_VOID__POINTER, G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
 	signals[ENTRY_ADDED] = g_signal_new ("entry_added",
-		G_SIGNAL_RUN_FIRST, G_TYPE_FROM_CLASS (g_class),
+		G_TYPE_FROM_CLASS (g_class), G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GtkExifContentListClass, entry_added),
 		NULL, NULL,
 		g_cclosure_marshal_VOID__POINTER, G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
 	signals[ENTRY_CHANGED] = g_signal_new ("entry_changed",
-		G_SIGNAL_RUN_FIRST, G_TYPE_FROM_CLASS (g_class),
+		G_TYPE_FROM_CLASS (g_class), G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GtkExifContentListClass, entry_changed),
 		NULL, NULL,
 		g_cclosure_marshal_VOID__POINTER, G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
 	signals[ENTRY_REMOVED] = g_signal_new ("entry_removed",
-		G_SIGNAL_RUN_FIRST, G_TYPE_FROM_CLASS (g_class),
+		G_TYPE_FROM_CLASS (g_class), G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GtkExifContentListClass, entry_removed),
 		NULL, NULL,
 		g_cclosure_marshal_VOID__POINTER, G_TYPE_NONE, 1,
@@ -190,26 +182,7 @@ gtk_exif_content_list_init (GTypeInstance *instance, gpointer g_class)
 				G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER);
 }
 
-GType
-gtk_exif_content_list_get_type (void)
-{
-	static GtkType t = 0;
-
-	if (!t) {
-		GTypeInfo ti;
-
-		memset (&ti, 0, sizeof (GTypeInfo));
-		ti.class_size     = sizeof (GtkExifContentListClass);
-		ti.class_init     = gtk_exif_content_list_class_init;
-		ti.instance_size  = sizeof (GtkExifContentList);
-		ti.instance_init  = gtk_exif_content_list_init;
-
-		t = g_type_register_static (PARENT_TYPE,
-					    "GtkExifContentList", &ti, 0);
-	}
-
-	return (t);
-}
+GTK_EXIF_CLASS (content_list, ContentList, "ContentList")
 
 static void
 on_hide (GtkWidget *widget, GtkMenu *menu)
@@ -318,7 +291,7 @@ update_foreach_func (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
 	if (g_value_peek_pointer (&value) == e) {
 		g_value_unset (&value);
 		gtk_list_store_set (GTK_LIST_STORE (model), iter,
-				VALUE_COLUMN, exif_entry_get_value (e), NULL);
+				VALUE_COLUMN, exif_entry_get_value (e), -1);
 		return (TRUE);
 	}
 	g_value_unset (&value);
@@ -343,10 +316,10 @@ gtk_exif_content_list_add_entry (GtkExifContentList *list, ExifEntry *entry)
 	g_return_if_fail (GTK_EXIF_IS_CONTENT_LIST (list));
 
 	gtk_list_store_append (list->priv->store, &iter);
-	gtk_tree_store_set (GTK_TREE_STORE (list->priv->store), &iter,
+	gtk_list_store_set (GTK_LIST_STORE (list->priv->store), &iter,
 			NAME_COLUMN, exif_tag_get_name (entry->tag),
 			VALUE_COLUMN, exif_entry_get_value (entry),
-			ENTRY_COLUMN, entry);
+			ENTRY_COLUMN, entry, -1);
 	g_signal_emit (G_OBJECT (list), signals[ENTRY_ADDED], 0, entry);
 }
 

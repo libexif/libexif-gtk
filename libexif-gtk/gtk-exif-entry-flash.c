@@ -21,11 +21,15 @@
 #include <config.h>
 #include "gtk-exif-entry-flash.h"
 
+#include <string.h>
+
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtkradiobutton.h>
 #include <gtk/gtkvbox.h>
 #include <gtk/gtksignal.h>
 #include <gtk/gtkframe.h>
+
+#include "gtk-exif-util.h"
 
 struct _GtkExifEntryFlashPrivate {
 	ExifEntry *entry;
@@ -50,52 +54,32 @@ gtk_exif_entry_flash_destroy (GtkObject *object)
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
-static void
-gtk_exif_entry_flash_finalize (GtkObject *object)
-{
-	GtkExifEntryFlash *entry = GTK_EXIF_ENTRY_FLASH (object);
-
-	g_free (entry->priv);
-
-	GTK_OBJECT_CLASS (parent_class)->finalize (object);
-}
+GTK_EXIF_FINALIZE (entry_flash, EntryFlash)
 
 static void
-gtk_exif_entry_flash_class_init (GtkExifEntryFlashClass *klass)
+gtk_exif_entry_flash_class_init (gpointer g_class, gpointer class_data)
 {
 	GtkObjectClass *object_class;
+	GObjectClass *gobject_class;
 
-	object_class = GTK_OBJECT_CLASS (klass);
+	object_class = GTK_OBJECT_CLASS (g_class);
 	object_class->destroy  = gtk_exif_entry_flash_destroy;
-	object_class->finalize = gtk_exif_entry_flash_finalize;
 
-	parent_class = gtk_type_class (PARENT_TYPE);
+	gobject_class = G_OBJECT_CLASS (g_class);
+	gobject_class->finalize = gtk_exif_entry_flash_finalize;
+
+	parent_class = g_type_class_peek_parent (g_class);
 }
 
 static void
-gtk_exif_entry_flash_init (GtkExifEntryFlash *entry)
+gtk_exif_entry_flash_init (GTypeInstance *instance, gpointer g_class)
 {
+	GtkExifEntryFlash *entry = GTK_EXIF_ENTRY_FLASH (instance);
+
 	entry->priv = g_new0 (GtkExifEntryFlashPrivate, 1);
 }
 
-GtkType
-gtk_exif_entry_flash_get_type (void)
-{
-	static GtkType entry_type = 0;
-
-	if (!entry_type) {
-		static const GtkTypeInfo entry_info = {
-			"GtkExifEntryFlash",
-			sizeof (GtkExifEntryFlash),
-			sizeof (GtkExifEntryFlashClass),
-			(GtkClassInitFunc)  gtk_exif_entry_flash_class_init,
-			(GtkObjectInitFunc) gtk_exif_entry_flash_init,
-			NULL, NULL, NULL};
-		entry_type = gtk_type_unique (PARENT_TYPE, &entry_info);
-	}
-
-	return (entry_type);
-}
+GTK_EXIF_CLASS (entry_flash, EntryFlash, "EntryFlash")
 
 static void
 on_value_changed (GtkToggleButton *toggle, GtkExifEntryFlash *entry)
@@ -111,7 +95,7 @@ on_value_changed (GtkToggleButton *toggle, GtkExifEntryFlash *entry)
 		entry->priv->entry->data[0] |= 0x04;
 	else if (entry->priv->r3->active)
 		entry->priv->entry->data[0] |= 0x06;
-	gtk_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed",
+	g_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed",
 				 entry->priv->entry);
 }
 
@@ -125,7 +109,7 @@ gtk_exif_entry_flash_new (ExifEntry *e)
 	g_return_val_if_fail (e != NULL, NULL);
 	g_return_val_if_fail (e->tag == EXIF_TAG_FLASH, NULL);
 
-	entry = gtk_type_new (GTK_EXIF_TYPE_ENTRY_FLASH);
+	entry = g_object_new (GTK_EXIF_TYPE_ENTRY_FLASH, NULL);
 	entry->priv->entry = e;
 	exif_entry_ref (e);
 	gtk_exif_entry_construct (GTK_EXIF_ENTRY (entry),
@@ -137,8 +121,8 @@ gtk_exif_entry_flash_new (ExifEntry *e)
 	gtk_box_pack_start (GTK_BOX (entry), check, FALSE, FALSE, 0);
 	if (e->data[0] & (1 << 0))
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
-	gtk_signal_connect (GTK_OBJECT (check), "toggled",
-			    GTK_SIGNAL_FUNC (on_value_changed), entry);
+	g_signal_connect (GTK_OBJECT (check), "toggled",
+			    G_CALLBACK (on_value_changed), entry);
 	entry->priv->c = GTK_TOGGLE_BUTTON (check);
 
 	frame = gtk_frame_new ("Return light");
@@ -155,32 +139,32 @@ gtk_exif_entry_flash_new (ExifEntry *e)
 	gtk_box_pack_start (GTK_BOX (vbox), radio, FALSE, FALSE, 0);
 	if (!(e->data[0] & (1 << 1)) && !(e->data[0] & (1 << 2)))
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), TRUE);
-	gtk_signal_connect (GTK_OBJECT (radio), "toggled",
-			    GTK_SIGNAL_FUNC (on_value_changed), entry);
+	g_signal_connect (GTK_OBJECT (radio), "toggled",
+			    G_CALLBACK (on_value_changed), entry);
 	entry->priv->r1 = GTK_TOGGLE_BUTTON (radio);
 
 	/* Stobe return light not detected */
-	group = gtk_radio_button_group (GTK_RADIO_BUTTON (radio));
+	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio));
 	radio = gtk_radio_button_new_with_label (group,
 				"Strobe return light not detected");
 	gtk_widget_show (radio);
 	gtk_box_pack_start (GTK_BOX (vbox), radio, FALSE, FALSE, 0);
 	if (!(e->data[0] & (1 << 1)) && (e->data[0] & (1 << 2)))
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), TRUE);
-	gtk_signal_connect (GTK_OBJECT (radio), "toggled",
-			    GTK_SIGNAL_FUNC (on_value_changed), entry);
+	g_signal_connect (GTK_OBJECT (radio), "toggled",
+			    G_CALLBACK (on_value_changed), entry);
 	entry->priv->r2 = GTK_TOGGLE_BUTTON (radio);
 
 	/* Strobe return light detected */
-	group = gtk_radio_button_group (GTK_RADIO_BUTTON (radio));
+	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio));
 	radio = gtk_radio_button_new_with_label (group, 
 					"Strobe return light detected");
 	gtk_widget_show (radio);
 	gtk_box_pack_start (GTK_BOX (vbox), radio, FALSE, FALSE, 0);
 	if ((e->data[0] & (1 << 1)) && (e->data[0] & (1 << 2)))
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), TRUE);
-	gtk_signal_connect (GTK_OBJECT (radio), "toggled",
-			    GTK_SIGNAL_FUNC (on_value_changed), entry);
+	g_signal_connect (GTK_OBJECT (radio), "toggled",
+			    G_CALLBACK (on_value_changed), entry);
 	entry->priv->r3 = GTK_TOGGLE_BUTTON (radio);
 
 	return (GTK_WIDGET (entry));

@@ -29,6 +29,8 @@
 #include <gtk/gtktable.h>
 #include <gtk/gtkhseparator.h>
 
+#include "gtk-exif-util.h"
+
 struct _GtkExifEntryPrivate {
 };
 
@@ -54,15 +56,7 @@ gtk_exif_entry_destroy (GtkObject *object)
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
-static void
-gtk_exif_entry_finalize (GObject *object)
-{
-	GtkExifEntry *entry = GTK_EXIF_ENTRY (object);
-
-	g_free (entry->priv);
-
-	G_OBJECT_CLASS (parent_class)->finalize (object);
-}
+GTK_EXIF_FINALIZE (entry, Entry)
 
 static void
 gtk_exif_entry_class_init (gpointer g_class, gpointer class_data)
@@ -76,18 +70,18 @@ gtk_exif_entry_class_init (gpointer g_class, gpointer class_data)
 	gobject_class = G_OBJECT_CLASS (g_class);
 	gobject_class->finalize = gtk_exif_entry_finalize;
 
-	signals[ENTRY_ADDED] = g_signal_new ("entry_added", G_SIGNAL_RUN_FIRST,
-		G_TYPE_FROM_CLASS (g_class),
+	signals[ENTRY_ADDED] = g_signal_new ("entry_added",
+		G_TYPE_FROM_CLASS (g_class), G_SIGNAL_RUN_LAST,
 		G_STRUCT_OFFSET (GtkExifEntryClass, entry_added), NULL, NULL,
 		g_cclosure_marshal_VOID__POINTER, G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
 	signals[ENTRY_REMOVED] = g_signal_new ("entry_removed",
-		G_SIGNAL_RUN_FIRST, G_TYPE_FROM_CLASS (g_class),
+		G_TYPE_FROM_CLASS (g_class), G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GtkExifEntryClass, entry_removed), NULL, NULL,
 		g_cclosure_marshal_VOID__POINTER, G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
 	signals[ENTRY_CHANGED] = g_signal_new ("entry_changed",
-		G_SIGNAL_RUN_FIRST, G_TYPE_FROM_CLASS (g_class),
+		G_TYPE_FROM_CLASS (g_class), G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GtkExifEntryClass, entry_changed), NULL, NULL,
 		g_cclosure_marshal_VOID__POINTER, G_TYPE_NONE, 1,
 		G_TYPE_POINTER);
@@ -103,26 +97,7 @@ gtk_exif_entry_init (GTypeInstance *instance, gpointer g_class)
 	entry->priv = g_new0 (GtkExifEntryPrivate, 1);
 }
 
-GtkType
-gtk_exif_entry_get_type (void)
-{
-	static GtkType t = 0;
-
-	if (!t) {
-		GTypeInfo ti;
-
-		memset (&ti, 0, sizeof (GTypeInfo));
-		ti.class_size    = sizeof (GtkExifEntry);
-		ti.class_init    = gtk_exif_entry_class_init;
-		ti.instance_size = sizeof (GtkExifEntry);
-		ti.instance_init = gtk_exif_entry_init;
-
-		t = g_type_register_static (PARENT_TYPE, "GtkExifEntry",
-					    &ti, 0);
-	}
-
-	return (t);
-}
+GTK_EXIF_CLASS (entry, Entry, "Entry")
 
 void
 gtk_exif_entry_construct (GtkExifEntry *entry,

@@ -36,6 +36,8 @@
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtkcalendar.h>
 
+#include "gtk-exif-util.h"
+
 #ifdef ENABLE_NLS
 #  include <libintl.h>
 #  undef _
@@ -78,15 +80,7 @@ gtk_exif_entry_date_destroy (GtkObject *object)
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
-static void
-gtk_exif_entry_date_finalize (GObject *object)
-{
-	GtkExifEntryDate *entry = GTK_EXIF_ENTRY_DATE (object);
-
-	g_free (entry->priv);
-
-	G_OBJECT_CLASS (parent_class)->finalize (object);
-}
+GTK_EXIF_FINALIZE (entry_date, EntryDate)
 
 static void
 gtk_exif_entry_date_class_init (gpointer g_class, gpointer class_data)
@@ -111,26 +105,7 @@ gtk_exif_entry_date_init (GTypeInstance *instance, gpointer g_class)
 	entry->priv = g_new0 (GtkExifEntryDatePrivate, 1);
 }
 
-GType
-gtk_exif_entry_date_get_type (void)
-{
-        static GType t = 0;
-
-        if (!t) {
-                GTypeInfo ti;
-
-                memset (&ti, 0, sizeof (GTypeInfo));
-                ti.class_size    = sizeof (GtkExifEntryDateClass);
-                ti.class_init    = gtk_exif_entry_date_class_init;
-                ti.instance_size = sizeof (GtkExifEntryDate);
-                ti.instance_init = gtk_exif_entry_date_init;
-
-                t = g_type_register_static (PARENT_TYPE, "GtkExifEntryDate",
-                                            &ti, 0);
-        }
-
-        return (t); 
-}
+GTK_EXIF_CLASS (entry_date, EntryDate, "EntryDate")
 
 static void
 gtk_exif_entry_date_load (GtkExifEntryDate *entry)
