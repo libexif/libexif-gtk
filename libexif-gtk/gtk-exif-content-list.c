@@ -241,12 +241,11 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event,
 
 	switch (event->button) {
 	case 3:
+
+		/* Create the popup menu */
 		menu = gtk_menu_new ();
-		gtk_widget_show (menu);
-		gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
-				event->button, event->time);
-		g_signal_connect (GTK_OBJECT (menu), "hide",
-				    GTK_SIGNAL_FUNC (on_hide), menu);
+		g_object_ref (menu);
+		gtk_object_sink (GTK_OBJECT (menu));
 
 		/* Add */
 		item = gtk_menu_item_new_with_label ("Add");
@@ -263,6 +262,13 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event,
 		gtk_container_add (GTK_CONTAINER (menu), item);
 		g_signal_connect (GTK_OBJECT (item), "activate",
 				GTK_SIGNAL_FUNC (on_remove_activate), list);
+
+		/* Popup */
+		gtk_widget_show (menu);
+		gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
+				event->button, event->time);
+		g_signal_connect (GTK_OBJECT (menu), "hide",
+				  GTK_SIGNAL_FUNC (on_hide), menu);
 
 		return (TRUE);
 	default:
@@ -322,7 +328,7 @@ gtk_exif_content_list_add_entry (GtkExifContentList *list, ExifEntry *entry)
 			NAME_COLUMN, exif_tag_get_name (entry->tag),
 			VALUE_COLUMN, exif_entry_get_value (entry),
 			ENTRY_COLUMN, entry, -1);
-	g_signal_emit (G_OBJECT (list), signals[ENTRY_ADDED], 0, entry);
+	g_signal_emit (list, signals[ENTRY_ADDED], 0, entry);
 }
 
 void

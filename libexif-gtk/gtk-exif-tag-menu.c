@@ -105,8 +105,7 @@ GTK_EXIF_CLASS (tag_menu, TagMenu, "TagMenu")
 static void
 on_option_selected (GtkMenuOption *options, guint option, GtkExifTagMenu *menu)
 {
-	g_signal_emit (GTK_OBJECT (menu), signals[TAG_SELECTED],
-			 option);
+	g_signal_emit (menu, signals[TAG_SELECTED], 0, option);
 }
 
 #define LIST_SIZE 1024
