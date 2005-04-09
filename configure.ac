@@ -111,7 +111,7 @@ AC_CONFIG_FILES([
   libexif-gtk/libexif-gtk.pc
   gtk-extensions/Makefile
   tests/Makefile
-  m4/Makefile
+  m4m/Makefile
 ])
 AC_OUTPUT()dnl
 
