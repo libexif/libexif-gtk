@@ -5,7 +5,7 @@ AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([gnu 1.8 dist-bzip2])
 
 GP_CHECK_SHELL_ENVIRONMENT
-
+GP_CONFIG_MSG([Build])
 GP_CONFIG_MSG([Source code location],[${srcdir}])
 
 AC_PROG_CC
@@ -36,6 +36,9 @@ AC_SUBST(LIBEXIF_GTK_VERSION_INFO)
 
 AM_PROG_LIBTOOL
 GP_CONFIG_MSG([Compiler],[${CC}])
+
+dnl GP_CONFIG_MSG([Features])
+
 
 # ---------------------------------------------------------------------------
 # i18n support

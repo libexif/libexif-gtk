@@ -6,47 +6,52 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: libexif-gtk 0.3.3\n"
-"POT-Creation-Date: 2003-03-21 00:19+0300\n"
+"Report-Msgid-Bugs-To: libexif-devel@lists.sourceforge.net\n"
+"POT-Creation-Date: 2005-03-30 16:58+0200\n"
 "PO-Revision-Date: 2003-03-19 21:37+0300\n"
 "Last-Translator: Вячеслав Диконов <sdiconov@mail.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: libexif-gtk/gtk-exif-browser.c:371
+#: libexif-gtk/gtk-exif-browser.c:145
+msgid "Nothing selected."
+msgstr ""
+
+#: libexif-gtk/gtk-exif-browser.c:393
 msgid "No thumbnail available."
 msgstr "Нет миниатюрного изображения."
 
-#: libexif-gtk/gtk-exif-browser.c:379
+#: libexif-gtk/gtk-exif-browser.c:401
 msgid "Could not parse thumbnail data."
 msgstr "Невозможно прочесть миниатюрное изображение."
 
-#: libexif-gtk/gtk-exif-browser.c:394
+#: libexif-gtk/gtk-exif-browser.c:416
 #, c-format
 msgid "Size: %i byte(s)."
 msgstr "Размер: %i байт."
 
-#: libexif-gtk/gtk-exif-browser.c:463
+#: libexif-gtk/gtk-exif-browser.c:485
 msgid "Load..."
 msgstr "Загрузить..."
 
-#: libexif-gtk/gtk-exif-browser.c:503
+#: libexif-gtk/gtk-exif-browser.c:525
 msgid "Save As..."
 msgstr "Сохранить как..."
 
-#: libexif-gtk/gtk-exif-browser.c:553
+#: libexif-gtk/gtk-exif-browser.c:575
 msgid "Thumbnail"
 msgstr "Миниатюра"
 
-#: libexif-gtk/gtk-exif-browser.c:570
+#: libexif-gtk/gtk-exif-browser.c:592
 msgid "Load"
 msgstr "Загрузить"
 
-#: libexif-gtk/gtk-exif-browser.c:575
+#: libexif-gtk/gtk-exif-browser.c:597
 msgid "Save"
 msgstr "Сохранить"
 
-#: libexif-gtk/gtk-exif-browser.c:580
+#: libexif-gtk/gtk-exif-browser.c:602
 msgid "Delete"
 msgstr "Удалить"
