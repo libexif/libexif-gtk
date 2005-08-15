@@ -60,7 +60,7 @@ dnl GP_CONFIG_MSG([Features])
 # ---------------------------------------------------------------------------
 GP_GETTEXT_HACK([${PACKAGE}-${LIBEXIF_GTK_CURRENT}],
                 [Lutz Müller and others])
-ALL_LINGUAS="es fr ru"
+ALL_LINGUAS="es fr pl ru"
 AM_GNU_GETTEXT_VERSION([0.14.1])
 AM_GNU_GETTEXT([external])
 AM_PO_SUBDIRS()

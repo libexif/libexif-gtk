@@ -1,0 +1,55 @@
+# Polish translation for libexif-gtk.
+# This file is distributed under the same license as the libexif-gtk package.
+# Jakub Bogusz <qboosh@pld-linux.org>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: libexif-gtk 0.3.5\n"
+"POT-Creation-Date: 2004-10-17 16:44+0200\n"
+"PO-Revision-Date: 2005-03-21 17:20+0100\n"
+"Last-Translator: Jakub Bogusz <qboosh@pld-linux.org>\n"
+"Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: libexif-gtk/gtk-exif-browser.c:145
+msgid "Nothing selected."
+msgstr "Nic nie wybrano"
+
+#: libexif-gtk/gtk-exif-browser.c:393
+msgid "No thumbnail available."
+msgstr "Miniaturka niedostępna."
+
+#: libexif-gtk/gtk-exif-browser.c:401
+msgid "Could not parse thumbnail data."
+msgstr "Nie można przetworzyć danych miniaturki."
+
+#: libexif-gtk/gtk-exif-browser.c:416
+#, c-format
+msgid "Size: %i byte(s)."
+msgstr "Rozmiar: %i bajt(ów)."
+
+#: libexif-gtk/gtk-exif-browser.c:485
+msgid "Load..."
+msgstr "Wczytaj..."
+
+#: libexif-gtk/gtk-exif-browser.c:525
+msgid "Save As..."
+msgstr "Zapisz jako..."
+
+#: libexif-gtk/gtk-exif-browser.c:575
+msgid "Thumbnail"
+msgstr "Miniaturka"
+
+#: libexif-gtk/gtk-exif-browser.c:592
+msgid "Load"
+msgstr "Wczytaj"
+
+#: libexif-gtk/gtk-exif-browser.c:597
+msgid "Save"
+msgstr "Zapisz"
+
+#: libexif-gtk/gtk-exif-browser.c:602
+msgid "Delete"
+msgstr "Usuń"
