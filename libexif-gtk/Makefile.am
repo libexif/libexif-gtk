@@ -33,14 +33,18 @@ libexif_gtk_la_SOURCES =			\
 	gtk-exif-entry-user-comment.c		\
 	gtk-exif-entry-version.c		\
 	gtk-exif-util.h
+
+# We cannot define -DGTK_DISABLE_DEPRECATED here
+# as long as we're still using our old code with
+# the old deprecated GTK stuff.
+
 libexif_gtk_la_CFLAGS =	\
 	$(AM_CPPFLAGS) $(CPPFLAGS)			\
 	-I$(top_srcdir)					\
 	-I$(top_srcdir)/gtk-extensions			\
 	$(LIBEXIF_CFLAGS)				\
 	$(GTK_CFLAGS)					\
-	-DG_LOG_DOMAIN=\"libexif\"			\
-	-DGTK_DISABLE_DEPRECATED
+	-DG_LOG_DOMAIN=\"libexif\"
 libexif_gtk_la_LDFLAGS = -version-info @LIBEXIF_GTK_VERSION_INFO@
 libexif_gtk_la_LIBADD = \
 	$(AM_LDFLAGS) $(LDFLAGS)				\
