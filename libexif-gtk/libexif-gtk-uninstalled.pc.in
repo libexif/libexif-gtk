@@ -1,0 +1,11 @@
+prefix=
+exec_prefix=
+libdir=${pcfiledir}
+includedir=${pc_top_builddir}/${pcfiledir}
+
+Name: libexif-gtk
+Description: GTK-widgets for libexif
+Requires: libexif
+Version: @VERSION@
+Libs: ${pc_top_builddir}/${pcfiledir}/libexif-gtk.la
+Cflags: -I${pc_top_builddir}/${pcfiledir}/..
