@@ -25,6 +25,7 @@ GP_CONFIG_MSG([Source code location],[${srcdir}])
 
 AC_PROG_CC
 AM_PROG_CC_STDC
+AM_PROG_CC_C_O
 AC_HEADER_STDC
 
 GP_PKG_CONFIG()dnl
