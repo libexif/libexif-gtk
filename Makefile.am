@@ -2,4 +2,12 @@ SUBDIRS = m4m po gtk-extensions libexif-gtk tests
 
 EXTRA_DIST = autogen.sh
 
+pkgconfigdir = $(libdir)/pkgconfig
+
+pkgconfig_DATA = libexif-gtk.pc
+EXTRA_DIST    += libexif-gtk.pc.in
+
+noinst_DATA = libexif-gtk-uninstalled.pc
+EXTRA_DIST += libexif-gtk-uninstalled.pc.in
+
 ACLOCAL_AMFLAGS = -I m4m

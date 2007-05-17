@@ -52,6 +52,3 @@ libexif_gtk_la_LIBADD = \
 	$(LIBEXIF_LIBS)						\
 	$(GTK_LIBS)
 
-pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = libexif-gtk.pc
-EXTRA_DIST = libexif-gtk.pc.in
