@@ -1,8 +1,9 @@
 AC_PREREQ(2.59)
-AC_INIT([EXIF GTK widget library],[0.3.6],[libexif-devel@lists.sourceforge.net],[libexif-gtk])
+AC_INIT([EXIF GTK widget library],[0.3.6cvs2],[libexif-devel@lists.sourceforge.net],[libexif-gtk])
 AC_CONFIG_SRCDIR([libexif-gtk/gtk-exif-browser.c])
 AC_CONFIG_HEADERS([config.h])
-AM_INIT_AUTOMAKE([gnu 1.8 dist-bzip2])
+AC_CONFIG_MACRO_DIR([auto-m4])
+AM_INIT_AUTOMAKE([-Wall gnu 1.9 dist-bzip2 check-news])
 
 if test ! -d "$srcdir/m4m"; then
 AC_MSG_ERROR([
