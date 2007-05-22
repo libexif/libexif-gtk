@@ -1,51 +1,56 @@
 # libexif-gtk Spanish Translation.
-# Copyright © 2002 Free Software Foundation, Inc.
+# Copyright Â© 2002 Free Software Foundation, Inc.
 # Fabian Mandelbaum <fabman@mandrakesoft.com>, 2002.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: libexif-gtk\n"
-"POT-Creation-Date: 2002-07-25 19:01+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-05-17 17:23+0200\n"
 "PO-Revision-Date: 2002-09-05 22:32-0300\n"
 "Last-Translator: Fabian Mandelbaum <fabman@mandrakesoft.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: libexif-gtk/gtk-exif-browser.c:367
+#: libexif-gtk/gtk-exif-browser.c:145
+msgid "Nothing selected."
+msgstr ""
+
+#: libexif-gtk/gtk-exif-browser.c:393
 msgid "No thumbnail available."
 msgstr "Sin diapositiva disponible."
 
-#: libexif-gtk/gtk-exif-browser.c:375
+#: libexif-gtk/gtk-exif-browser.c:401
 msgid "Could not parse thumbnail data."
 msgstr "No se pueden analizar datos de diapositiva."
 
-#: libexif-gtk/gtk-exif-browser.c:390
+#: libexif-gtk/gtk-exif-browser.c:416
 #, c-format
 msgid "Size: %i byte(s)."
-msgstr "Tamaño: %i byte(s)."
+msgstr "TamaÃ±o: %i byte(s)."
 
-#: libexif-gtk/gtk-exif-browser.c:459
+#: libexif-gtk/gtk-exif-browser.c:485
 msgid "Load..."
 msgstr "Cargar..."
 
-#: libexif-gtk/gtk-exif-browser.c:499
+#: libexif-gtk/gtk-exif-browser.c:525
 msgid "Save As..."
 msgstr "Guardar como..."
 
-#: libexif-gtk/gtk-exif-browser.c:549
+#: libexif-gtk/gtk-exif-browser.c:575
 msgid "Thumbnail"
 msgstr "Diapositiva"
 
-#: libexif-gtk/gtk-exif-browser.c:566
+#: libexif-gtk/gtk-exif-browser.c:592
 msgid "Load"
 msgstr "Cargar"
 
-#: libexif-gtk/gtk-exif-browser.c:571
+#: libexif-gtk/gtk-exif-browser.c:597
 msgid "Save"
 msgstr "Guardar"
 
-#: libexif-gtk/gtk-exif-browser.c:576
+#: libexif-gtk/gtk-exif-browser.c:602
 msgid "Delete"
 msgstr "Borrar"

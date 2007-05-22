@@ -1,52 +1,57 @@
 # LIBEXIF-GTK PO FILE
-# Copyright © 2003 Free Software Foundation, Inc.
+# Copyright Â© 2003 Free Software Foundation, Inc.
 # This file is distributed under the same license as the LIBEXIF-GTK package.
 # Arnaud Launay <asl@launay.org>, 2003.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: libexif-gtk 0.3.3\n"
-"POT-Creation-Date: 2003-01-07 17:11+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-05-17 17:23+0200\n"
 "PO-Revision-Date: 2003-01-07 17:30+0100\n"
 "Last-Translator: Arnaud Launay <asl@launay.org>\n"
-"Language-Team: Français <traduc@traduc.org>\n"
+"Language-Team: FranÃ§ais <traduc@traduc.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: libexif-gtk/gtk-exif-browser.c:371
+#: libexif-gtk/gtk-exif-browser.c:145
+msgid "Nothing selected."
+msgstr ""
+
+#: libexif-gtk/gtk-exif-browser.c:393
 msgid "No thumbnail available."
 msgstr "Pas de vignette disponible."
 
-#: libexif-gtk/gtk-exif-browser.c:379
+#: libexif-gtk/gtk-exif-browser.c:401
 msgid "Could not parse thumbnail data."
-msgstr "Ne peut parcourir les donneés de la vignette."
+msgstr "Ne peut parcourir les donneÃ©s de la vignette."
 
-#: libexif-gtk/gtk-exif-browser.c:394
+#: libexif-gtk/gtk-exif-browser.c:416
 #, c-format
 msgid "Size: %i byte(s)."
 msgstr "Taille: %i octet(s)."
 
-#: libexif-gtk/gtk-exif-browser.c:463
+#: libexif-gtk/gtk-exif-browser.c:485
 msgid "Load..."
 msgstr "Chargement..."
 
-#: libexif-gtk/gtk-exif-browser.c:503
+#: libexif-gtk/gtk-exif-browser.c:525
 msgid "Save As..."
 msgstr "Sauver sous..."
 
-#: libexif-gtk/gtk-exif-browser.c:553
+#: libexif-gtk/gtk-exif-browser.c:575
 msgid "Thumbnail"
 msgstr "Vignette"
 
-#: libexif-gtk/gtk-exif-browser.c:570
+#: libexif-gtk/gtk-exif-browser.c:592
 msgid "Load"
 msgstr "Charger"
 
-#: libexif-gtk/gtk-exif-browser.c:575
+#: libexif-gtk/gtk-exif-browser.c:597
 msgid "Save"
 msgstr "Sauver"
 
-#: libexif-gtk/gtk-exif-browser.c:580
+#: libexif-gtk/gtk-exif-browser.c:602
 msgid "Delete"
 msgstr "Effacer"
