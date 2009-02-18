@@ -1,7 +1,5 @@
 SUBDIRS = m4m po gtk-extensions libexif-gtk tests
 
-EXTRA_DIST = autogen.sh
-
 pkgconfigdir = $(libdir)/pkgconfig
 
 pkgconfig_DATA = libexif-gtk.pc
