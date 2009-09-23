@@ -1,3 +1,10 @@
+2009-09-23  Dan Fandrich <dan@coneharvesters.com>
+
+	* Added the text of the LGPL V2.1 in COPYING so there isn't any
+	  confusion as to the licensing terms of the project. GNU
+	  autotools adds a GPL COPYING file by default if this doesn't
+	  exist, which is wrong.
+
 2005-08-15  Lutz Mueller <lutz@users.sourceforge.net>
 
 	Patch by Jakub Bogusz <qboosh@pld-linux.org>:
