@@ -1,3 +1,8 @@
+2009-09-24  Lutz Mueller <lutz@users.sourceforge.net>
+
+	* libexif-gtk/gtk-exif-entry-user-comment.c: Complete information
+          about copyright. Fixes #1673969.
+
 2009-09-23  Dan Fandrich <dan@coneharvesters.com>
 
 	* Added the text of the LGPL V2.1 in COPYING so there isn't any
