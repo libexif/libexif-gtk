@@ -1,3 +1,7 @@
+2009-09-24  Dan Fandrich <dan@coneharvesters.com>
+
+	* po/POTFILES.in: added additional files that need translation
+
 2009-09-24  Lutz Mueller <lutz@users.sourceforge.net>
 
 	* libexif-gtk/gtk-exif-entry-user-comment.c: Complete information
