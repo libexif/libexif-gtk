@@ -7,10 +7,10 @@
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details. 
+ * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the
@@ -157,7 +157,7 @@ gtk_exif_entry_flash_new (ExifEntry *e)
 
 	/* Strobe return light detected */
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio));
-	radio = gtk_radio_button_new_with_label (group, 
+	radio = gtk_radio_button_new_with_label (group,
 					"Strobe return light detected");
 	gtk_widget_show (radio);
 	gtk_box_pack_start (GTK_BOX (vbox), radio, FALSE, FALSE, 0);

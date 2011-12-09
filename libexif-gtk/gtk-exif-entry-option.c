@@ -7,10 +7,10 @@
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details. 
+ * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the
@@ -46,7 +46,7 @@
 #ifdef ENABLE_NLS
 #  include <libintl.h>
 #  undef _
-#  define _(String) dgettext (PACKAGE, String)
+#  define _(String) dgettext (GETTEXT_PACKAGE, String)
 #  ifdef gettext_noop
 #    define N_(String) gettext_noop (String)
 #  else
@@ -238,6 +238,9 @@ gtk_exif_entry_option_new (ExifEntry *e)
 			      (e->tag == EXIF_TAG_YCBCR_POSITIONING) ||
 			      (e->tag == EXIF_TAG_EXPOSURE_PROGRAM) ||
 			      (e->tag == EXIF_TAG_COMPRESSION), NULL);
+
+	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
+	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 
 	switch (e->tag) {
 	case EXIF_TAG_SENSING_METHOD:

@@ -7,10 +7,10 @@
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details. 
+ * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the
@@ -42,7 +42,7 @@
 #ifdef ENABLE_NLS
 #  include <libintl.h>
 #  undef _
-#  define _(String) dgettext (PACKAGE, String)
+#  define _(String) dgettext (GETTEXT_PACKAGE, String)
 #  ifdef gettext_noop
 #    define N_(String) gettext_noop (String)
 #  else
@@ -179,7 +179,7 @@ gtk_exif_entry_version_load (GtkExifEntryVersion *entry)
 		break;
 	case EXIF_TAG_FLASH_PIX_VERSION:
 		for (i = 0; flash_pix_versions[i].data; i++)
-			if (!memcmp (flash_pix_versions[i].data, 
+			if (!memcmp (flash_pix_versions[i].data,
 				     entry->priv->entry->data, 4)) {
 				if (!gtk_tree_model_get_iter_from_option (tm,
 					flash_pix_versions[i].version, &iter))
@@ -249,6 +249,9 @@ gtk_exif_entry_version_new (ExifEntry *e)
 	g_return_val_if_fail (e->format == EXIF_FORMAT_UNDEFINED, NULL);
 	g_return_val_if_fail (e->components == 4, NULL);
 	g_return_val_if_fail (e->data != NULL, NULL);
+
+	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
+	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 
 	entry = g_object_new (GTK_EXIF_TYPE_ENTRY_VERSION, NULL);
 	entry->priv->entry = e;

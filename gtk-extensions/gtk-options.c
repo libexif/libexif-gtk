@@ -7,10 +7,10 @@
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details. 
+ * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the
@@ -25,6 +25,25 @@
 #include <gtk/gtktreemodel.h>
 
 #include <string.h>
+
+#ifdef ENABLE_NLS
+#  include <libintl.h>
+#  undef _
+#  define _(String) dgettext (GETTEXT_PACKAGE, String)
+#  ifdef gettext_noop
+#    define N_(String) gettext_noop (String)
+#  else
+#    define N_(String) (String)
+#  endif
+#else
+#  define textdomain(String) (String)
+#  define gettext(String) (String)
+#  define dgettext(Domain,Message) (Message)
+#  define dcgettext(Domain,Message,Type) (Message)
+#  define bindtextdomain(Domain,Directory) (Domain)
+#  define _(String) (String)
+#  define N_(String) (String)
+#endif
 
 void
 gtk_options_sort (GtkOptions *options)
@@ -50,21 +69,24 @@ gtk_tree_model_new_from_options (GtkOptions *options)
 	GtkListStore *ls;
 	guint i;
 	GtkTreeIter iter;
-	
+
+	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
+	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+
 	ls = gtk_list_store_new (GTK_OPTIONS_N_COLUMNS, G_TYPE_INT,
 				 G_TYPE_STRING);
 	for (i = 0; options[i].name; i++) {
 		gtk_list_store_append (ls, &iter);
 		gtk_list_store_set (ls, &iter,
 			GTK_OPTIONS_OPTION_COLUMN, options[i].option,
-			GTK_OPTIONS_NAME_COLUMN, options[i].name, -1);
+			GTK_OPTIONS_NAME_COLUMN, _(options[i].name), -1);
 	}
 
 	return GTK_TREE_MODEL (ls);
 }
 
 gboolean
-gtk_tree_model_get_iter_from_option (GtkTreeModel *tm, guint option, 
+gtk_tree_model_get_iter_from_option (GtkTreeModel *tm, guint option,
 				     GtkTreeIter *iter)
 {
 	GValue v = {0,};

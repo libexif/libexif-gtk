@@ -7,10 +7,10 @@
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details. 
+ * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the
@@ -36,7 +36,7 @@
 #ifdef ENABLE_NLS
 #  include <libintl.h>
 #  undef _
-#  define _(String) dgettext (PACKAGE, String)
+#  define _(String) dgettext (GETTEXT_PACKAGE, String)
 #  ifdef gettext_noop
 #    define N_(String) gettext_noop (String)
 #  else
@@ -236,7 +236,7 @@ on_tag_selected (GtkMenuOption *menu, guint option, GtkExifContentList *list)
 #define LIST_SIZE 1024
 
 static gint
-on_button_press_event (GtkWidget *widget, GdkEventButton *event, 
+on_button_press_event (GtkWidget *widget, GdkEventButton *event,
 		       GtkExifContentList *list)
 {
 	GtkWidget *menu, *item, *smenu, *ssmenu;
@@ -291,7 +291,7 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event,
 		j++;
 		memmove (tags + j + 1, tags + j, n - j);
 		memset (tags + j, 0, sizeof (GtkOptions));
-		
+
 		/* Create the first part of the list */
 		s = g_strdup_printf ("%c - %c", *tags[0].name,
 				     *tags[i - 1].name);
@@ -355,6 +355,9 @@ GtkWidget *
 gtk_exif_content_list_new (void)
 {
 	GtkExifContentList *list;
+
+	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
+	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 
 	list = g_object_new (GTK_EXIF_TYPE_CONTENT_LIST, NULL);
 	g_signal_connect (G_OBJECT (list), "button_press_event",

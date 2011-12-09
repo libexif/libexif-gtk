@@ -1,10 +1,10 @@
 lib_LTLIBRARIES = libexif-gtk.la
 
 libexif_gtkincludedir = $(includedir)/libexif-gtk
-libexif_gtkinclude_HEADERS =		\
-	gtk-exif-browser.h		\
+libexif_gtkinclude_HEADERS = \
+	gtk-exif-browser.h			\
 	gtk-exif-content-list.h		\
-	gtk-exif-entry.h		\
+	gtk-exif-entry.h			\
 	gtk-exif-entry-ascii.h		\
 	gtk-exif-entry-copyright.h	\
 	gtk-exif-entry-date.h		\
@@ -18,9 +18,9 @@ libexif_gtkinclude_HEADERS =		\
 	gtk-exif-entry-version.h
 
 libexif_gtk_la_SOURCES =			\
-	gtk-exif-browser.c			\
+	gtk-exif-browser.c				\
 	gtk-exif-content-list.c			\
-	gtk-exif-entry.c			\
+	gtk-exif-entry.c				\
 	gtk-exif-entry-ascii.c			\
 	gtk-exif-entry-copyright.c		\
 	gtk-exif-entry-date.c			\
@@ -30,7 +30,7 @@ libexif_gtk_la_SOURCES =			\
 	gtk-exif-entry-option.c			\
 	gtk-exif-entry-rational.c		\
 	gtk-exif-entry-resolution.c		\
-	gtk-exif-entry-user-comment.c		\
+	gtk-exif-entry-user-comment.c	\
 	gtk-exif-entry-version.c		\
 	gtk-exif-util.h
 
@@ -39,16 +39,16 @@ libexif_gtk_la_SOURCES =			\
 # the old deprecated GTK stuff.
 
 libexif_gtk_la_CFLAGS =	\
-	$(AM_CPPFLAGS) $(CPPFLAGS)			\
+	$(AM_CPPFLAGS) $(CPPFLAGS)		\
 	-I$(top_srcdir)					\
-	-I$(top_srcdir)/gtk-extensions			\
+	-I$(top_srcdir)/gtk-extensions	\
 	$(LIBEXIF_CFLAGS)				\
 	$(GTK_CFLAGS)					\
 	-DG_LOG_DOMAIN=\"libexif\"
+
 libexif_gtk_la_LDFLAGS = -version-info @LIBEXIF_GTK_VERSION_INFO@
 libexif_gtk_la_LIBADD = \
 	$(AM_LDFLAGS) $(LDFLAGS)				\
 	$(top_builddir)/gtk-extensions/libgtk-extensions.la	\
-	$(LIBEXIF_LIBS)						\
+	$(LIBEXIF_LIBS)							\
 	$(GTK_LIBS)
-

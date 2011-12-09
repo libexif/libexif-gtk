@@ -1,3 +1,8 @@
+2011-12-08  Dan Fandrich <dan@coneharvesters.com>
+
+	* Cleanups in internationalization, whitespace & comments.
+	  Patch by Valere Monseur <valere.monseur@ymail.com>
+
 2009-09-24  Dan Fandrich <dan@coneharvesters.com>
 
 	* po/POTFILES.in: added additional files that need translation

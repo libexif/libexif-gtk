@@ -35,9 +35,9 @@ GP_PKG_CONFIG()dnl
 dnl ---------------------------------------------------------------------------
 dnl Versioning (libexif-gtk-AGE.CURRENT.REVISION):
 dnl  - AGE (Micro):      Increment if any interfaces have been added; set to 0
-dnl                      if any interfaces have been removed. Removal has 
+dnl                      if any interfaces have been removed. Removal has
 dnl                      precedence over adding, so set to 0 if both happened.
-dnl  - REVISION (Minor): Increment any time the source changes; set to 
+dnl  - REVISION (Minor): Increment any time the source changes; set to
 dnl                      0 if you incremented CURRENT.
 dnl  - CURRENT (Major):  Increment if the interface has additions, changes,
 dnl                      removals.
@@ -60,21 +60,14 @@ dnl GP_CONFIG_MSG([Features])
 # ---------------------------------------------------------------------------
 # i18n support
 # ---------------------------------------------------------------------------
+ALL_LINGUAS="es fr pl ru"
+AM_PO_SUBDIRS
 GP_GETTEXT_HACK([${PACKAGE}-${LIBEXIF_GTK_CURRENT}],
                 [Lutz Müller and others])
-ALL_LINGUAS="es fr pl ru"
 AM_GNU_GETTEXT_VERSION([0.14.1])
 AM_GNU_GETTEXT([external])
-AM_PO_SUBDIRS()
 AM_ICONV()
 GP_GETTEXT_FLAGS()
-
-dnl No one is calling bindtextdomain(), so we don't need this.
-dnl
-dnl We cannot use AC_DEFINE_UNQUOTED() for these definitions, as
-dnl we require make to do insert the proper $(datadir) value
-dnl AC_SUBST([localedir],["\$(datadir)/locale"])
-dnl AM_CFLAGS="$AM_CFLAGS -DLOCALEDIR=\\\"${localedir}\\\""
 
 
 # ---------------------------------------------------------------------------
