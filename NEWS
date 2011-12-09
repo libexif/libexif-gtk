@@ -1,4 +1,5 @@
 New in 0.3.6cvs2:
- * Bug fixes:
-   #1643242: need uninstalled.pc file for libexif-gtk
- * Proper setting of gettext parameters
+  * Updated translations: fr
+  * Bug fixes:
+    #1643242: need uninstalled.pc file for libexif-gtk
+  * Proper setting of gettext parameters

@@ -2,6 +2,8 @@
 
 	* Cleanups in internationalization, whitespace & comments.
 	  Patch by Valere Monseur <valere.monseur@ymail.com>
+	* po/fr.po: Updated French translation by ValÃ¨re Monseur
+	* Converted ChangeLog into UTF-8
 
 2009-09-24  Dan Fandrich <dan@coneharvesters.com>
 
@@ -73,44 +75,44 @@
 	* libexif-gtk/gtk-exif-entry-resolution.c: An entry must have a 
 	  parent before initialization.
 
-2002-12-11  Lutz Müller <lutz@users.sourceforge.net>
+2002-12-11  Lutz MÃ¼ller <lutz@users.sourceforge.net>
 
 	* libexif-gtk/gtk-exif-content-list.c: Split the endless list of tags.
 	* libexif-gtk/gtk-exif-entry-user-comment.[c,h]: New.
 	* configure.in: Require libexif >= 0.5.9
 
-2002-12-11  Lutz Müller <lutz@users.sourceforge.net>
+2002-12-11  Lutz MÃ¼ller <lutz@users.sourceforge.net>
 
 	* libexif-gtk/gtk-exif-content-list.c: Fix popup.
 
-2002-09-15  Lutz Müller <lutz@users.sourceforge.net>
+2002-09-15  Lutz MÃ¼ller <lutz@users.sourceforge.net>
 
 	* configure.in:
 	* po/es.po: Spanish translation by Fabian Mandelbaum
 	  <fabman@2vias.com.ar>
 
-2002-07-25  Lutz Müller <lutz@users.sourceforge.net>
+2002-07-25  Lutz MÃ¼ller <lutz@users.sourceforge.net>
 
 	* configure.in: Version 0.3.2. Require libexif-0.5.4 or higher.
 	* libexif-gtk/gtk-exif-browser.c: Adapt to new API.
 
-2002-07-23  Lutz Müller <lutz@users.sourceforge.net>
+2002-07-23  Lutz MÃ¼ller <lutz@users.sourceforge.net>
 
 	* configure.in: Version 0.3.1
 
-2002-07-23  Lutz Müller <lutz@users.sourceforge.net>
+2002-07-23  Lutz MÃ¼ller <lutz@users.sourceforge.net>
 
 	Finish gtk+-2.0 port.
 
-2002-07-22  Lutz Müller <lutz@users.sourceforge.net>
+2002-07-22  Lutz MÃ¼ller <lutz@users.sourceforge.net>
 
 	Start of gtk+-2.0 port.
 
-2002-06-14  Lutz Müller <lutz@users.sourceforge.net>
+2002-06-14  Lutz MÃ¼ller <lutz@users.sourceforge.net>
 
         * configure.in: Correct -version-info.
 
-2002-04-30  Lutz Müller <lutz@users.sourceforge.net>
+2002-04-30  Lutz MÃ¼ller <lutz@users.sourceforge.net>
 
 	Patch by Arnaud Rouanet <rouanet@labri.fr>:
 
@@ -120,14 +122,14 @@
 
 	* Makefile.am: dded .tar.bz2 packaging to "make dist"
 
-2002-02-13  Lutz Müller <lutz@users.sourceforge.net>
+2002-02-13  Lutz MÃ¼ller <lutz@users.sourceforge.net>
 
 	* configure.in: Version 0.3.0
 
-2002-02-13  Lutz Müller <lutz@users.sourceforge.net>
+2002-02-13  Lutz MÃ¼ller <lutz@users.sourceforge.net>
 
 	* libexif-gtk: Bring in sync with libexif.
 
-2002-02-06  Lutz Müller <lutz@users.sourceforge.net>
+2002-02-06  Lutz MÃ¼ller <lutz@users.sourceforge.net>
 
 	Add support for previews.

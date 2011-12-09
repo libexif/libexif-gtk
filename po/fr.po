@@ -6,52 +6,379 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: libexif-gtk 0.3.3\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-17 17:23+0200\n"
+"Report-Msgid-Bugs-To: libexif-devel@lists.sourceforge.net\n"
+"POT-Creation-Date: 2011-09-30 19:17+0200\n"
 "PO-Revision-Date: 2003-01-07 17:30+0100\n"
-"Last-Translator: Arnaud Launay <asl@launay.org>\n"
-"Language-Team: Français <traduc@traduc.org>\n"
+"Last-Translator: Valère Monseur <valere.monseur@ymail.com>\n"
+"Language-Team: \n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: libexif-gtk/gtk-exif-browser.c:145
+#: libexif-gtk/gtk-exif-browser.c:157
 msgid "Nothing selected."
-msgstr ""
+msgstr "Rien n'est sélectionné."
 
-#: libexif-gtk/gtk-exif-browser.c:393
+#: libexif-gtk/gtk-exif-browser.c:405
 msgid "No thumbnail available."
 msgstr "Pas de vignette disponible."
 
-#: libexif-gtk/gtk-exif-browser.c:401
+#: libexif-gtk/gtk-exif-browser.c:413
 msgid "Could not parse thumbnail data."
-msgstr "Ne peut parcourir les donneés de la vignette."
+msgstr "Impossible de parcourir les données de la vignette."
 
-#: libexif-gtk/gtk-exif-browser.c:416
+#: libexif-gtk/gtk-exif-browser.c:428
 #, c-format
 msgid "Size: %i byte(s)."
 msgstr "Taille: %i octet(s)."
 
-#: libexif-gtk/gtk-exif-browser.c:485
+#: libexif-gtk/gtk-exif-browser.c:492
 msgid "Load..."
-msgstr "Chargement..."
+msgstr "Charger..."
 
-#: libexif-gtk/gtk-exif-browser.c:525
+#: libexif-gtk/gtk-exif-browser.c:531
 msgid "Save As..."
-msgstr "Sauver sous..."
+msgstr "Enregistrer sous..."
 
-#: libexif-gtk/gtk-exif-browser.c:575
+#: libexif-gtk/gtk-exif-browser.c:589
 msgid "Thumbnail"
 msgstr "Vignette"
 
-#: libexif-gtk/gtk-exif-browser.c:592
+#: libexif-gtk/gtk-exif-browser.c:606
 msgid "Load"
 msgstr "Charger"
 
-#: libexif-gtk/gtk-exif-browser.c:597
+#: libexif-gtk/gtk-exif-browser.c:611
 msgid "Save"
-msgstr "Sauver"
+msgstr "Enregistrer"
 
-#: libexif-gtk/gtk-exif-browser.c:602
+#: libexif-gtk/gtk-exif-browser.c:616
 msgid "Delete"
-msgstr "Effacer"
+msgstr "Supprimer"
+
+#: libexif-gtk/gtk-exif-content-list.c:178
+msgid "Tag"
+msgstr "Champ"
+
+#: libexif-gtk/gtk-exif-content-list.c:184
+msgid "Value"
+msgstr "Valeur"
+
+#: libexif-gtk/gtk-exif-content-list.c:272
+msgid "Add"
+msgstr "Ajouter"
+
+#: libexif-gtk/gtk-exif-content-list.c:348
+msgid "Remove"
+msgstr "Supprimer"
+
+#: libexif-gtk/gtk-exif-entry-copyright.c:164
+msgid "Photographer:"
+msgstr "Photographe:"
+
+#: libexif-gtk/gtk-exif-entry-copyright.c:170
+msgid "Editor:"
+msgstr "Editeur:"
+
+#: libexif-gtk/gtk-exif-entry-date.c:219
+msgid "Time:"
+msgstr "Heure:"
+
+#: libexif-gtk/gtk-exif-entry-number.c:245
+#: libexif-gtk/gtk-exif-entry-rational.c:248
+#, c-format
+msgid "Value %i:"
+msgstr "Valeur %i:"
+
+#: libexif-gtk/gtk-exif-entry-number.c:247
+#: libexif-gtk/gtk-exif-entry-rational.c:250
+msgid "Value:"
+msgstr "Valeur:"
+
+#: libexif-gtk/gtk-exif-entry-option.c:151
+#: libexif-gtk/gtk-exif-entry-option.c:213
+msgid "Not defined"
+msgstr "Non défini"
+
+#: libexif-gtk/gtk-exif-entry-option.c:152
+msgid "One-chip color area sensor"
+msgstr "Capteur de couleur à une puce"
+
+#: libexif-gtk/gtk-exif-entry-option.c:153
+msgid "Two-chip color area sensor"
+msgstr "Capteur de couleur à deux puces"
+
+#: libexif-gtk/gtk-exif-entry-option.c:154
+msgid "Three-chip color area sensor"
+msgstr "Capteur de couleur à trois puces"
+
+#: libexif-gtk/gtk-exif-entry-option.c:155
+msgid "Color sequential area sensor"
+msgstr "Capteur séquentiel de couleur"
+
+#: libexif-gtk/gtk-exif-entry-option.c:156
+msgid "Trilinear sensor"
+msgstr "Capteur trilinéaire"
+
+#: libexif-gtk/gtk-exif-entry-option.c:157
+msgid "Color sequential linear sensor"
+msgstr "Capteur linéaire séquentiel de couleur"
+
+#: libexif-gtk/gtk-exif-entry-option.c:162
+msgid "Uncompressed"
+msgstr "Non compressé"
+
+#: libexif-gtk/gtk-exif-entry-option.c:163
+msgid "JPEG compression"
+msgstr "Compression JPEG"
+
+#: libexif-gtk/gtk-exif-entry-option.c:168
+#: libexif-gtk/gtk-exif-entry-option.c:180
+msgid "Unknown"
+msgstr "Inconnu"
+
+#: libexif-gtk/gtk-exif-entry-option.c:169
+msgid "Average"
+msgstr "Moyenne"
+
+#: libexif-gtk/gtk-exif-entry-option.c:170
+msgid "Center-Weighted Average"
+msgstr "Pondéré au centre"
+
+#: libexif-gtk/gtk-exif-entry-option.c:171
+msgid "Spot"
+msgstr "Spot"
+
+#: libexif-gtk/gtk-exif-entry-option.c:172
+msgid "Multi Spot"
+msgstr "Multi spot"
+
+#: libexif-gtk/gtk-exif-entry-option.c:173
+msgid "Pattern"
+msgstr "Multiple"
+
+#: libexif-gtk/gtk-exif-entry-option.c:174
+msgid "Partial"
+msgstr "Partiel"
+
+#: libexif-gtk/gtk-exif-entry-option.c:175
+#: libexif-gtk/gtk-exif-entry-option.c:190
+msgid "Other"
+msgstr "Autre"
+
+#: libexif-gtk/gtk-exif-entry-option.c:181
+msgid "Daylight"
+msgstr "Lumière du jour"
+
+#: libexif-gtk/gtk-exif-entry-option.c:182
+msgid "Fluorescent"
+msgstr "Fluorescent"
+
+#: libexif-gtk/gtk-exif-entry-option.c:183
+msgid "Tungsten"
+msgstr "Tungstène"
+
+#: libexif-gtk/gtk-exif-entry-option.c:184
+msgid "Standard light A"
+msgstr "Lampe standard A"
+
+#: libexif-gtk/gtk-exif-entry-option.c:185
+msgid "Standard light B"
+msgstr "Lampe standard B"
+
+#: libexif-gtk/gtk-exif-entry-option.c:186
+msgid "Standard light C"
+msgstr "Lampe standard C"
+
+#: libexif-gtk/gtk-exif-entry-option.c:187
+msgid "D55"
+msgstr "D55"
+
+#: libexif-gtk/gtk-exif-entry-option.c:188
+msgid "D65"
+msgstr "D65"
+
+#: libexif-gtk/gtk-exif-entry-option.c:189
+msgid "D75"
+msgstr "D75"
+
+#: libexif-gtk/gtk-exif-entry-option.c:195
+msgid "top - left"
+msgstr "haut - gauche"
+
+#: libexif-gtk/gtk-exif-entry-option.c:196
+msgid "top - right"
+msgstr "haut - droite"
+
+#: libexif-gtk/gtk-exif-entry-option.c:197
+msgid "bottom - right"
+msgstr "bas - droite"
+
+#: libexif-gtk/gtk-exif-entry-option.c:198
+msgid "bottom - left"
+msgstr "bas - gauche"
+
+#: libexif-gtk/gtk-exif-entry-option.c:199
+msgid "left - top"
+msgstr "gauche - haut"
+
+#: libexif-gtk/gtk-exif-entry-option.c:200
+msgid "right - top"
+msgstr "droite - haut"
+
+#: libexif-gtk/gtk-exif-entry-option.c:201
+msgid "right - bottom"
+msgstr "droite - bas"
+
+#: libexif-gtk/gtk-exif-entry-option.c:202
+msgid "left - bottom"
+msgstr "gauche - bas"
+
+#: libexif-gtk/gtk-exif-entry-option.c:207
+msgid "centered"
+msgstr "centré"
+
+#: libexif-gtk/gtk-exif-entry-option.c:208
+msgid "co-sited"
+msgstr "coimplanté"
+
+#: libexif-gtk/gtk-exif-entry-option.c:214
+msgid "Manual"
+msgstr "Manuel"
+
+#: libexif-gtk/gtk-exif-entry-option.c:215
+msgid "Normal program"
+msgstr "Programme normal"
+
+#: libexif-gtk/gtk-exif-entry-option.c:216
+msgid "Aperture priority"
+msgstr "Priorité à l'ouverture"
+
+#: libexif-gtk/gtk-exif-entry-option.c:217
+msgid "Shutter priority"
+msgstr "Priorité à la vitesse"
+
+#: libexif-gtk/gtk-exif-entry-option.c:218
+msgid "Creative program (biased toward depth of field)"
+msgstr "Programme créatif (grande profondeur de champ)"
+
+#: libexif-gtk/gtk-exif-entry-option.c:219
+msgid "Action program (biased toward fast shutter speed)"
+msgstr "Programme action (vitesse d'obturation élevée)"
+
+#: libexif-gtk/gtk-exif-entry-option.c:220
+msgid "Portrait mode (for closeup photos with the background out of focus"
+msgstr "Mode portrait (photos en gros plan avec arrière-plan flou"
+
+#: libexif-gtk/gtk-exif-entry-option.c:222
+msgid "Landscape mode (for landscape photos with the background in focus"
+msgstr "Mode paysage (paysages avec arrière-plan net"
+
+#: libexif-gtk/gtk-exif-entry-option.c:248
+msgid "Sensing method:"
+msgstr "Méthode de détection:"
+
+#: libexif-gtk/gtk-exif-entry-option.c:252
+msgid "0-th row - 0-th column:"
+msgstr "0-ième ligne - 0-ième colonne:"
+
+#: libexif-gtk/gtk-exif-entry-option.c:256
+msgid "Light source:"
+msgstr "Source de lumière:"
+
+#: libexif-gtk/gtk-exif-entry-option.c:260
+msgid "Metering mode:"
+msgstr "Mode de mesure:"
+
+#: libexif-gtk/gtk-exif-entry-option.c:264
+msgid "Compression scheme:"
+msgstr "Schéma de compression:"
+
+#: libexif-gtk/gtk-exif-entry-option.c:268
+msgid "YCbCr Positioning:"
+msgstr "Positionnement YCbCr:"
+
+#: libexif-gtk/gtk-exif-entry-option.c:272
+msgid "Exposure Program:"
+msgstr "Programme d'exposition:"
+
+#: libexif-gtk/gtk-exif-entry-resolution.c:401
+msgid "Focal Plane Resolution"
+msgstr "Résolution du plan focal"
+
+#: libexif-gtk/gtk-exif-entry-resolution.c:402
+msgid "The number of pixels on the camera focal plane."
+msgstr "Nombre de pixels du plan focal de l'appareil."
+
+#: libexif-gtk/gtk-exif-entry-resolution.c:408
+msgid "Resolution"
+msgstr "Résolution"
+
+#: libexif-gtk/gtk-exif-entry-resolution.c:409
+msgid "The number of pixels per unit."
+msgstr "Nombre de pixels par unité."
+
+#: libexif-gtk/gtk-exif-entry-resolution.c:420
+msgid "Image width direction:"
+msgstr "Largeur de l'image:"
+
+#: libexif-gtk/gtk-exif-entry-resolution.c:456
+msgid "Image height direction:"
+msgstr "Hauteur de l'image:"
+
+#: libexif-gtk/gtk-exif-entry-resolution.c:492
+msgid "Unit:"
+msgstr "Unité:"
+
+#: libexif-gtk/gtk-exif-entry-resolution.c:504
+msgid "Centimeter"
+msgstr "Centimètre"
+
+#: libexif-gtk/gtk-exif-entry-resolution.c:508
+msgid "Inch"
+msgstr "Pouce"
+
+#: libexif-gtk/gtk-exif-entry-user-comment.c:224
+msgid "ASCII"
+msgstr "ASCII"
+
+#: libexif-gtk/gtk-exif-entry-user-comment.c:225
+msgid "JIS"
+msgstr "JIS"
+
+#: libexif-gtk/gtk-exif-entry-user-comment.c:226
+msgid "Unicode"
+msgstr "Unicode"
+
+#: libexif-gtk/gtk-exif-entry-user-comment.c:227
+msgid "Undefined"
+msgstr "Non défini"
+
+#: libexif-gtk/gtk-exif-entry-user-comment.c:258
+msgid "Character Code:"
+msgstr "Code de charactère:"
+
+#: libexif-gtk/gtk-exif-entry-version.c:134
+msgid "Exif Format Version 2.0"
+msgstr "Version 2.0 du format EXIF"
+
+#: libexif-gtk/gtk-exif-entry-version.c:135
+msgid "Exif Format Version 2.1"
+msgstr "Version 2.1 du format EXIF"
+
+#: libexif-gtk/gtk-exif-entry-version.c:136
+msgid "Exif Format Version 2.2"
+msgstr "Version 2.2 du format EXIF"
+
+#: libexif-gtk/gtk-exif-entry-version.c:137
+msgid "Exif Format Version 2.21"
+msgstr "Version 2.21 du format EXIF"
+
+#: libexif-gtk/gtk-exif-entry-version.c:142
+msgid "FlashPix Format Version 1.0"
+msgstr "Version 1.0 du format FlashPix"
+
+#: libexif-gtk/gtk-exif-entry-version.c:269
+msgid "Version:"
+msgstr "Version:"
