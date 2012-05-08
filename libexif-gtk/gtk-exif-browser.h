@@ -21,7 +21,7 @@
 #ifndef __GTK_EXIF_BROWSER_H__
 #define __GTK_EXIF_BROWSER_H__
 
-#include <gtk/gtkhpaned.h>
+#include <gtk/gtk.h>
 #include <libexif/exif-data.h>
 
 #define GTK_EXIF_TYPE_BROWSER     (gtk_exif_browser_get_type())

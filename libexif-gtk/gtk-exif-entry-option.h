@@ -24,9 +24,9 @@
 #include <libexif-gtk/gtk-exif-entry.h>
 
 #define GTK_EXIF_TYPE_ENTRY_OPTION     (gtk_exif_entry_option_get_type())
-#define GTK_EXIF_ENTRY_OPTION(o)       (GTK_CHECK_CAST((o),GTK_EXIF_TYPE_ENTRY_OPTION,GtkExifEntryOption))
-#define GTK_EXIF_ENTRY_OPTION_CLASS(k) (GTK_CHECK_CLASS_CAST((k),GTK_EXIF_TYPE_ENTRY_OPTION,GtkExifEntryOptionClass))
-#define GTK_EXIF_IS_ENTRY_OPTION(o)    (GTK_CHECK_TYPE((o),GTK_EXIF_TYPE_ENTRY_OPTION))
+#define GTK_EXIF_ENTRY_OPTION(o)       (G_TYPE_CHECK_INSTANCE_CAST((o),GTK_EXIF_TYPE_ENTRY_OPTION,GtkExifEntryOption))
+#define GTK_EXIF_ENTRY_OPTION_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k),GTK_EXIF_TYPE_ENTRY_OPTION,GtkExifEntryOptionClass))
+#define GTK_EXIF_IS_ENTRY_OPTION(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o),GTK_EXIF_TYPE_ENTRY_OPTION))
 
 typedef struct _GtkExifEntryOption        GtkExifEntryOption;
 typedef struct _GtkExifEntryOptionPrivate GtkExifEntryOptionPrivate;
@@ -44,7 +44,7 @@ struct _GtkExifEntryOptionClass
 	GtkExifEntryClass parent_class;
 };
 
-GtkType    gtk_exif_entry_option_get_type  (void);
+GType      gtk_exif_entry_option_get_type  (void);
 GtkWidget *gtk_exif_entry_option_new (ExifEntry *entry);
 
 #endif /* __GTK_EXIF_ENTRY_OPTION_H__ */

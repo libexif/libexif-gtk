@@ -24,9 +24,9 @@
 #include <libexif-gtk/gtk-exif-entry.h>
 
 #define GTK_EXIF_TYPE_ENTRY_FLASH     (gtk_exif_entry_flash_get_type())
-#define GTK_EXIF_ENTRY_FLASH(o)       (GTK_CHECK_CAST((o),GTK_EXIF_TYPE_ENTRY_FLASH,GtkExifEntryFlash))
-#define GTK_EXIF_ENTRY_FLASH_CLASS(k) (GTK_CHECK_CLASS_CAST((k),GTK_EXIF_TYPE_ENTRY_FLASH,GtkExifEntryFlashClass))
-#define GTK_EXIF_IS_ENTRY_FLASH(o)    (GTK_CHECK_TYPE((o),GTK_EXIF_TYPE_ENTRY_FLASH))
+#define GTK_EXIF_ENTRY_FLASH(o)       (G_TYPE_CHECK_INSTANCE_CAST((o),GTK_EXIF_TYPE_ENTRY_FLASH,GtkExifEntryFlash))
+#define GTK_EXIF_ENTRY_FLASH_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k),GTK_EXIF_TYPE_ENTRY_FLASH,GtkExifEntryFlashClass))
+#define GTK_EXIF_IS_ENTRY_FLASH(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o),GTK_EXIF_TYPE_ENTRY_FLASH))
 
 typedef struct _GtkExifEntryFlash        GtkExifEntryFlash;
 typedef struct _GtkExifEntryFlashPrivate GtkExifEntryFlashPrivate;
@@ -44,7 +44,7 @@ struct _GtkExifEntryFlashClass
 	GtkExifEntryClass parent_class;
 };
 
-GtkType    gtk_exif_entry_flash_get_type (void);
+GType      gtk_exif_entry_flash_get_type (void);
 GtkWidget *gtk_exif_entry_flash_new		 (ExifEntry *entry);
 
 #endif /* __GTK_EXIF_ENTRY_FLASH_H__ */

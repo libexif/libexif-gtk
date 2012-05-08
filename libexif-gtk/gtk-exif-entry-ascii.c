@@ -20,18 +20,10 @@
 
 #include "config.h"
 #include "gtk-exif-entry-ascii.h"
-
-#include <gtk/gtkcheckbutton.h>
-#include <gtk/gtkradiobutton.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkframe.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkentry.h>
+#include "gtk-exif-util.h"
 
 #include <string.h>
-
-#include "gtk-exif-util.h"
+#include <gtk/gtk.h>
 
 struct _GtkExifEntryAsciiPrivate {
 	ExifEntry *entry;
@@ -43,16 +35,28 @@ struct _GtkExifEntryAsciiPrivate {
 static GtkExifEntryClass *parent_class;
 
 static void
+#if GTK_CHECK_VERSION(3,0,0)
+gtk_exif_entry_ascii_destroy (GtkWidget *widget)
+#else
 gtk_exif_entry_ascii_destroy (GtkObject *object)
+#endif
 {
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkExifEntryAscii *entry = GTK_EXIF_ENTRY_ASCII (widget);
+#else
 	GtkExifEntryAscii *entry = GTK_EXIF_ENTRY_ASCII (object);
+#endif
 
 	if (entry->priv->entry) {
 		exif_entry_unref (entry->priv->entry);
 		entry->priv->entry = NULL;
 	}
 
+#if GTK_CHECK_VERSION(3,0,0)
+	GTK_WIDGET_CLASS (parent_class)->destroy (widget);
+#else
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
+#endif
 }
 
 GTK_EXIF_FINALIZE (entry_ascii, EntryAscii)
@@ -60,11 +64,19 @@ GTK_EXIF_FINALIZE (entry_ascii, EntryAscii)
 static void
 gtk_exif_entry_ascii_class_init (gpointer g_class, gpointer class_data)
 {
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkWidgetClass *widget_class;
+	GObjectClass *gobject_class;
+
+	widget_class = GTK_WIDGET_CLASS (g_class);
+	widget_class->destroy  = gtk_exif_entry_ascii_destroy;
+#else
 	GtkObjectClass *object_class;
 	GObjectClass *gobject_class;
 
 	object_class = GTK_OBJECT_CLASS (g_class);
 	object_class->destroy  = gtk_exif_entry_ascii_destroy;
+#endif
 
 	gobject_class = G_OBJECT_CLASS (g_class);
 	gobject_class->finalize = gtk_exif_entry_ascii_finalize;

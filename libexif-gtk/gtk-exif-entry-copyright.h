@@ -24,8 +24,8 @@
 #include <libexif-gtk/gtk-exif-entry.h>
 
 #define GTK_EXIF_TYPE_ENTRY_COPYRIGHT     (gtk_exif_entry_copyright_get_type())
-#define GTK_EXIF_ENTRY_COPYRIGHT(o)       (GTK_CHECK_CAST((o),GTK_EXIF_TYPE_ENTRY_COPYRIGHT,GtkExifEntryCopyright))
-#define GTK_EXIF_ENTRY_COPYRIGHT_CLASS(k) (GTK_CHECK_CLASS_CAST((k),GTK_EXIF_TYPE_ENTRY_COPYRIGHT,GtkExifEntryCopyrightClass))
+#define GTK_EXIF_ENTRY_COPYRIGHT(o)       (G_TYPE_CHECK_INSTANCE_CAST((o),GTK_EXIF_TYPE_ENTRY_COPYRIGHT,GtkExifEntryCopyright))
+#define GTK_EXIF_ENTRY_COPYRIGHT_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k),GTK_EXIF_TYPE_ENTRY_COPYRIGHT,GtkExifEntryCopyrightClass))
 #define GTK_EXIF_IS_ENTRY_COPYRIGHT(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o),GTK_EXIF_TYPE_ENTRY_COPYRIGHT))
 
 typedef struct _GtkExifEntryCopyright        GtkExifEntryCopyright;
@@ -44,7 +44,7 @@ struct _GtkExifEntryCopyrightClass
 	GtkExifEntryClass parent_class;
 };
 
-GtkType    gtk_exif_entry_copyright_get_type (void);
+GType      gtk_exif_entry_copyright_get_type (void);
 GtkWidget *gtk_exif_entry_copyright_new		 (ExifEntry *entry);
 
 #endif /* __GTK_EXIF_ENTRY_COPYRIGHT_H__ */

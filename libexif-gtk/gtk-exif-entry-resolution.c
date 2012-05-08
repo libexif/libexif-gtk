@@ -20,25 +20,11 @@
 
 #include "config.h"
 #include "gtk-exif-entry-resolution.h"
+#include "gtk-exif-util.h"
 
 #include <string.h>
-
-#include <gtk/gtkspinbutton.h>
-#include <gtk/gtkradiobutton.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtkcellrenderertext.h>
-#include <gtk/gtkcelllayout.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkframe.h>
-#include <gtk/gtkcombobox.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkmenu.h>
-#include <gtk/gtklabel.h>
-
+#include <gtk/gtk.h>
 #include <libexif/exif-utils.h>
-
-#include "gtk-exif-util.h"
 
 #ifdef ENABLE_NLS
 #  include <libintl.h>
@@ -89,16 +75,28 @@ struct _GtkExifEntryResolutionPrivate
 static GtkExifEntryClass *parent_class;
 
 static void
+#if GTK_CHECK_VERSION(3,0,0)
+gtk_exif_entry_resolution_destroy (GtkWidget *widget)
+#else
 gtk_exif_entry_resolution_destroy (GtkObject *object)
+#endif
 {
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkExifEntryResolution *entry = GTK_EXIF_ENTRY_RESOLUTION (widget);
+#else
 	GtkExifEntryResolution *entry = GTK_EXIF_ENTRY_RESOLUTION (object);
+#endif
 
 	if (entry->priv->content) {
 		exif_content_unref (entry->priv->content);
 		entry->priv->content = NULL;
 	}
 
+#if GTK_CHECK_VERSION(3,0,0)
+	GTK_WIDGET_CLASS (parent_class)->destroy (widget);
+#else
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
+#endif
 }
 
 GTK_EXIF_FINALIZE (entry_resolution, EntryResolution)
@@ -106,11 +104,19 @@ GTK_EXIF_FINALIZE (entry_resolution, EntryResolution)
 static void
 gtk_exif_entry_resolution_class_init (gpointer g_class, gpointer class_data)
 {
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkWidgetClass *widget_class;
+	GObjectClass *gobject_class;
+
+	widget_class = GTK_WIDGET_CLASS (g_class);
+	widget_class->destroy  = gtk_exif_entry_resolution_destroy;
+#else
 	GtkObjectClass *object_class;
 	GObjectClass *gobject_class;
 
 	object_class = GTK_OBJECT_CLASS (g_class);
 	object_class->destroy  = gtk_exif_entry_resolution_destroy;
+#endif
 
 	gobject_class = G_OBJECT_CLASS (g_class);
 	gobject_class->finalize = gtk_exif_entry_resolution_finalize;
@@ -172,13 +178,13 @@ on_w_value_changed (GtkAdjustment *a, GtkExifEntryResolution *entry)
 	o = exif_data_get_byte_order (e->parent->parent);
 	switch (e->format) {
 	case EXIF_FORMAT_RATIONAL:
-		r.numerator   = entry->priv->ox.ap->value;
-		r.denominator = entry->priv->ox.aq->value;
+		r.numerator   = gtk_adjustment_get_value (entry->priv->ox.ap);
+		r.denominator = gtk_adjustment_get_value (entry->priv->ox.aq);
 		exif_set_rational (e->data, o, r);
 		break;
 	case EXIF_FORMAT_SRATIONAL:
-		sr.numerator   = entry->priv->ox.ap->value;
-		sr.denominator = entry->priv->ox.aq->value;
+		sr.numerator   = gtk_adjustment_get_value (entry->priv->ox.ap);
+		sr.denominator = gtk_adjustment_get_value (entry->priv->ox.aq);
 		exif_set_srational (e->data, o, sr);
 		break;
 	default:
@@ -202,13 +208,13 @@ on_h_value_changed (GtkAdjustment *a, GtkExifEntryResolution *entry)
 	o = exif_data_get_byte_order (e->parent->parent);
 	switch (e->format) {
 	case EXIF_FORMAT_RATIONAL:
-		r.numerator   = entry->priv->oy.ap->value;
-		r.denominator = entry->priv->oy.aq->value;
+		r.numerator   = gtk_adjustment_get_value (entry->priv->oy.ap);
+		r.denominator = gtk_adjustment_get_value (entry->priv->oy.aq);
 		exif_set_rational (e->data, o, r);
 		break;
 	case EXIF_FORMAT_SRATIONAL:
-		sr.numerator   = entry->priv->oy.ap->value;
-		sr.denominator = entry->priv->oy.aq->value;
+		sr.numerator   = gtk_adjustment_get_value (entry->priv->oy.ap);
+		sr.denominator = gtk_adjustment_get_value (entry->priv->oy.aq);
 		exif_set_srational (e->data, o, sr);
 		break;
 	default:
@@ -304,16 +310,16 @@ on_cw_toggled (GtkToggleButton *toggle, GtkExifEntryResolution *entry)
 
 	e = exif_content_get_entry (entry->priv->content,
 				    entry->priv->tag_x);
-	gtk_widget_set_sensitive (entry->priv->ox.sp, toggle->active);
-	gtk_widget_set_sensitive (entry->priv->ox.sq, toggle->active);
-	if (toggle->active && !e) { 
+	gtk_widget_set_sensitive (entry->priv->ox.sp, gtk_toggle_button_get_active (toggle));
+	gtk_widget_set_sensitive (entry->priv->ox.sq, gtk_toggle_button_get_active (toggle));
+	if (gtk_toggle_button_get_active (toggle) && !e) {
 		e = exif_entry_new ();
 		exif_content_add_entry (entry->priv->content, e);
 		exif_entry_initialize (e, entry->priv->tag_x);
 		gtk_exif_entry_resolution_load (entry, e);
 		exif_entry_unref (e);
 		gtk_exif_entry_added (GTK_EXIF_ENTRY (entry), e);
-	} else if (!toggle->active && e) {
+	} else if (!gtk_toggle_button_get_active (toggle) && e) {
 		g_object_ref (entry);
 		gtk_exif_entry_removed (GTK_EXIF_ENTRY (entry), e);
 		exif_content_remove_entry (entry->priv->content, e);
@@ -328,16 +334,16 @@ on_ch_toggled (GtkToggleButton *toggle, GtkExifEntryResolution *entry)
 
         e = exif_content_get_entry (entry->priv->content,
                                     entry->priv->tag_y);
-	gtk_widget_set_sensitive (entry->priv->oy.sp, toggle->active);
-	gtk_widget_set_sensitive (entry->priv->oy.sq, toggle->active);
-        if (toggle->active && !e) {
+	gtk_widget_set_sensitive (entry->priv->oy.sp, gtk_toggle_button_get_active (toggle));
+	gtk_widget_set_sensitive (entry->priv->oy.sq, gtk_toggle_button_get_active (toggle));
+        if (gtk_toggle_button_get_active (toggle) && !e) {
 		e = exif_entry_new ();
 		exif_content_add_entry (entry->priv->content, e);
 		exif_entry_initialize (e, entry->priv->tag_y);
 		gtk_exif_entry_resolution_load (entry, e);
 		exif_entry_unref (e);
 		gtk_exif_entry_added (GTK_EXIF_ENTRY (entry), e);
-        } else if (!toggle->active && e) {
+        } else if (!gtk_toggle_button_get_active (toggle) && e) {
 		g_object_ref (entry);
 		gtk_exif_entry_removed (GTK_EXIF_ENTRY (entry), e);
 		exif_content_remove_entry (entry->priv->content, e);
@@ -353,15 +359,15 @@ on_unit_toggled (GtkToggleButton *toggle, GtkExifEntryResolution *entry)
 	e = exif_content_get_entry (entry->priv->content,
 				    entry->priv->tag_u);
 	gtk_widget_set_sensitive (GTK_WIDGET (entry->priv->u.menu),
-				  toggle->active);
-	if (toggle->active && !e) {
+				  gtk_toggle_button_get_active (toggle));
+	if (gtk_toggle_button_get_active (toggle) && !e) {
 		e = exif_entry_new ();
 		exif_content_add_entry (entry->priv->content, e);
 		exif_entry_initialize (e, entry->priv->tag_u);
 		gtk_exif_entry_resolution_load_unit (entry, e);
 		exif_entry_unref (e);
 		gtk_exif_entry_added (GTK_EXIF_ENTRY (entry), e);
-	} else if (!toggle->active && e) {
+	} else if (!gtk_toggle_button_get_active (toggle) && e) {
 		g_object_ref (entry);
 		gtk_exif_entry_removed (GTK_EXIF_ENTRY (entry), e);
 		exif_content_remove_entry (entry->priv->content, e);
@@ -374,7 +380,11 @@ gtk_exif_entry_resolution_new (ExifContent *content, gboolean focal_plane)
 {
 	GtkExifEntryResolution *entry;
 	GtkWidget *hbox, *sp, *sq, *label, *o, *c;
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkAdjustment *ap, *aq;
+#else
 	GtkObject *ap, *aq;
+#endif
 	ExifEntry *e;
 	GtkTreeIter iter;
 	GtkTreeModel *tm;
@@ -415,7 +425,7 @@ gtk_exif_entry_resolution_new (ExifContent *content, gboolean focal_plane)
 	gtk_box_pack_start (GTK_BOX (hbox), c, FALSE, FALSE, 0);
 	entry->priv->ox.check = GTK_TOGGLE_BUTTON (c);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (c), (e != NULL));
-	g_signal_connect (GTK_OBJECT (c), "toggled",
+	g_signal_connect (G_OBJECT (c), "toggled",
 			    G_CALLBACK (on_cw_toggled), entry);
 	ap = gtk_adjustment_new (0, 0, 0xffffffff, 1, 0xffff, 0);
 	entry->priv->ox.ap = GTK_ADJUSTMENT (ap);
@@ -451,7 +461,7 @@ gtk_exif_entry_resolution_new (ExifContent *content, gboolean focal_plane)
 	gtk_box_pack_start (GTK_BOX (hbox), c, FALSE, FALSE, 0);
 	entry->priv->oy.check = GTK_TOGGLE_BUTTON (c);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (c), (e != NULL));
-	g_signal_connect (GTK_OBJECT (c), "toggled",
+	g_signal_connect (G_OBJECT (c), "toggled",
 			    G_CALLBACK (on_ch_toggled), entry);
 	ap = gtk_adjustment_new (0, 0, 0xffffffff, 1, 0xffff, 0);
 	entry->priv->oy.ap = GTK_ADJUSTMENT (ap);
@@ -487,7 +497,7 @@ gtk_exif_entry_resolution_new (ExifContent *content, gboolean focal_plane)
 	gtk_box_pack_start (GTK_BOX (hbox), c, FALSE, FALSE, 0);
 	entry->priv->check = GTK_TOGGLE_BUTTON (c);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (c), (e != NULL));
-	g_signal_connect (GTK_OBJECT (c), "toggled",
+	g_signal_connect (G_OBJECT (c), "toggled",
 			  G_CALLBACK (on_unit_toggled), entry);
 	tm = GTK_TREE_MODEL (gtk_list_store_new (N_COLUMNS, G_TYPE_INT,
 						 G_TYPE_STRING));

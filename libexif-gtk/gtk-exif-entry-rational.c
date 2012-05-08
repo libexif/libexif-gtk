@@ -20,23 +20,11 @@
 
 #include "config.h"
 #include "gtk-exif-entry-rational.h"
+#include "gtk-exif-util.h"
 
 #include <string.h>
-
-#include <gtk/gtkcheckbutton.h>
-#include <gtk/gtkradiobutton.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkframe.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkspinbutton.h>
-#include <gtk/gtktable.h>
-
+#include <gtk/gtk.h>
 #include <libexif/exif-utils.h>
-
-#include "gtk-exif-util.h"
 
 #ifdef ENABLE_NLS
 #  include <libintl.h>
@@ -67,9 +55,17 @@ struct _GtkExifEntryRationalPrivate {
 static GtkExifEntryClass *parent_class;
 
 static void
+#if GTK_CHECK_VERSION(3,0,0)
+gtk_exif_entry_rational_destroy (GtkWidget *widget)
+#else
 gtk_exif_entry_rational_destroy (GtkObject *object)
+#endif
 {
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkExifEntryRational *entry = GTK_EXIF_ENTRY_RATIONAL (widget);
+#else
 	GtkExifEntryRational *entry = GTK_EXIF_ENTRY_RATIONAL (object);
+#endif
 
 	if (entry->priv->entry) {
 		exif_entry_unref (entry->priv->entry);
@@ -86,7 +82,11 @@ gtk_exif_entry_rational_destroy (GtkObject *object)
 		entry->priv->aq = NULL;
 	}
 
+#if GTK_CHECK_VERSION(3,0,0)
+	GTK_WIDGET_CLASS (parent_class)->destroy (widget);
+#else
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
+#endif
 }
 
 GTK_EXIF_FINALIZE (entry_rational, EntryRational)
@@ -94,11 +94,19 @@ GTK_EXIF_FINALIZE (entry_rational, EntryRational)
 static void
 gtk_exif_entry_rational_class_init (gpointer g_class, gpointer class_data)
 {
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkWidgetClass *widget_class;
+	GObjectClass *gobject_class;
+
+	widget_class = GTK_WIDGET_CLASS (g_class);
+	widget_class->destroy  = gtk_exif_entry_rational_destroy;
+#else
 	GtkObjectClass *object_class;
 	GObjectClass *gobject_class;
 
 	object_class = GTK_OBJECT_CLASS (g_class);
 	object_class->destroy  = gtk_exif_entry_rational_destroy;
+#endif
 
 	gobject_class = G_OBJECT_CLASS (g_class);
 	gobject_class->finalize = gtk_exif_entry_rational_finalize;
@@ -180,13 +188,13 @@ gtk_exif_entry_rational_save (GtkExifEntryRational *entry)
 		aq = entry->priv->aq->pdata[i];
 		switch (e->format) {
 		case EXIF_FORMAT_RATIONAL:
-			r.numerator = ap->value;
-			r.denominator = aq->value;
+			r.numerator = gtk_adjustment_get_value (ap);
+			r.denominator = gtk_adjustment_get_value (aq);
 			exif_set_rational (e->data + 8 * i, o, r);
 			break;
 		case EXIF_FORMAT_SRATIONAL:
-			sr.numerator = ap->value;
-			sr.denominator = aq->value;
+			sr.numerator = gtk_adjustment_get_value (ap);
+			sr.denominator = gtk_adjustment_get_value (aq);
 			exif_set_srational (e->data + 8 * i, o, sr);
 			break;
 		default:
@@ -194,7 +202,7 @@ gtk_exif_entry_rational_save (GtkExifEntryRational *entry)
 			return;
 		}
 	}
-	g_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed", e);
+	g_signal_emit_by_name (G_OBJECT (entry), "entry_changed", e);
 }
 
 static void
@@ -208,7 +216,11 @@ gtk_exif_entry_rational_new (ExifEntry *e)
 {
 	GtkExifEntryRational *entry;
 	GtkWidget *table, *label, *spin;
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkAdjustment *a;
+#else
 	GtkObject *a;
+#endif
 	gchar *txt;
 	guint i;
 

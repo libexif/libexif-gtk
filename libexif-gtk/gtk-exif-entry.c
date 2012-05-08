@@ -20,16 +20,10 @@
 
 #include "config.h"
 #include "gtk-exif-entry.h"
+#include "gtk-exif-util.h"
 
 #include <string.h>
-
-#include <gtk/gtksignal.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkscrolledwindow.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtkhseparator.h>
-
-#include "gtk-exif-util.h"
+#include <gtk/gtk.h>
 
 struct _GtkExifEntryPrivate {
 };
@@ -47,13 +41,25 @@ enum {
 static guint signals[LAST_SIGNAL] = {0};
 
 static void
+#if GTK_CHECK_VERSION(3,0,0)
+gtk_exif_entry_destroy (GtkWidget *widget)
+#else
 gtk_exif_entry_destroy (GtkObject *object)
+#endif
 {
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkExifEntry *entry = GTK_EXIF_ENTRY (widget);
+#else
 	GtkExifEntry *entry = GTK_EXIF_ENTRY (object);
+#endif
 
 	entry = NULL;
 
+#if GTK_CHECK_VERSION(3,0,0)
+	GTK_WIDGET_CLASS (parent_class)->destroy (widget);
+#else
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
+#endif
 }
 
 GTK_EXIF_FINALIZE (entry, Entry)
@@ -61,11 +67,19 @@ GTK_EXIF_FINALIZE (entry, Entry)
 static void
 gtk_exif_entry_class_init (gpointer g_class, gpointer class_data)
 {
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkWidgetClass *widget_class;
+	GObjectClass *gobject_class;
+
+	widget_class = GTK_WIDGET_CLASS (g_class);
+	widget_class->destroy  = gtk_exif_entry_destroy;
+#else
 	GtkObjectClass *object_class;
 	GObjectClass *gobject_class;
 
 	object_class = GTK_OBJECT_CLASS (g_class);
 	object_class->destroy  = gtk_exif_entry_destroy;
+#endif
 
 	gobject_class = G_OBJECT_CLASS (g_class);
 	gobject_class->finalize = gtk_exif_entry_finalize;

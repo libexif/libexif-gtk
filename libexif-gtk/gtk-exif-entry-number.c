@@ -20,22 +20,10 @@
 
 #include "config.h"
 #include "gtk-exif-entry-number.h"
-
-#include <string.h>
-
-#include <gtk/gtkcheckbutton.h>
-#include <gtk/gtkradiobutton.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkframe.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkspinbutton.h>
-#include <gtk/gtktable.h>
-
 #include "gtk-exif-util.h"
 
+#include <string.h>
+#include <gtk/gtk.h>
 #include <libexif/exif-utils.h>
 
 #ifdef ENABLE_NLS
@@ -67,9 +55,17 @@ struct _GtkExifEntryNumberPrivate {
 static GtkExifEntryClass *parent_class;
 
 static void
+#if GTK_CHECK_VERSION(3,0,0)
+gtk_exif_entry_number_destroy (GtkWidget *widget)
+#else
 gtk_exif_entry_number_destroy (GtkObject *object)
+#endif
 {
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkExifEntryNumber *entry = GTK_EXIF_ENTRY_NUMBER (widget);
+#else
 	GtkExifEntryNumber *entry = GTK_EXIF_ENTRY_NUMBER (object);
+#endif
 
 	if (entry->priv->entry) {
 		exif_entry_unref (entry->priv->entry);
@@ -81,7 +77,11 @@ gtk_exif_entry_number_destroy (GtkObject *object)
 		entry->priv->a = NULL;
 	}
 
+#if GTK_CHECK_VERSION(3,0,0)
+	GTK_WIDGET_CLASS (parent_class)->destroy (widget);
+#else
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
+#endif
 }
 
 GTK_EXIF_FINALIZE (entry_number, EntryNumber)
@@ -89,11 +89,19 @@ GTK_EXIF_FINALIZE (entry_number, EntryNumber)
 static void
 gtk_exif_entry_number_class_init (gpointer g_class, gpointer class_data)
 {
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkWidgetClass *widget_class;
+	GObjectClass *gobject_class;
+
+	widget_class = GTK_WIDGET_CLASS (g_class);
+	widget_class->destroy = gtk_exif_entry_number_destroy;
+#else
 	GtkObjectClass *object_class;
 	GObjectClass *gobject_class;
 
 	object_class = GTK_OBJECT_CLASS (g_class);
 	object_class->destroy  = gtk_exif_entry_number_destroy;
+#endif
 
 	gobject_class = G_OBJECT_CLASS (g_class);
 	gobject_class->finalize = gtk_exif_entry_number_finalize;
@@ -153,7 +161,7 @@ gtk_exif_entry_number_load (GtkExifEntryNumber *entry)
 			g_warning ("Invalid format!");
 			break;
 		}
-		g_signal_handlers_unblock_matched (GTK_OBJECT (a),
+		g_signal_handlers_unblock_matched (G_OBJECT (a),
 				G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, entry);
 	}
 }
@@ -174,23 +182,23 @@ gtk_exif_entry_number_save (GtkExifEntryNumber *entry)
 		a = entry->priv->a->pdata[i];
 		switch (e->format) {
 		case EXIF_FORMAT_BYTE:
-			e->data[i] = a->value;
+			e->data[i] = gtk_adjustment_get_value (a);
 			break;
 		case EXIF_FORMAT_SHORT:
-			exif_set_short (e->data + 2 * i, o, a->value);
+			exif_set_short (e->data + 2 * i, o, gtk_adjustment_get_value (a));
 			break;
 		case EXIF_FORMAT_LONG:
-			exif_set_long (e->data + 4 * i, o, a->value);
+			exif_set_long (e->data + 4 * i, o, gtk_adjustment_get_value (a));
 			break;
 		case EXIF_FORMAT_SLONG:
-			exif_set_slong (e->data + 4 * i, o, a->value);
+			exif_set_slong (e->data + 4 * i, o, gtk_adjustment_get_value (a));
 			break;
 		default:
 			g_warning ("Invalid format!");
 			return;
 		}
 	}
-	g_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed", e);
+	g_signal_emit_by_name (G_OBJECT (entry), "entry_changed", e);
 }
 
 static void
@@ -204,7 +212,11 @@ gtk_exif_entry_number_new (ExifEntry *e)
 {
 	GtkExifEntryNumber *entry;
 	GtkWidget *table, *label, *spin;
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkAdjustment *a;
+#else
 	GtkObject *a;
+#endif
 	gchar *txt;
 	guint i;
 

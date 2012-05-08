@@ -21,12 +21,12 @@
 #ifndef __GTK_EXIF_CONTENT_LIST_H__
 #define __GTK_EXIF_CONTENT_LIST_H__
 
-#include <gtk/gtktreeview.h>
+#include <gtk/gtk.h>
 #include <libexif/exif-data.h>
 
 #define GTK_EXIF_TYPE_CONTENT_LIST     (gtk_exif_content_list_get_type())
-#define GTK_EXIF_CONTENT_LIST(o)       (GTK_CHECK_CAST((o),GTK_EXIF_TYPE_CONTENT_LIST,GtkExifContentList))
-#define GTK_EXIF_CONTENT_LIST_CLASS(k) (GTK_CHECK_CLASS_CAST((k),GTK_EXIF_TYPE_CONTENT_LIST,GtkExifContentListClass))
+#define GTK_EXIF_CONTENT_LIST(o)       (G_TYPE_CHECK_INSTANCE_CAST((o),GTK_EXIF_TYPE_CONTENT_LIST,GtkExifContentList))
+#define GTK_EXIF_CONTENT_LIST_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k),GTK_EXIF_TYPE_CONTENT_LIST,GtkExifContentListClass))
 #define GTK_EXIF_IS_CONTENT_LIST(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o),GTK_EXIF_TYPE_CONTENT_LIST))
 
 typedef struct _GtkExifContentList        GtkExifContentList;

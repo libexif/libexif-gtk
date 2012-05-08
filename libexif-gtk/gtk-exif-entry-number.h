@@ -24,9 +24,9 @@
 #include <libexif-gtk/gtk-exif-entry.h>
 
 #define GTK_EXIF_TYPE_ENTRY_NUMBER     (gtk_exif_entry_number_get_type())
-#define GTK_EXIF_ENTRY_NUMBER(o)       (GTK_CHECK_CAST((o),GTK_EXIF_TYPE_ENTRY_NUMBER,GtkExifEntryNumber))
-#define GTK_EXIF_ENTRY_NUMBER_CLASS(k) (GTK_CHECK_CLASS_CAST((k),GTK_EXIF_TYPE_ENTRY_NUMBER,GtkExifEntryNumberClass))
-#define GTK_EXIF_IS_ENTRY_NUMBER(o)    (GTK_CHECK_TYPE((o),GTK_EXIF_TYPE_ENTRY_NUMBER))
+#define GTK_EXIF_ENTRY_NUMBER(o)       (G_TYPE_CHECK_INSTANCE_CAST((o),GTK_EXIF_TYPE_ENTRY_NUMBER,GtkExifEntryNumber))
+#define GTK_EXIF_ENTRY_NUMBER_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k),GTK_EXIF_TYPE_ENTRY_NUMBER,GtkExifEntryNumberClass))
+#define GTK_EXIF_IS_ENTRY_NUMBER(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o),GTK_EXIF_TYPE_ENTRY_NUMBER))
 
 typedef struct _GtkExifEntryNumber        GtkExifEntryNumber;
 typedef struct _GtkExifEntryNumberPrivate GtkExifEntryNumberPrivate;
@@ -44,7 +44,7 @@ struct _GtkExifEntryNumberClass
 	GtkExifEntryClass parent_class;
 };
 
-GtkType    gtk_exif_entry_number_get_type (void);
+GType      gtk_exif_entry_number_get_type (void);
 GtkWidget *gtk_exif_entry_number_new	  (ExifEntry *entry);
 
 #endif /* __GTK_EXIF_ENTRY_NUMBER_H__ */

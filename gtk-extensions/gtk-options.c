@@ -21,10 +21,8 @@
 #include "config.h"
 #include "gtk-options.h"
 
-#include <gtk/gtkliststore.h>
-#include <gtk/gtktreemodel.h>
-
 #include <string.h>
+#include <gtk/gtk.h>
 
 #ifdef ENABLE_NLS
 #  include <libintl.h>

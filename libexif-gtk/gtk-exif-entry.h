@@ -21,12 +21,12 @@
 #ifndef __GTK_EXIF_ENTRY_H__
 #define __GTK_EXIF_ENTRY_H__
 
-#include <gtk/gtkvbox.h>
+#include <gtk/gtk.h>
 #include <libexif/exif-entry.h>
 
 #define GTK_EXIF_TYPE_ENTRY     (gtk_exif_entry_get_type())
-#define GTK_EXIF_ENTRY(o)       (GTK_CHECK_CAST((o),GTK_EXIF_TYPE_ENTRY,GtkExifEntry))
-#define GTK_EXIF_ENTRY_CLASS(k) (GTK_CHECK_CLASS_CAST((k),GTK_EXIF_TYPE_ENTRY,GtkExifEntryClass))
+#define GTK_EXIF_ENTRY(o)       (G_TYPE_CHECK_INSTANCE_CAST((o),GTK_EXIF_TYPE_ENTRY,GtkExifEntry))
+#define GTK_EXIF_ENTRY_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k),GTK_EXIF_TYPE_ENTRY,GtkExifEntryClass))
 #define GTK_EXIF_IS_ENTRY(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o),GTK_EXIF_TYPE_ENTRY))
 
 typedef struct _GtkExifEntry        GtkExifEntry;

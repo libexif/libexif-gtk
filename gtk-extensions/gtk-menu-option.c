@@ -22,10 +22,7 @@
 #include "gtk-menu-option.h"
 
 #include <string.h>
-
-#include <gtk/gtksignal.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkmenu.h>
+#include <gtk/gtk.h>
 
 #ifdef ENABLE_NLS
 #  include <libintl.h>
@@ -67,9 +64,17 @@ enum {
 static guint signals[LAST_SIGNAL] = {0};
 
 static void
+#if GTK_CHECK_VERSION(3,0,0)
+gtk_menu_option_destroy (GtkWidget *widget)
+#else
 gtk_menu_option_destroy (GtkObject *object)
+#endif
 {
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkMenuOption *menu = GTK_MENU_OPTION (widget);
+#else
 	GtkMenuOption *menu = GTK_MENU_OPTION (object);
+#endif
 
 	if (menu->priv->array) {
 		g_array_free (menu->priv->array, TRUE);
@@ -81,7 +86,11 @@ gtk_menu_option_destroy (GtkObject *object)
 		menu->priv->items = NULL;
 	}
 
+#if GTK_CHECK_VERSION(3,0,0)
+	GTK_WIDGET_CLASS (parent_class)->destroy (widget);
+#else
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
+#endif
 }
 
 static void
@@ -97,11 +106,19 @@ gtk_menu_option_finalize (GObject *object)
 static void
 gtk_menu_option_class_init (gpointer g_class, gpointer class_data)
 {
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkWidgetClass *widget_class;
+	GObjectClass *gobject_class;
+
+	widget_class = GTK_WIDGET_CLASS (g_class);
+	widget_class->destroy = gtk_menu_option_destroy;
+#else
 	GtkObjectClass *object_class;
 	GObjectClass *gobject_class;
 
 	object_class = GTK_OBJECT_CLASS (g_class);
 	object_class->destroy  = gtk_menu_option_destroy;
+#endif
 
 	gobject_class = G_OBJECT_CLASS (g_class);
 	gobject_class->finalize = gtk_menu_option_finalize;
@@ -193,7 +210,7 @@ gtk_menu_option_construct (GtkMenuOption *menu, GtkOptions *list)
 		gtk_container_add (GTK_CONTAINER (menu), item);
 		g_object_set_data (G_OBJECT (item), "option",
 				   GINT_TO_POINTER ((gint) list[i].option));
-		g_signal_connect (GTK_OBJECT (item), "activate",
+		g_signal_connect (G_OBJECT (item), "activate",
 				  G_CALLBACK (on_item_activate), menu);
 		g_array_append_val (menu->priv->array, list[i].option);
 		g_ptr_array_add (menu->priv->items, item);
@@ -222,7 +239,7 @@ gtk_menu_option_set_sensitive_all (GtkMenuOption *menu, gboolean sensitive)
 
 	for (i = 0; i < menu->priv->items->len; i++)
 		gtk_widget_set_sensitive (
-			GTK_WIDGET (menu->priv->items->pdata[i]), 
+			GTK_WIDGET (menu->priv->items->pdata[i]),
 			sensitive);
 }
 

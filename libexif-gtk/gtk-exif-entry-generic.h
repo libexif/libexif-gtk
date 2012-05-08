@@ -24,9 +24,9 @@
 #include <libexif-gtk/gtk-exif-entry.h>
 
 #define GTK_EXIF_TYPE_ENTRY_GENERIC     (gtk_exif_entry_generic_get_type())
-#define GTK_EXIF_ENTRY_GENERIC(o)       (GTK_CHECK_CAST((o),GTK_EXIF_TYPE_ENTRY_GENERIC,GtkExifEntryGeneric))
-#define GTK_EXIF_ENTRY_GENERIC_CLASS(k) (GTK_CHECK_CLASS_CAST((k),GTK_EXIF_TYPE_ENTRY_GENERIC,GtkExifEntryGenericClass))
-#define GTK_EXIF_IS_ENTRY_GENERIC(o)    (GTK_CHECK_TYPE((o),GTK_EXIF_TYPE_ENTRY_GENERIC))
+#define GTK_EXIF_ENTRY_GENERIC(o)       (G_TYPE_CHECK_INSTANCE_CAST((o),GTK_EXIF_TYPE_ENTRY_GENERIC,GtkExifEntryGeneric))
+#define GTK_EXIF_ENTRY_GENERIC_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k),GTK_EXIF_TYPE_ENTRY_GENERIC,GtkExifEntryGenericClass))
+#define GTK_EXIF_IS_ENTRY_GENERIC(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o),GTK_EXIF_TYPE_ENTRY_GENERIC))
 
 typedef struct _GtkExifEntryGeneric        GtkExifEntryGeneric;
 typedef struct _GtkExifEntryGenericPrivate GtkExifEntryGenericPrivate;
@@ -44,7 +44,7 @@ struct _GtkExifEntryGenericClass
 	GtkExifEntryClass parent_class;
 };
 
-GtkType    gtk_exif_entry_generic_get_type (void);
+GType      gtk_exif_entry_generic_get_type (void);
 GtkWidget *gtk_exif_entry_generic_new	   (ExifEntry *entry);
 
 #endif /* __GTK_EXIF_ENTRY_GENERIC_H__ */

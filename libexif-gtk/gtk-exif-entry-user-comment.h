@@ -24,8 +24,8 @@
 #include <libexif-gtk/gtk-exif-entry.h>
 
 #define GTK_EXIF_TYPE_ENTRY_USER_COMMENT     (gtk_exif_entry_user_comment_get_type())
-#define GTK_EXIF_ENTRY_USER_COMMENT(o)       (GTK_CHECK_CAST((o),GTK_EXIF_TYPE_ENTRY_USER_COMMENT,GtkExifEntryUserComment))
-#define GTK_EXIF_ENTRY_USER_COMMENT_CLASS(k) (GTK_CHECK_CLASS_CAST((k),GTK_EXIF_TYPE_ENTRY_USER_COMMENT,GtkExifEntryUserCommentClass))
+#define GTK_EXIF_ENTRY_USER_COMMENT(o)       (G_TYPE_CHECK_INSTANCE_CAST((o),GTK_EXIF_TYPE_ENTRY_USER_COMMENT,GtkExifEntryUserComment))
+#define GTK_EXIF_ENTRY_USER_COMMENT_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k),GTK_EXIF_TYPE_ENTRY_USER_COMMENT,GtkExifEntryUserCommentClass))
 #define GTK_EXIF_IS_ENTRY_USER_COMMENT(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o),GTK_EXIF_TYPE_ENTRY_USER_COMMENT))
 
 typedef struct _GtkExifEntryUserComment        GtkExifEntryUserComment;
@@ -44,7 +44,7 @@ struct _GtkExifEntryUserCommentClass
 	GtkExifEntryClass parent_class;
 };
 
-GtkType    gtk_exif_entry_user_comment_get_type (void);
+GType      gtk_exif_entry_user_comment_get_type (void);
 GtkWidget *gtk_exif_entry_user_comment_new		(ExifEntry *entry);
 
 #endif /* __GTK_EXIF_ENTRY_USER_COMMENT_H__ */

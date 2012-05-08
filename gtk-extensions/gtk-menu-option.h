@@ -21,14 +21,13 @@
 #ifndef __GTK_MENU_OPTION_H__
 #define __GTK_MENU_OPTION_H__
 
-#include <gtk/gtkmenu.h>
-
 #include <gtk-options.h>
+#include <gtk/gtk.h>
 
 #define GTK_TYPE_MENU_OPTION     (gtk_menu_option_get_type())
-#define GTK_MENU_OPTION(o)       (GTK_CHECK_CAST((o),GTK_TYPE_MENU_OPTION,GtkMenuOption))
-#define GTK_MENU_OPTION_CLASS(k) (GTK_CHECK_CLASS_CAST((k),GTK_TYPE_MENU_OPTION,GtkMenuOptionClass))
-#define GTK_IS_MENU_OPTION(o)    (GTK_CHECK_TYPE((o),GTK_TYPE_MENU_OPTION))
+#define GTK_MENU_OPTION(o)       (G_TYPE_CHECK_INSTANCE_CAST((o),GTK_TYPE_MENU_OPTION,GtkMenuOption))
+#define GTK_MENU_OPTION_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k),GTK_TYPE_MENU_OPTION,GtkMenuOptionClass))
+#define GTK_IS_MENU_OPTION(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o),GTK_TYPE_MENU_OPTION))
 
 typedef struct _GtkMenuOption        GtkMenuOption;
 typedef struct _GtkMenuOptionPrivate GtkMenuOptionPrivate;
@@ -50,7 +49,7 @@ struct _GtkMenuOptionClass
 	void (* option_set)      (GtkMenuOption *menu, guint option);
 };
 
-GtkType    gtk_menu_option_get_type  (void);
+GType    gtk_menu_option_get_type  (void);
 GtkWidget *gtk_menu_option_new       (GtkOptions *list);
 void       gtk_menu_option_construct (GtkMenuOption *menu, GtkOptions *list);
 

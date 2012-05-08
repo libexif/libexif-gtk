@@ -20,16 +20,10 @@
 
 #include "config.h"
 #include "gtk-exif-entry-flash.h"
+#include "gtk-exif-util.h"
 
 #include <string.h>
-
-#include <gtk/gtkcheckbutton.h>
-#include <gtk/gtkradiobutton.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkframe.h>
-
-#include "gtk-exif-util.h"
+#include <gtk/gtk.h>
 
 struct _GtkExifEntryFlashPrivate {
 	ExifEntry *entry;
@@ -42,16 +36,28 @@ struct _GtkExifEntryFlashPrivate {
 static GtkExifEntryClass *parent_class;
 
 static void
+#if GTK_CHECK_VERSION(3,0,0)
+gtk_exif_entry_flash_destroy (GtkWidget *widget)
+#else
 gtk_exif_entry_flash_destroy (GtkObject *object)
+#endif
 {
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkExifEntryFlash *entry = GTK_EXIF_ENTRY_FLASH (widget);
+#else
 	GtkExifEntryFlash *entry = GTK_EXIF_ENTRY_FLASH (object);
+#endif
 
 	if (entry->priv->entry) {
 		exif_entry_unref (entry->priv->entry);
 		entry->priv->entry = NULL;
 	}
 
+#if GTK_CHECK_VERSION(3,0,0)
+	GTK_WIDGET_CLASS (parent_class)->destroy (widget);
+#else
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
+#endif
 }
 
 GTK_EXIF_FINALIZE (entry_flash, EntryFlash)
@@ -59,11 +65,19 @@ GTK_EXIF_FINALIZE (entry_flash, EntryFlash)
 static void
 gtk_exif_entry_flash_class_init (gpointer g_class, gpointer class_data)
 {
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkWidgetClass *widget_class;
+	GObjectClass *gobject_class;
+
+	widget_class = GTK_WIDGET_CLASS (g_class);
+	widget_class->destroy = gtk_exif_entry_flash_destroy;
+#else
 	GtkObjectClass *object_class;
 	GObjectClass *gobject_class;
 
 	object_class = GTK_OBJECT_CLASS (g_class);
 	object_class->destroy  = gtk_exif_entry_flash_destroy;
+#endif
 
 	gobject_class = G_OBJECT_CLASS (g_class);
 	gobject_class->finalize = gtk_exif_entry_flash_finalize;
@@ -87,15 +101,15 @@ on_value_changed (GtkToggleButton *toggle, GtkExifEntryFlash *entry)
 	g_return_if_fail (GTK_EXIF_IS_ENTRY_FLASH (entry));
 
 	entry->priv->entry->data[0] &= 0xfe;
-	if (entry->priv->c->active)
+	if (gtk_toggle_button_get_active (entry->priv->c))
 		entry->priv->entry->data[0] |= 0x01;
 
 	entry->priv->entry->data[0] &= 0xf9;
-	if (entry->priv->r2->active)
+	if (gtk_toggle_button_get_active (entry->priv->r2))
 		entry->priv->entry->data[0] |= 0x04;
-	else if (entry->priv->r3->active)
+	else if (gtk_toggle_button_get_active (entry->priv->r3))
 		entry->priv->entry->data[0] |= 0x06;
-	g_signal_emit_by_name (GTK_OBJECT (entry), "entry_changed",
+	g_signal_emit_by_name (G_OBJECT (entry), "entry_changed",
 				 entry->priv->entry);
 }
 
@@ -121,7 +135,7 @@ gtk_exif_entry_flash_new (ExifEntry *e)
 	gtk_box_pack_start (GTK_BOX (entry), check, FALSE, FALSE, 0);
 	if (e->data[0] & (1 << 0))
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
-	g_signal_connect (GTK_OBJECT (check), "toggled",
+	g_signal_connect (G_OBJECT (check), "toggled",
 			    G_CALLBACK (on_value_changed), entry);
 	entry->priv->c = GTK_TOGGLE_BUTTON (check);
 
@@ -139,7 +153,7 @@ gtk_exif_entry_flash_new (ExifEntry *e)
 	gtk_box_pack_start (GTK_BOX (vbox), radio, FALSE, FALSE, 0);
 	if (!(e->data[0] & (1 << 1)) && !(e->data[0] & (1 << 2)))
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), TRUE);
-	g_signal_connect (GTK_OBJECT (radio), "toggled",
+	g_signal_connect (G_OBJECT (radio), "toggled",
 			    G_CALLBACK (on_value_changed), entry);
 	entry->priv->r1 = GTK_TOGGLE_BUTTON (radio);
 
@@ -151,7 +165,7 @@ gtk_exif_entry_flash_new (ExifEntry *e)
 	gtk_box_pack_start (GTK_BOX (vbox), radio, FALSE, FALSE, 0);
 	if (!(e->data[0] & (1 << 1)) && (e->data[0] & (1 << 2)))
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), TRUE);
-	g_signal_connect (GTK_OBJECT (radio), "toggled",
+	g_signal_connect (G_OBJECT (radio), "toggled",
 			    G_CALLBACK (on_value_changed), entry);
 	entry->priv->r2 = GTK_TOGGLE_BUTTON (radio);
 
@@ -163,7 +177,7 @@ gtk_exif_entry_flash_new (ExifEntry *e)
 	gtk_box_pack_start (GTK_BOX (vbox), radio, FALSE, FALSE, 0);
 	if ((e->data[0] & (1 << 1)) && (e->data[0] & (1 << 2)))
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), TRUE);
-	g_signal_connect (GTK_OBJECT (radio), "toggled",
+	g_signal_connect (G_OBJECT (radio), "toggled",
 			    G_CALLBACK (on_value_changed), entry);
 	entry->priv->r3 = GTK_TOGGLE_BUTTON (radio);
 

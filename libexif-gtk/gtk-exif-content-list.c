@@ -20,18 +20,11 @@
 
 #include "config.h"
 #include "gtk-exif-content-list.h"
+#include "gtk-exif-util.h"
+#include "gtk-extensions/gtk-menu-option.h"
 
 #include <string.h>
-
-#include <gtk/gtkmenu.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkliststore.h>
-#include <gtk/gtkcellrenderertext.h>
-#include <gtk/gtktreeselection.h>
-
-#include <gtk-extensions/gtk-menu-option.h>
-
-#include "gtk-exif-util.h"
+#include <gtk/gtk.h>
 
 #ifdef ENABLE_NLS
 #  include <libintl.h>
@@ -77,16 +70,28 @@ enum {
 static guint signals[LAST_SIGNAL] = {0};
 
 static void
+#if GTK_CHECK_VERSION(3,0,0)
+gtk_exif_content_list_destroy (GtkWidget *widget)
+#else
 gtk_exif_content_list_destroy (GtkObject *object)
+#endif
 {
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkExifContentList *list = GTK_EXIF_CONTENT_LIST (widget);
+#else
 	GtkExifContentList *list = GTK_EXIF_CONTENT_LIST (object);
+#endif
 
 	if (list->content) {
 		exif_content_unref (list->content);
 		list->content = NULL;
 	}
 
+#if GTK_CHECK_VERSION(3,0,0)
+	GTK_WIDGET_CLASS (parent_class)->destroy (widget);
+#else
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
+#endif
 }
 
 GTK_EXIF_FINALIZE (content_list, ContentList)
@@ -94,11 +99,19 @@ GTK_EXIF_FINALIZE (content_list, ContentList)
 static void
 gtk_exif_content_list_class_init (gpointer g_class, gpointer class_data)
 {
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkWidgetClass *widget_class;
+	GObjectClass *gobject_class;
+
+	widget_class = GTK_WIDGET_CLASS (g_class);
+	widget_class->destroy  = gtk_exif_content_list_destroy;
+#else
 	GtkObjectClass *object_class;
 	GObjectClass *gobject_class;
 
 	object_class = GTK_OBJECT_CLASS (g_class);
 	object_class->destroy  = gtk_exif_content_list_destroy;
+#endif
 
 	gobject_class = G_OBJECT_CLASS (g_class);
 	gobject_class->finalize = gtk_exif_content_list_finalize;
@@ -253,7 +266,7 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event,
 		/* Create the popup menu */
 		menu = gtk_menu_new ();
 		g_object_ref (menu);
-		gtk_object_sink (GTK_OBJECT (menu));
+		g_object_ref_sink (G_OBJECT (menu));
 
 		/* Add */
 		item = gtk_menu_item_new_with_label (_("Add"));
@@ -302,7 +315,7 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event,
 		ssmenu = gtk_menu_option_new (tags);
 		gtk_widget_show (ssmenu);
 		gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), ssmenu);
-		g_signal_connect (GTK_OBJECT (ssmenu), "option_selected",
+		g_signal_connect (G_OBJECT (ssmenu), "option_selected",
 				  G_CALLBACK (on_tag_selected), list);
 
 		/* Create the second part of the list */
@@ -315,7 +328,7 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event,
 		ssmenu = gtk_menu_option_new (tags + i + 1);
 		gtk_widget_show (ssmenu);
 		gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), ssmenu);
-		g_signal_connect (GTK_OBJECT (ssmenu), "option_selected",
+		g_signal_connect (G_OBJECT (ssmenu), "option_selected",
 				  G_CALLBACK (on_tag_selected), list);
 
 		/* Create the third part of the list */
@@ -328,22 +341,22 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event,
 		ssmenu = gtk_menu_option_new (tags + j + 1);
 		gtk_widget_show (ssmenu);
 		gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), ssmenu);
-		g_signal_connect (GTK_OBJECT (ssmenu), "option_selected",
+		g_signal_connect (G_OBJECT (ssmenu), "option_selected",
 				  G_CALLBACK (on_tag_selected), list);
 
 		/* Remove */
 		item = gtk_menu_item_new_with_label (_("Remove"));
 		gtk_widget_show (item);
 		gtk_container_add (GTK_CONTAINER (menu), item);
-		g_signal_connect (GTK_OBJECT (item), "activate",
-				GTK_SIGNAL_FUNC (on_remove_activate), list);
+		g_signal_connect (G_OBJECT (item), "activate",
+				G_CALLBACK (on_remove_activate), list);
 
 		/* Popup */
 		gtk_widget_show (menu);
 		gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
 				event->button, event->time);
-		g_signal_connect (GTK_OBJECT (menu), "hide",
-				  GTK_SIGNAL_FUNC (on_hide), menu);
+		g_signal_connect (G_OBJECT (menu), "hide",
+				  G_CALLBACK (on_hide), menu);
 
 		return (TRUE);
 	default:

@@ -21,7 +21,7 @@
 #ifndef __GTK_OPTIONS_H__
 #define __GTK_OPTIONS_H__
 
-#include <gtk/gtktreemodel.h>
+#include <gtk/gtk.h>
 
 typedef struct _GtkOptions GtkOptions;
 struct _GtkOptions {

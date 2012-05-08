@@ -24,9 +24,9 @@
 #include <libexif-gtk/gtk-exif-entry.h>
 
 #define GTK_EXIF_TYPE_ENTRY_VERSION     (gtk_exif_entry_version_get_type())
-#define GTK_EXIF_ENTRY_VERSION(o)       (GTK_CHECK_CAST((o),GTK_EXIF_TYPE_ENTRY_VERSION,GtkExifEntryVersion))
-#define GTK_EXIF_ENTRY_VERSION_CLASS(k) (GTK_CHECK_CLASS_CAST((k),GTK_EXIF_TYPE_ENTRY_VERSION,GtkExifEntryVersionClass))
-#define GTK_EXIF_IS_ENTRY_VERSION(o)    (GTK_CHECK_TYPE((o),GTK_EXIF_TYPE_ENTRY_VERSION))
+#define GTK_EXIF_ENTRY_VERSION(o)       (G_TYPE_CHECK_INSTANCE_CAST((o),GTK_EXIF_TYPE_ENTRY_VERSION,GtkExifEntryVersion))
+#define GTK_EXIF_ENTRY_VERSION_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k),GTK_EXIF_TYPE_ENTRY_VERSION,GtkExifEntryVersionClass))
+#define GTK_EXIF_IS_ENTRY_VERSION(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o),GTK_EXIF_TYPE_ENTRY_VERSION))
 
 typedef struct _GtkExifEntryVersion        GtkExifEntryVersion;
 typedef struct _GtkExifEntryVersionPrivate GtkExifEntryVersionPrivate;
@@ -44,7 +44,7 @@ struct _GtkExifEntryVersionClass
 	GtkExifEntryClass parent_class;
 };
 
-GtkType    gtk_exif_entry_version_get_type (void);
+GType      gtk_exif_entry_version_get_type (void);
 GtkWidget *gtk_exif_entry_version_new      (ExifEntry *entry);
 
 #endif /* __GTK_EXIF_ENTRY_VERSION_H__ */
