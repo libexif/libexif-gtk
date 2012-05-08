@@ -1,3 +1,4 @@
+gtk-extensions/gtk-options.c
 gtk-extensions/gtk-menu-option.c
 libexif-gtk/gtk-exif-browser.c
 libexif-gtk/gtk-exif-content-list.c

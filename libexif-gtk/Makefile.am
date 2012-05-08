@@ -1,4 +1,4 @@
-lib_LTLIBRARIES = libexif-gtk.la
+lib_LTLIBRARIES = libexif-@LIBEXIF_GTK_EXTENSION@.la
 
 libexif_gtkincludedir = $(includedir)/libexif-gtk
 libexif_gtkinclude_HEADERS = \
@@ -17,7 +17,7 @@ libexif_gtkinclude_HEADERS = \
 	gtk-exif-entry-user-comment.h	\
 	gtk-exif-entry-version.h
 
-libexif_gtk_la_SOURCES =			\
+libexif_@LIBEXIF_GTK_EXTENSION@_la_SOURCES = \
 	gtk-exif-browser.c				\
 	gtk-exif-content-list.c			\
 	gtk-exif-entry.c				\
@@ -34,11 +34,7 @@ libexif_gtk_la_SOURCES =			\
 	gtk-exif-entry-version.c		\
 	gtk-exif-util.h
 
-# We cannot define -DGTK_DISABLE_DEPRECATED here
-# as long as we're still using our old code with
-# the old deprecated GTK stuff.
-
-libexif_gtk_la_CFLAGS =	\
+libexif_@LIBEXIF_GTK_EXTENSION@_la_CFLAGS =	\
 	$(AM_CPPFLAGS) $(CPPFLAGS)		\
 	-I$(top_srcdir)					\
 	-I$(top_srcdir)/gtk-extensions	\
@@ -46,8 +42,9 @@ libexif_gtk_la_CFLAGS =	\
 	$(GTK_CFLAGS)					\
 	-DG_LOG_DOMAIN=\"libexif\"
 
-libexif_gtk_la_LDFLAGS = -version-info @LIBEXIF_GTK_VERSION_INFO@
-libexif_gtk_la_LIBADD = \
+libexif_@LIBEXIF_GTK_EXTENSION@_la_LDFLAGS = -version-info @LIBEXIF_GTK_VERSION_INFO@
+
+libexif_@LIBEXIF_GTK_EXTENSION@_la_LIBADD = \
 	$(AM_LDFLAGS) $(LDFLAGS)				\
 	$(top_builddir)/gtk-extensions/libgtk-extensions.la	\
 	$(LIBEXIF_LIBS)							\

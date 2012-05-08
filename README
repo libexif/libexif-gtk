@@ -4,7 +4,8 @@
 WHAT IT IS
 ==========
 
-libexif-gtk is a library of widgets to help displaying EXIF tags in GTK programs.
+libexif-gtk is a library of widgets to help display EXIF tags in GTK
+programs.
 
 
 REQUIREMENTS
@@ -12,3 +13,16 @@ REQUIREMENTS
 
 libexif-gtk requires libexif and gtk+.
 
+NOTE TO PACKAGERS
+=================
+
+The default is to build the gtk2 version of the library (minimum gtk2
+version: 2.4).  The configure option --with-gtk3 allows to build the gtk3
+version of the library.
+
+NOTE TO DEVELOPERS
+==================
+
+To link to the gtk2 version of libexif-gtk, use the 'libexif-gtk' pkgconfig
+information.  To link your application to the gtk3 version of this library, use
+the 'libexif-gtk3' pkgconfig information.

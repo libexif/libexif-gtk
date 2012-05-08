@@ -8,7 +8,7 @@ test_libexif_gtk_CFLAGS = 	\
 
 test_libexif_gtk_LDADD = 		\
 	$(AM_LDFLAGS) $(LDFLAGS)	\
-	$(top_builddir)/libexif-gtk/libexif-gtk.la	\
+	$(top_builddir)/libexif-gtk/libexif-@LIBEXIF_GTK_EXTENSION@.la	\
 	$(LIBEXIF_LIBS)				\
 	$(GTK_LIBS)					\
 	$(INTLLIBS)

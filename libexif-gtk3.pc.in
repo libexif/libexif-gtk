@@ -6,9 +6,9 @@ datarootdir=@datarootdir@
 datadir=@datadir@
 localedir=@localedir@
 
-Name: libexif-gtk
-Description: gtk2-widgets for libexif
+Name: libexif-gtk3
+Description: gtk3-widgets for libexif
 Requires: libexif
 Version: @VERSION@
-Libs: -L${libdir} -lexif -lexif-gtk -lm
+Libs: -L${libdir} -lexif -lexif-gtk3 -lm
 Cflags: -I${includedir}

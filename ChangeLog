@@ -1,3 +1,12 @@
+2012-05-08  Valere Monseur <valere.monseur@ymail.com>
+
+	* libexif-gtk made compatible for both gtk2 (min version: 2.4) and gtk3
+	* added --with-gtk3 option in configure.ac (default is gtk2)
+	* encoding of source files set to utf8
+	* encoding of ru translation file set to utf8
+	* fixed bugs linked to gtk_notebook_remove_page action
+	* fixed internationalisation bugs in gtk-options.c & configure.ac
+
 2011-12-08  Dan Fandrich <dan@coneharvesters.com>
 
 	* Cleanups in internationalization, whitespace & comments.

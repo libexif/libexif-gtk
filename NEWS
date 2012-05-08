@@ -1,5 +1,10 @@
-New in 0.3.6cvs2:
+New in 0.3.6cvs3:
   * Updated translations: fr
-  * Bug fixes:
-    #1643242: need uninstalled.pc file for libexif-gtk
+  * Bug fixes: #1643242: need uninstalled.pc file for libexif-gtk
   * Proper setting of gettext parameters
+  * libexif-gtk made compatible for both gtk2 (min version: 2.4) and gtk3
+  * added --with-gtk3 option in configure.ac (default is gtk2)
+  * encoding of source files set to utf-8
+  * encoding of ru translation file set to utf-8
+  * fixed internationalisation bugs in gtk-options.c & configure.ac
+  * fixed bugs linked to gtk_notebook_remove_page action

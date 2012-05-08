@@ -1,0 +1,6 @@
+Name: libexif-gtk3
+Description: gtk3-widgets for libexif
+Requires: libexif
+Version: @VERSION@
+Libs: ${pcfiledir}/libexif-gtk/libexif-gtk3.la
+Cflags: -I${pcfiledir}/@srcdir@

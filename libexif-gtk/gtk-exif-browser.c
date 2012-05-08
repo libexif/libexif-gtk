@@ -572,8 +572,15 @@ gtk_exif_browser_set_data (GtkExifBrowser *b, ExifData *data)
 	b->priv->data = data;
 	exif_data_ref (data);
 
-	while ((n = gtk_notebook_get_current_page (b->priv->notebook)) >= 0)
-		gtk_notebook_remove_page (b->priv->notebook, n);
+	/* sequence of tabs removal is important to avoid segfault */
+	gtk_notebook_set_current_page (b->priv->notebook, -1);
+	n = gtk_notebook_get_n_pages (b->priv->notebook);
+	for (i = 0; i < n; i++)
+		gtk_notebook_remove_page (b->priv->notebook, 0);
+
+	/* thumbnail has disappeared with the removal of the related page */
+	b->priv->thumb_box = NULL;
+	b->priv->thumb     = NULL;
 
 	for (i = 0; i < EXIF_IFD_COUNT; i++)
 		gtk_exif_browser_add_content (b, exif_ifd_get_name (i),
