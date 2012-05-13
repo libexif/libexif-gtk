@@ -29,8 +29,8 @@ msgstr "Nie można przetworzyć danych miniaturki."
 
 #: libexif-gtk/gtk-exif-browser.c:416
 #, c-format
-msgid "Size: %i byte(s)."
-msgstr "Rozmiar: %i bajt(ów)."
+msgid "Size: %i bytes."
+msgstr "Rozmiar: %i bajtów."
 
 #: libexif-gtk/gtk-exif-browser.c:485
 msgid "Load..."

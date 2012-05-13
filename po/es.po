@@ -29,8 +29,8 @@ msgstr "No se pueden analizar datos de diapositiva."
 
 #: libexif-gtk/gtk-exif-browser.c:416
 #, c-format
-msgid "Size: %i byte(s)."
-msgstr "Tamaño: %i byte(s)."
+msgid "Size: %i bytes."
+msgstr "Tamaño: %i bytes."
 
 #: libexif-gtk/gtk-exif-browser.c:485
 msgid "Load..."

@@ -428,7 +428,7 @@ gtk_exif_browser_show_thumbnail (GtkExifBrowser *b)
 				GTK_SCROLLED_WINDOW (b->priv->thumb), image);
 		}
 		g_object_unref (G_OBJECT (loader));
-		tip = g_strdup_printf (_("Size: %i byte(s)."),
+		tip = g_strdup_printf (_("Size: %i bytes."),
 				       b->priv->data->size);
 #if !GTK_CHECK_VERSION(2,12,0)
 		gtk_tooltips_set_tip (b->priv->tooltips, b->priv->thumb, tip, NULL);

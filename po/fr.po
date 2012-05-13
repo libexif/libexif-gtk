@@ -30,8 +30,8 @@ msgstr "Impossible de parcourir les données de la vignette."
 
 #: libexif-gtk/gtk-exif-browser.c:428
 #, c-format
-msgid "Size: %i byte(s)."
-msgstr "Taille: %i octet(s)."
+msgid "Size: %i bytes."
+msgstr "Taille: %i octets."
 
 #: libexif-gtk/gtk-exif-browser.c:492
 msgid "Load..."

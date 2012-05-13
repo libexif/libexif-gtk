@@ -30,7 +30,7 @@ msgstr "Невозможно прочесть миниатюрное изобр�
 
 #: libexif-gtk/gtk-exif-browser.c:416
 #, c-format
-msgid "Size: %i byte(s)."
+msgid "Size: %i bytes."
 msgstr "Размер: %i байт."
 
 #: libexif-gtk/gtk-exif-browser.c:485
