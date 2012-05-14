@@ -7,53 +7,54 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libexif-gtk 0.3.3\n"
 "Report-Msgid-Bugs-To: libexif-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2011-09-30 19:17+0200\n"
+"POT-Creation-Date: 2012-05-14 15:16-0700\n"
 "PO-Revision-Date: 2003-01-07 17:30+0100\n"
 "Last-Translator: Valère Monseur <valere.monseur@ymail.com>\n"
 "Language-Team: \n"
-"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
 
 #: libexif-gtk/gtk-exif-browser.c:157
 msgid "Nothing selected."
 msgstr "Rien n'est sélectionné."
 
-#: libexif-gtk/gtk-exif-browser.c:405
+#: libexif-gtk/gtk-exif-browser.c:408
 msgid "No thumbnail available."
 msgstr "Pas de vignette disponible."
 
-#: libexif-gtk/gtk-exif-browser.c:413
-msgid "Could not parse thumbnail data."
-msgstr "Impossible de parcourir les données de la vignette."
+#: libexif-gtk/gtk-exif-browser.c:416
+#, fuzzy
+msgid "Corrupt thumbnail image."
+msgstr "Vignette corrompue."
 
-#: libexif-gtk/gtk-exif-browser.c:428
+#: libexif-gtk/gtk-exif-browser.c:431
 #, c-format
 msgid "Size: %i bytes."
 msgstr "Taille: %i octets."
 
-#: libexif-gtk/gtk-exif-browser.c:492
+#: libexif-gtk/gtk-exif-browser.c:495
 msgid "Load..."
 msgstr "Charger..."
 
-#: libexif-gtk/gtk-exif-browser.c:531
+#: libexif-gtk/gtk-exif-browser.c:534
 msgid "Save As..."
 msgstr "Enregistrer sous..."
 
-#: libexif-gtk/gtk-exif-browser.c:589
+#: libexif-gtk/gtk-exif-browser.c:592
 msgid "Thumbnail"
 msgstr "Vignette"
 
-#: libexif-gtk/gtk-exif-browser.c:606
+#: libexif-gtk/gtk-exif-browser.c:609
 msgid "Load"
 msgstr "Charger"
 
-#: libexif-gtk/gtk-exif-browser.c:611
+#: libexif-gtk/gtk-exif-browser.c:614
 msgid "Save"
 msgstr "Enregistrer"
 
-#: libexif-gtk/gtk-exif-browser.c:616
+#: libexif-gtk/gtk-exif-browser.c:619
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -73,26 +74,26 @@ msgstr "Ajouter"
 msgid "Remove"
 msgstr "Supprimer"
 
-#: libexif-gtk/gtk-exif-entry-copyright.c:164
+#: libexif-gtk/gtk-exif-entry-copyright.c:167
 msgid "Photographer:"
 msgstr "Photographe:"
 
-#: libexif-gtk/gtk-exif-entry-copyright.c:170
+#: libexif-gtk/gtk-exif-entry-copyright.c:173
 msgid "Editor:"
 msgstr "Editeur:"
 
-#: libexif-gtk/gtk-exif-entry-date.c:219
+#: libexif-gtk/gtk-exif-entry-date.c:222
 msgid "Time:"
 msgstr "Heure:"
 
-#: libexif-gtk/gtk-exif-entry-number.c:245
-#: libexif-gtk/gtk-exif-entry-rational.c:248
+#: libexif-gtk/gtk-exif-entry-number.c:248
+#: libexif-gtk/gtk-exif-entry-rational.c:251
 #, c-format
 msgid "Value %i:"
 msgstr "Valeur %i:"
 
-#: libexif-gtk/gtk-exif-entry-number.c:247
-#: libexif-gtk/gtk-exif-entry-rational.c:250
+#: libexif-gtk/gtk-exif-entry-number.c:250
+#: libexif-gtk/gtk-exif-entry-rational.c:253
 msgid "Value:"
 msgstr "Valeur:"
 
@@ -268,74 +269,74 @@ msgid "Action program (biased toward fast shutter speed)"
 msgstr "Programme action (vitesse d'obturation élevée)"
 
 #: libexif-gtk/gtk-exif-entry-option.c:220
-msgid "Portrait mode (for closeup photos with the background out of focus"
-msgstr "Mode portrait (photos en gros plan avec arrière-plan flou"
+msgid "Portrait mode (for closeup photos with the background out of focus)"
+msgstr "Mode portrait (photos en gros plan avec arrière-plan flou)"
 
 #: libexif-gtk/gtk-exif-entry-option.c:222
-msgid "Landscape mode (for landscape photos with the background in focus"
-msgstr "Mode paysage (paysages avec arrière-plan net"
+msgid "Landscape mode (for landscape photos with the background in focus)"
+msgstr "Mode paysage (paysages avec arrière-plan net)"
 
-#: libexif-gtk/gtk-exif-entry-option.c:248
+#: libexif-gtk/gtk-exif-entry-option.c:251
 msgid "Sensing method:"
 msgstr "Méthode de détection:"
 
-#: libexif-gtk/gtk-exif-entry-option.c:252
+#: libexif-gtk/gtk-exif-entry-option.c:255
 msgid "0-th row - 0-th column:"
 msgstr "0-ième ligne - 0-ième colonne:"
 
-#: libexif-gtk/gtk-exif-entry-option.c:256
+#: libexif-gtk/gtk-exif-entry-option.c:259
 msgid "Light source:"
 msgstr "Source de lumière:"
 
-#: libexif-gtk/gtk-exif-entry-option.c:260
+#: libexif-gtk/gtk-exif-entry-option.c:263
 msgid "Metering mode:"
 msgstr "Mode de mesure:"
 
-#: libexif-gtk/gtk-exif-entry-option.c:264
+#: libexif-gtk/gtk-exif-entry-option.c:267
 msgid "Compression scheme:"
 msgstr "Schéma de compression:"
 
-#: libexif-gtk/gtk-exif-entry-option.c:268
+#: libexif-gtk/gtk-exif-entry-option.c:271
 msgid "YCbCr Positioning:"
 msgstr "Positionnement YCbCr:"
 
-#: libexif-gtk/gtk-exif-entry-option.c:272
+#: libexif-gtk/gtk-exif-entry-option.c:275
 msgid "Exposure Program:"
 msgstr "Programme d'exposition:"
 
-#: libexif-gtk/gtk-exif-entry-resolution.c:401
+#: libexif-gtk/gtk-exif-entry-resolution.c:404
 msgid "Focal Plane Resolution"
 msgstr "Résolution du plan focal"
 
-#: libexif-gtk/gtk-exif-entry-resolution.c:402
+#: libexif-gtk/gtk-exif-entry-resolution.c:405
 msgid "The number of pixels on the camera focal plane."
 msgstr "Nombre de pixels du plan focal de l'appareil."
 
-#: libexif-gtk/gtk-exif-entry-resolution.c:408
+#: libexif-gtk/gtk-exif-entry-resolution.c:411
 msgid "Resolution"
 msgstr "Résolution"
 
-#: libexif-gtk/gtk-exif-entry-resolution.c:409
+#: libexif-gtk/gtk-exif-entry-resolution.c:412
 msgid "The number of pixels per unit."
 msgstr "Nombre de pixels par unité."
 
-#: libexif-gtk/gtk-exif-entry-resolution.c:420
+#: libexif-gtk/gtk-exif-entry-resolution.c:423
 msgid "Image width direction:"
 msgstr "Largeur de l'image:"
 
-#: libexif-gtk/gtk-exif-entry-resolution.c:456
+#: libexif-gtk/gtk-exif-entry-resolution.c:459
 msgid "Image height direction:"
 msgstr "Hauteur de l'image:"
 
-#: libexif-gtk/gtk-exif-entry-resolution.c:492
+#: libexif-gtk/gtk-exif-entry-resolution.c:495
 msgid "Unit:"
 msgstr "Unité:"
 
-#: libexif-gtk/gtk-exif-entry-resolution.c:504
+#: libexif-gtk/gtk-exif-entry-resolution.c:507
 msgid "Centimeter"
 msgstr "Centimètre"
 
-#: libexif-gtk/gtk-exif-entry-resolution.c:508
+#: libexif-gtk/gtk-exif-entry-resolution.c:511
 msgid "Inch"
 msgstr "Pouce"
 
@@ -355,7 +356,7 @@ msgstr "Unicode"
 msgid "Undefined"
 msgstr "Non défini"
 
-#: libexif-gtk/gtk-exif-entry-user-comment.c:258
+#: libexif-gtk/gtk-exif-entry-user-comment.c:261
 msgid "Character Code:"
 msgstr "Code de charactère:"
 
@@ -379,6 +380,9 @@ msgstr "Version 2.21 du format EXIF"
 msgid "FlashPix Format Version 1.0"
 msgstr "Version 1.0 du format FlashPix"
 
-#: libexif-gtk/gtk-exif-entry-version.c:269
+#: libexif-gtk/gtk-exif-entry-version.c:272
 msgid "Version:"
 msgstr "Version:"
+
+#~ msgid "Could not parse thumbnail data."
+#~ msgstr "Impossible de parcourir les données de la vignette."

@@ -413,8 +413,8 @@ gtk_exif_browser_show_thumbnail (GtkExifBrowser *b)
 		loader = gdk_pixbuf_loader_new ();
 		if (!gdk_pixbuf_loader_write (loader,
 			b->priv->data->data, b->priv->data->size, NULL)) {
-			b->priv->thumb = gtk_label_new (_("Could not parse "
-							"thumbnail data."));
+			b->priv->thumb = gtk_label_new (_("Corrupt thumbnail "
+							"image."));
 		} else {
 			gdk_pixbuf_loader_close (loader, NULL);
 			image = gtk_image_new_from_pixbuf (

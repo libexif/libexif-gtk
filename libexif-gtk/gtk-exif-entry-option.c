@@ -218,9 +218,9 @@ static GtkOptions options_exposure_program[] = {
 	{5, N_("Creative program (biased toward depth of field)")},
 	{6, N_("Action program (biased toward fast shutter speed)")},
 	{7, N_("Portrait mode (for closeup photos with the "
-	       "background out of focus")},
+	       "background out of focus)")},
 	{8, N_("Landscape mode (for landscape photos with the "
-	       "background in focus")},
+	       "background in focus)")},
 	{0, NULL}
 };
 
