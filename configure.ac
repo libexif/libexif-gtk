@@ -60,7 +60,7 @@ dnl GP_CONFIG_MSG([Features])
 # ---------------------------------------------------------------------------
 # i18n support
 # ---------------------------------------------------------------------------
-ALL_LINGUAS="es fr pl ru"
+ALL_LINGUAS="de es fr pl ru"
 AM_PO_SUBDIRS
 GP_GETTEXT_HACK([${PACKAGE}-${LIBEXIF_GTK_CURRENT}],
                 [Lutz Müller and others])
