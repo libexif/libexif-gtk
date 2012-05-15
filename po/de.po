@@ -257,11 +257,11 @@ msgstr "Normalprogramm"
 
 #: libexif-gtk/gtk-exif-entry-option.c:216
 msgid "Aperture priority"
-msgstr "optimiert nach Blende"
+msgstr "Optimiert nach Blende"
 
 #: libexif-gtk/gtk-exif-entry-option.c:217
 msgid "Shutter priority"
-msgstr "optimiert nach Belichtungszeit"
+msgstr "Optimiert nach Belichtungszeit"
 
 #: libexif-gtk/gtk-exif-entry-option.c:218
 msgid "Creative program (biased toward depth of field)"
@@ -385,4 +385,4 @@ msgstr "FlashPix Format Version 1.0"
 
 #: libexif-gtk/gtk-exif-entry-version.c:272
 msgid "Version:"
-msgstr "Version"
+msgstr "Version:"
