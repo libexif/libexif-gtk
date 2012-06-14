@@ -1,8 +1,12 @@
+2012-06-14  Dan Fandrich <dan@coneharvesters.com>
+
+	* encoding of source files set to utf8 (somehow this was missed
+	  in the last change)
+
 2012-05-08  Valere Monseur <valere.monseur@ymail.com>
 
 	* libexif-gtk made compatible for both gtk2 (min version: 2.4) and gtk3
 	* added --with-gtk3 option in configure.ac (default is gtk2)
-	* encoding of source files set to utf8
 	* encoding of ru translation file set to utf8
 	* fixed bugs linked to gtk_notebook_remove_page action
 	* fixed internationalisation bugs in gtk-options.c & configure.ac
@@ -21,7 +25,7 @@
 2009-09-24  Lutz Mueller <lutz@users.sourceforge.net>
 
 	* libexif-gtk/gtk-exif-entry-user-comment.c: Complete information
-          about copyright. Fixes #1673969.
+	  about copyright. Fixes #1673969.
 
 2009-09-23  Dan Fandrich <dan@coneharvesters.com>
 
@@ -119,7 +123,7 @@
 
 2002-06-14  Lutz Müller <lutz@users.sourceforge.net>
 
-        * configure.in: Correct -version-info.
+	* configure.in: Correct -version-info.
 
 2002-04-30  Lutz Müller <lutz@users.sourceforge.net>
 

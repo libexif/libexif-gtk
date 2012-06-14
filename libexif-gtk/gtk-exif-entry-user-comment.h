@@ -1,6 +1,6 @@
 /* gtk-exif-entry-user-comment.h
  *
- * UserComment © 2001 Lutz Müller <lutz@users.sourceforge.net>
+ * UserComment Â© 2001 Lutz MÃ¼ller <lutz@users.sourceforge.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
