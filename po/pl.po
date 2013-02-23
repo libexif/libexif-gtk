@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: exif 0.6.20\n"
 "Report-Msgid-Bugs-To: libexif-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-05-14 15:16-0700\n"
+"POT-Creation-Date: 2013-02-23 20:11+0100\n"
 "PO-Revision-Date: 2012-05-15 23:50+0200\n"
 "Last-Translator: Jakub Bogusz <qboosh@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pl\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
@@ -89,7 +89,7 @@ msgstr "Czas:"
 
 #: libexif-gtk/gtk-exif-entry-number.c:248
 #: libexif-gtk/gtk-exif-entry-rational.c:251
-#, fuzzy, c-format
+#, c-format
 msgid "Value %i:"
 msgstr "Wartość %i:"
 
@@ -280,7 +280,7 @@ msgstr "Tryb pejzażowy (do krajobrazów z tłem w ognisku)"
 #: libexif-gtk/gtk-exif-entry-option.c:251
 #, fuzzy
 msgid "Sensing method:"
-msgstr "Rodzaj czujnika:"
+msgstr "Metoda pomiaru:"
 
 #: libexif-gtk/gtk-exif-entry-option.c:255
 msgid "0-th row - 0-th column:"
