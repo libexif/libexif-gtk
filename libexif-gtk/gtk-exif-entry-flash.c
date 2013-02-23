@@ -127,8 +127,8 @@ gtk_exif_entry_flash_new (ExifEntry *e)
 	entry->priv->entry = e;
 	exif_entry_ref (e);
 	gtk_exif_entry_construct (GTK_EXIF_ENTRY (entry),
-		exif_tag_get_title (e->tag),
-		exif_tag_get_description (e->tag));
+		exif_tag_get_title_in_ifd (e->tag, exif_content_get_ifd(e->parent)),
+		exif_tag_get_description_in_ifd (e->tag, exif_content_get_ifd(e->parent)));
 
 	check = gtk_check_button_new_with_label ("Flash fired");
 	gtk_widget_show (check);

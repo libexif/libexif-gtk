@@ -120,7 +120,8 @@ gtk_exif_tree_item_set_entry (GtkExifTreeItem *item, ExifEntry *entry)
 	item->entry = entry;
 	exif_entry_ref (entry);
 
-	label = gtk_label_new (exif_tag_get_name (entry->tag));
+	label = gtk_label_new (
+		  exif_tag_get_name_in_ifd (entry->tag, exif_content_get_ifd(entry->parent));
 	gtk_widget_show (label);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);

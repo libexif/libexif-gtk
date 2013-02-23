@@ -276,6 +276,8 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event,
 		gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), smenu);
 
 		/* Create a sorted list of tags. */
+		/* UGLY: libexif does not provide API for "all known tags". */
+		/* FIXME: List should offer only tags legal in current IFD */
 		t = n = 0;
 		memset (tags, 0, sizeof (GtkOptions) * LIST_SIZE);
 		while ((t < 0xffff) && (n < LIST_SIZE - 2)) {
@@ -287,6 +289,15 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event,
 			}
 			t++;
 		}
+		/* These two tags are the only two known non-unique IFD-specific tags. */
+		name = exif_tag_get_name_in_ifd (EXIF_TAG_GPS_LATITUDE_REF, EXIF_IFD_GPS);
+		tags[n].option = EXIF_TAG_GPS_LATITUDE_REF;
+		tags[n].name = name;
+		n++;
+		name = exif_tag_get_name_in_ifd (EXIF_TAG_GPS_LATITUDE, EXIF_IFD_GPS);
+		tags[n].option = EXIF_TAG_GPS_LATITUDE;
+		tags[n].name = name;
+		n++;
 		gtk_options_sort (tags);
 		g_assert (n > 1);
 
@@ -446,7 +457,7 @@ gtk_exif_content_list_add_entry (GtkExifContentList *list, ExifEntry *e)
 
 	gtk_list_store_append (list->priv->store, &iter);
 	gtk_list_store_set (GTK_LIST_STORE (list->priv->store), &iter,
-			NAME_COLUMN, exif_tag_get_name (e->tag),
+ 			NAME_COLUMN, exif_tag_get_name_in_ifd (e->tag, exif_content_get_ifd(e->parent)),
 			VALUE_COLUMN, exif_entry_get_value (e, s, sizeof (s)),
 			ENTRY_COLUMN, e, -1);
 	g_signal_emit (list, signals[ENTRY_ADDED], 0, e);
