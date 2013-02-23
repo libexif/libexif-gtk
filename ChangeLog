@@ -1,3 +1,10 @@
+2013-02-23  Dan Fandrich <dan@coneharvesters.com>
+
+	* Removed use of broken-by-design exif_tag_get_name(). This fixes
+	  display of GPSLatitude and GPSLatitudeRef tag names. Patch
+	  by Stanislav Brabec (bug #2014281)
+	* Changed a few fuzzy translations and removed the fuzzyiness
+
 2012-06-14  Dan Fandrich <dan@coneharvesters.com>
 
 	* encoding of source files set to utf8 (somehow this was missed

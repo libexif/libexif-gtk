@@ -17,7 +17,7 @@ NOTE TO PACKAGERS
 =================
 
 The default is to build the gtk2 version of the library (minimum gtk2
-version: 2.4).  The configure option --with-gtk3 allows to build the gtk3
+version: 2.4).  The configure option --with-gtk3 allows building with the gtk3
 version of the library.
 
 NOTE TO DEVELOPERS

@@ -1,7 +1,7 @@
-New in 0.3.6cvs3:
-  * New translation: de
-  * Updated translations: fr
-  * Bug fixes: #1643242: need uninstalled.pc file for libexif-gtk
+New in 0.4.0:
+  * New translations: de, pl
+  * Updated translations: es, fr, ru
+  * Bug fixes: #1643242: added libexif-gtk-uninstalled.pc file
   * Proper setting of gettext parameters
   * libexif-gtk made compatible for both gtk2 (min version: 2.4) and gtk3
   * added --with-gtk3 option in configure.ac (default is gtk2)
@@ -9,3 +9,4 @@ New in 0.3.6cvs3:
   * encoding of ru translation file set to utf-8
   * fixed internationalisation bugs in gtk-options.c & configure.ac
   * fixed bugs linked to gtk_notebook_remove_page action
+  * Bug fixes: #2014281: fix display of GPSLatitude and GPSLatitudeRef names
