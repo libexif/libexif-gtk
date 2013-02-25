@@ -7,26 +7,26 @@ msgstr ""
 "Project-Id-Version: libexif-gtk 0.3.6cvs3\n"
 "Report-Msgid-Bugs-To: libexif-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2013-02-23 20:11+0100\n"
-"PO-Revision-Date: 2012-05-14 23:40+0200\n"
-"Last-Translator: Fabian Mandelbaum <fabman@mandrakesoft.com>\n"
+"PO-Revision-Date: 2013-02-24 09:36+0100\n"
+"Last-Translator: Fabián Mandelbaum <fmandelbaum@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.5\n"
 
 #: libexif-gtk/gtk-exif-browser.c:157
 msgid "Nothing selected."
-msgstr ""
+msgstr "Nada seleccionado."
 
 #: libexif-gtk/gtk-exif-browser.c:408
 msgid "No thumbnail available."
 msgstr "Sin diapositiva disponible."
 
 #: libexif-gtk/gtk-exif-browser.c:416
-#, fuzzy
 msgid "Corrupt thumbnail image."
-msgstr "Imagen de la diapositiva corrupto."
+msgstr "Diapositiva corrupta."
 
 #: libexif-gtk/gtk-exif-browser.c:431
 #, c-format
@@ -35,11 +35,11 @@ msgstr "Tamaño: %i bytes."
 
 #: libexif-gtk/gtk-exif-browser.c:495
 msgid "Load..."
-msgstr "Cargar..."
+msgstr "Cargar…"
 
 #: libexif-gtk/gtk-exif-browser.c:534
 msgid "Save As..."
-msgstr "Guardar como..."
+msgstr "Guardar como…"
 
 #: libexif-gtk/gtk-exif-browser.c:592
 msgid "Thumbnail"
@@ -67,34 +67,34 @@ msgstr "Valor"
 
 #: libexif-gtk/gtk-exif-content-list.c:272
 msgid "Add"
-msgstr ""
+msgstr "Añadir"
 
 #: libexif-gtk/gtk-exif-content-list.c:348
 msgid "Remove"
-msgstr ""
+msgstr "Quitar"
 
 #: libexif-gtk/gtk-exif-entry-copyright.c:167
 msgid "Photographer:"
-msgstr ""
+msgstr "Fotógrafo:"
 
 #: libexif-gtk/gtk-exif-entry-copyright.c:173
 msgid "Editor:"
-msgstr ""
+msgstr "Editor:"
 
 #: libexif-gtk/gtk-exif-entry-date.c:222
 msgid "Time:"
-msgstr ""
+msgstr "Fecha:"
 
 #: libexif-gtk/gtk-exif-entry-number.c:248
 #: libexif-gtk/gtk-exif-entry-rational.c:251
 #, c-format
 msgid "Value %i:"
-msgstr ""
+msgstr "Valor %i:"
 
 #: libexif-gtk/gtk-exif-entry-number.c:250
 #: libexif-gtk/gtk-exif-entry-rational.c:253
 msgid "Value:"
-msgstr ""
+msgstr "Valor:"
 
 #: libexif-gtk/gtk-exif-entry-option.c:151
 #: libexif-gtk/gtk-exif-entry-option.c:213
@@ -148,7 +148,7 @@ msgstr "Promedio Ponderado en el Centro"
 
 #: libexif-gtk/gtk-exif-entry-option.c:171
 msgid "Spot"
-msgstr "Lugar"
+msgstr "Localizado"
 
 #: libexif-gtk/gtk-exif-entry-option.c:172
 msgid "Multi Spot"
@@ -177,7 +177,7 @@ msgstr "Fluorescente"
 
 #: libexif-gtk/gtk-exif-entry-option.c:183
 msgid "Tungsten"
-msgstr "Incandescente"
+msgstr "Tungsteno"
 
 #: libexif-gtk/gtk-exif-entry-option.c:184
 msgid "Standard light A"
@@ -265,7 +265,7 @@ msgstr "Programa creativo (orientado a la profundidad del campo)"
 
 #: libexif-gtk/gtk-exif-entry-option.c:219
 msgid "Action program (biased toward fast shutter speed)"
-msgstr ""
+msgstr "Programa de acción (orientado a una obturación rápida)"
 
 #: libexif-gtk/gtk-exif-entry-option.c:220
 msgid "Portrait mode (for closeup photos with the background out of focus)"
@@ -277,59 +277,59 @@ msgstr "Modo paisaje (para fotos de paisaje con el fondo en foco)"
 
 #: libexif-gtk/gtk-exif-entry-option.c:251
 msgid "Sensing method:"
-msgstr ""
+msgstr "Método de sensado:"
 
 #: libexif-gtk/gtk-exif-entry-option.c:255
 msgid "0-th row - 0-th column:"
-msgstr ""
+msgstr "fila 0 - columna 0:"
 
 #: libexif-gtk/gtk-exif-entry-option.c:259
 msgid "Light source:"
-msgstr ""
+msgstr "Fuente de luz:"
 
 #: libexif-gtk/gtk-exif-entry-option.c:263
 msgid "Metering mode:"
-msgstr ""
+msgstr "Módo de medición:"
 
 #: libexif-gtk/gtk-exif-entry-option.c:267
 msgid "Compression scheme:"
-msgstr ""
+msgstr "Esquema de compresión:"
 
 #: libexif-gtk/gtk-exif-entry-option.c:271
 msgid "YCbCr Positioning:"
-msgstr ""
+msgstr "Posicionamiento YCbCr:"
 
 #: libexif-gtk/gtk-exif-entry-option.c:275
 msgid "Exposure Program:"
-msgstr ""
+msgstr "Programa de exposición:"
 
 #: libexif-gtk/gtk-exif-entry-resolution.c:404
 msgid "Focal Plane Resolution"
-msgstr ""
+msgstr "Resolución del plano focal"
 
 #: libexif-gtk/gtk-exif-entry-resolution.c:405
 msgid "The number of pixels on the camera focal plane."
-msgstr ""
+msgstr "La cantidad de pixeles en el plano focal de la cámara."
 
 #: libexif-gtk/gtk-exif-entry-resolution.c:411
 msgid "Resolution"
-msgstr ""
+msgstr "Resolución"
 
 #: libexif-gtk/gtk-exif-entry-resolution.c:412
 msgid "The number of pixels per unit."
-msgstr ""
+msgstr "La cantidad de pixeles por unidad."
 
 #: libexif-gtk/gtk-exif-entry-resolution.c:423
 msgid "Image width direction:"
-msgstr ""
+msgstr "Dirección del ancho de la imagen:"
 
 #: libexif-gtk/gtk-exif-entry-resolution.c:459
 msgid "Image height direction:"
-msgstr ""
+msgstr "Dirección del alto de la imagen:"
 
 #: libexif-gtk/gtk-exif-entry-resolution.c:495
 msgid "Unit:"
-msgstr ""
+msgstr "Unidad:"
 
 #: libexif-gtk/gtk-exif-entry-resolution.c:507
 msgid "Centimeter"
@@ -341,15 +341,15 @@ msgstr "Pulgada"
 
 #: libexif-gtk/gtk-exif-entry-user-comment.c:224
 msgid "ASCII"
-msgstr ""
+msgstr "ASCII"
 
 #: libexif-gtk/gtk-exif-entry-user-comment.c:225
 msgid "JIS"
-msgstr ""
+msgstr "JIS"
 
 #: libexif-gtk/gtk-exif-entry-user-comment.c:226
 msgid "Unicode"
-msgstr ""
+msgstr "Unicode"
 
 #: libexif-gtk/gtk-exif-entry-user-comment.c:227
 msgid "Undefined"
@@ -357,27 +357,27 @@ msgstr "Indefinido"
 
 #: libexif-gtk/gtk-exif-entry-user-comment.c:261
 msgid "Character Code:"
-msgstr ""
+msgstr "Código de caracteres:"
 
 #: libexif-gtk/gtk-exif-entry-version.c:134
 msgid "Exif Format Version 2.0"
-msgstr ""
+msgstr "Formato EXIF versión 2.0"
 
 #: libexif-gtk/gtk-exif-entry-version.c:135
 msgid "Exif Format Version 2.1"
-msgstr ""
+msgstr "Formato EXIF versión 2.1"
 
 #: libexif-gtk/gtk-exif-entry-version.c:136
 msgid "Exif Format Version 2.2"
-msgstr ""
+msgstr "Formato EXIF versión 2.2"
 
 #: libexif-gtk/gtk-exif-entry-version.c:137
 msgid "Exif Format Version 2.21"
-msgstr ""
+msgstr "Formato EXIF versión 2.21"
 
 #: libexif-gtk/gtk-exif-entry-version.c:142
 msgid "FlashPix Format Version 1.0"
-msgstr ""
+msgstr "Formato FlashPix versión 1.0"
 
 #: libexif-gtk/gtk-exif-entry-version.c:272
 msgid "Version:"

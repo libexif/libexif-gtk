@@ -1,13 +1,13 @@
 # Polish translation for libexif-gtk.
 # This file is distributed under the same license as the libexif-gtk package.
-# Jakub Bogusz <qboosh@pld-linux.org>, 2005.
+# Jakub Bogusz <qboosh@pld-linux.org>, 2005-2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: exif 0.6.20\n"
 "Report-Msgid-Bugs-To: libexif-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2013-02-23 20:11+0100\n"
-"PO-Revision-Date: 2012-05-15 23:50+0200\n"
+"PO-Revision-Date: 2013-02-24 11:49+0100\n"
 "Last-Translator: Jakub Bogusz <qboosh@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "Language: pl\n"
@@ -26,9 +26,8 @@ msgid "No thumbnail available."
 msgstr "Miniaturka niedostępna."
 
 #: libexif-gtk/gtk-exif-browser.c:416
-#, fuzzy
 msgid "Corrupt thumbnail image."
-msgstr "Miniaturka niedostępna."
+msgstr "Uszkodzona miniaturka."
 
 #: libexif-gtk/gtk-exif-browser.c:431
 #, c-format
@@ -69,19 +68,19 @@ msgstr "Wartość"
 
 #: libexif-gtk/gtk-exif-content-list.c:272
 msgid "Add"
-msgstr ""
+msgstr "Dodaj"
 
 #: libexif-gtk/gtk-exif-content-list.c:348
 msgid "Remove"
-msgstr ""
+msgstr "Usuń"
 
 #: libexif-gtk/gtk-exif-entry-copyright.c:167
 msgid "Photographer:"
-msgstr ""
+msgstr "Fotograf:"
 
 #: libexif-gtk/gtk-exif-entry-copyright.c:173
 msgid "Editor:"
-msgstr ""
+msgstr "Wydawca:"
 
 #: libexif-gtk/gtk-exif-entry-date.c:222
 msgid "Time:"
@@ -146,7 +145,7 @@ msgstr "Średnia"
 
 #: libexif-gtk/gtk-exif-entry-option.c:170
 msgid "Center-Weighted Average"
-msgstr ""
+msgstr "Średnia centralnie ważona"
 
 #: libexif-gtk/gtk-exif-entry-option.c:171
 msgid "Spot"
@@ -154,7 +153,7 @@ msgstr "Punktowy"
 
 #: libexif-gtk/gtk-exif-entry-option.c:172
 msgid "Multi Spot"
-msgstr ""
+msgstr "Wielopunktowy"
 
 #: libexif-gtk/gtk-exif-entry-option.c:173
 msgid "Pattern"
@@ -267,7 +266,7 @@ msgstr "Program twórczy (nakierowany na głębię obrazu)"
 
 #: libexif-gtk/gtk-exif-entry-option.c:219
 msgid "Action program (biased toward fast shutter speed)"
-msgstr ""
+msgstr "Program akcji (nakierowany na szybkość migawki)"
 
 #: libexif-gtk/gtk-exif-entry-option.c:220
 msgid "Portrait mode (for closeup photos with the background out of focus)"
@@ -278,13 +277,12 @@ msgid "Landscape mode (for landscape photos with the background in focus)"
 msgstr "Tryb pejzażowy (do krajobrazów z tłem w ognisku)"
 
 #: libexif-gtk/gtk-exif-entry-option.c:251
-#, fuzzy
 msgid "Sensing method:"
 msgstr "Metoda pomiaru:"
 
 #: libexif-gtk/gtk-exif-entry-option.c:255
 msgid "0-th row - 0-th column:"
-msgstr ""
+msgstr "wiersz 0. - kolumna 0.:"
 
 #: libexif-gtk/gtk-exif-entry-option.c:259
 msgid "Light source:"
@@ -292,47 +290,45 @@ msgstr "Źródło światła"
 
 #: libexif-gtk/gtk-exif-entry-option.c:263
 msgid "Metering mode:"
-msgstr ""
+msgstr "Tryb pomiaru:"
 
 #: libexif-gtk/gtk-exif-entry-option.c:267
 msgid "Compression scheme:"
-msgstr ""
+msgstr "Schemat kompresji:"
 
 #: libexif-gtk/gtk-exif-entry-option.c:271
 msgid "YCbCr Positioning:"
-msgstr ""
+msgstr "Pozycja YCbCr:"
 
 #: libexif-gtk/gtk-exif-entry-option.c:275
 msgid "Exposure Program:"
-msgstr ""
+msgstr "Program ekspozycji:"
 
 #: libexif-gtk/gtk-exif-entry-resolution.c:404
 msgid "Focal Plane Resolution"
-msgstr ""
+msgstr "Rozdzielczość płaszczyzny odwzorowania"
 
 #: libexif-gtk/gtk-exif-entry-resolution.c:405
 msgid "The number of pixels on the camera focal plane."
-msgstr ""
+msgstr "Liczba pikseli na płaszczyźnie odwzorowania aparatu."
 
 #: libexif-gtk/gtk-exif-entry-resolution.c:411
-#, fuzzy
 msgid "Resolution"
 msgstr "Rozdzielczość"
 
 #: libexif-gtk/gtk-exif-entry-resolution.c:412
 msgid "The number of pixels per unit."
-msgstr ""
+msgstr "Liczba pikseli na jednostkę."
 
 #: libexif-gtk/gtk-exif-entry-resolution.c:423
 msgid "Image width direction:"
-msgstr ""
+msgstr "Kierunek szerokości obrazu:"
 
 #: libexif-gtk/gtk-exif-entry-resolution.c:459
 msgid "Image height direction:"
-msgstr ""
+msgstr "Kierunek wysokości obrazu:"
 
 #: libexif-gtk/gtk-exif-entry-resolution.c:495
-#, fuzzy
 msgid "Unit:"
 msgstr "Jednostka:"
 
@@ -350,11 +346,11 @@ msgstr "ASCII"
 
 #: libexif-gtk/gtk-exif-entry-user-comment.c:225
 msgid "JIS"
-msgstr ""
+msgstr "JIS"
 
 #: libexif-gtk/gtk-exif-entry-user-comment.c:226
 msgid "Unicode"
-msgstr ""
+msgstr "Unicode"
 
 #: libexif-gtk/gtk-exif-entry-user-comment.c:227
 msgid "Undefined"
@@ -362,29 +358,28 @@ msgstr "Nieokreślony"
 
 #: libexif-gtk/gtk-exif-entry-user-comment.c:261
 msgid "Character Code:"
-msgstr ""
+msgstr "Kod znaku:"
 
 #: libexif-gtk/gtk-exif-entry-version.c:134
 msgid "Exif Format Version 2.0"
-msgstr ""
+msgstr "Format Exif wersja 2.0"
 
 #: libexif-gtk/gtk-exif-entry-version.c:135
 msgid "Exif Format Version 2.1"
-msgstr ""
+msgstr "Format Exif wersja 2.1"
 
 #: libexif-gtk/gtk-exif-entry-version.c:136
 msgid "Exif Format Version 2.2"
-msgstr ""
+msgstr "Format Exif wersja 2.2"
 
 #: libexif-gtk/gtk-exif-entry-version.c:137
 msgid "Exif Format Version 2.21"
-msgstr ""
+msgstr "Format Exif wersja 2.21"
 
 #: libexif-gtk/gtk-exif-entry-version.c:142
 msgid "FlashPix Format Version 1.0"
-msgstr ""
+msgstr "Format FlashPix wersja 1.0"
 
 #: libexif-gtk/gtk-exif-entry-version.c:272
-#, fuzzy
 msgid "Version:"
 msgstr "Wersja:"
