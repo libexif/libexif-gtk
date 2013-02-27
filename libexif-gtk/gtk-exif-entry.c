@@ -53,7 +53,8 @@ gtk_exif_entry_destroy (GtkObject *object)
 	GtkExifEntry *entry = GTK_EXIF_ENTRY (object);
 #endif
 
-	entry = NULL;
+	/* Nothing to free here */
+	(void)entry;
 
 #if GTK_CHECK_VERSION(3,0,0)
 	GTK_WIDGET_CLASS (parent_class)->destroy (widget);
