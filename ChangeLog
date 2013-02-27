@@ -3,6 +3,7 @@
 	* tests/.cvsignore: ignore more stuff
 	* Makefile.am: Add both gtk pkgconfig templates to the tarball
 	* Added some more strings to translate that were missing
+	* fixed crash when viewing an enumerated tag with an unsupported value
 
 2013-02-25  Dan Fandrich <dan@coneharvesters.com>
 

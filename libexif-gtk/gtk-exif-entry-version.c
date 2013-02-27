@@ -172,6 +172,7 @@ static void
 gtk_exif_entry_version_load (GtkExifEntryVersion *entry)
 {
 	guint i;
+	gboolean found = FALSE;
 	GtkTreeIter iter;
 	GtkTreeModel *tm;
 
@@ -180,29 +181,34 @@ gtk_exif_entry_version_load (GtkExifEntryVersion *entry)
 	tm = gtk_combo_box_get_model (entry->priv->menu);
 	switch (entry->priv->entry->tag) {
 	case EXIF_TAG_EXIF_VERSION:
-		for (i = 0; exif_versions[i].data; i++)
+		for (i = 0; exif_versions[i].data; i++) {
 			if (!memcmp (exif_versions[i].data,
 				     entry->priv->entry->data, 4)) {
 				if (!gtk_tree_model_get_iter_from_option (tm,
 					exif_versions[i].version, &iter))
 					return;
+				found = TRUE;
 				break;
 			}
+		}
 		break;
 	case EXIF_TAG_FLASH_PIX_VERSION:
-		for (i = 0; flash_pix_versions[i].data; i++)
+		for (i = 0; flash_pix_versions[i].data; i++) {
 			if (!memcmp (flash_pix_versions[i].data,
 				     entry->priv->entry->data, 4)) {
 				if (!gtk_tree_model_get_iter_from_option (tm,
 					flash_pix_versions[i].version, &iter))
 					return;
+				found = TRUE;
 				break;
 			}
+		}
 		break;
 	default:
 		return;
 	}
-	gtk_combo_box_set_active_iter (entry->priv->menu, &iter);
+	if (found)
+		gtk_combo_box_set_active_iter (entry->priv->menu, &iter);
 }
 
 static void
