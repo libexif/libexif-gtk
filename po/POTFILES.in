@@ -4,6 +4,8 @@ libexif-gtk/gtk-exif-browser.c
 libexif-gtk/gtk-exif-content-list.c
 libexif-gtk/gtk-exif-entry-copyright.c
 libexif-gtk/gtk-exif-entry-date.c
+libexif-gtk/gtk-exif-entry-flash.c
+libexif-gtk/gtk-exif-entry-generic.c
 libexif-gtk/gtk-exif-entry-number.c
 libexif-gtk/gtk-exif-entry-option.c
 libexif-gtk/gtk-exif-entry-rational.c

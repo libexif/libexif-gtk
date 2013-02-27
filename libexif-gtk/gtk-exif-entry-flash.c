@@ -25,6 +25,25 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
+#ifdef ENABLE_NLS
+#  include <libintl.h>
+#  undef _
+#  define _(String) dgettext (GETTEXT_PACKAGE, String)
+#  ifdef gettext_noop
+#    define N_(String) gettext_noop (String)
+#  else
+#    define N_(String) (String)
+#  endif
+#else
+#  define textdomain(String) (String)
+#  define gettext(String) (String)
+#  define dgettext(Domain,Message) (Message)
+#  define dcgettext(Domain,Message,Type) (Message)
+#  define bindtextdomain(Domain,Directory) (Domain)
+#  define _(String) (String)
+#  define N_(String) (String)
+#endif
+
 struct _GtkExifEntryFlashPrivate {
 	ExifEntry *entry;
 
@@ -130,7 +149,7 @@ gtk_exif_entry_flash_new (ExifEntry *e)
 		exif_tag_get_title_in_ifd (e->tag, exif_content_get_ifd(e->parent)),
 		exif_tag_get_description_in_ifd (e->tag, exif_content_get_ifd(e->parent)));
 
-	check = gtk_check_button_new_with_label ("Flash fired");
+	check = gtk_check_button_new_with_label (_("Flash fired"));
 	gtk_widget_show (check);
 	gtk_box_pack_start (GTK_BOX (entry), check, FALSE, FALSE, 0);
 	if (e->data[0] & (1 << 0))
@@ -139,7 +158,7 @@ gtk_exif_entry_flash_new (ExifEntry *e)
 			    G_CALLBACK (on_value_changed), entry);
 	entry->priv->c = GTK_TOGGLE_BUTTON (check);
 
-	frame = gtk_frame_new ("Return light");
+	frame = gtk_frame_new (_("Return light"));
 	gtk_widget_show (frame);
 	gtk_box_pack_start (GTK_BOX (entry), frame, FALSE, FALSE, 0);
 	vbox = gtk_vbox_new (FALSE, 0);
@@ -147,8 +166,8 @@ gtk_exif_entry_flash_new (ExifEntry *e)
 	gtk_container_add (GTK_CONTAINER (frame), vbox);
 
 	/* No strobe return detection function */
-	radio = gtk_radio_button_new_with_label (NULL, "No strobe return "
-						 "detection function");
+	radio = gtk_radio_button_new_with_label (NULL, _("No strobe return "
+						 "detection function"));
 	gtk_widget_show (radio);
 	gtk_box_pack_start (GTK_BOX (vbox), radio, FALSE, FALSE, 0);
 	if (!(e->data[0] & (1 << 1)) && !(e->data[0] & (1 << 2)))
@@ -160,7 +179,7 @@ gtk_exif_entry_flash_new (ExifEntry *e)
 	/* Stobe return light not detected */
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio));
 	radio = gtk_radio_button_new_with_label (group,
-				"Strobe return light not detected");
+				_("Strobe return light not detected"));
 	gtk_widget_show (radio);
 	gtk_box_pack_start (GTK_BOX (vbox), radio, FALSE, FALSE, 0);
 	if (!(e->data[0] & (1 << 1)) && (e->data[0] & (1 << 2)))
@@ -172,7 +191,7 @@ gtk_exif_entry_flash_new (ExifEntry *e)
 	/* Strobe return light detected */
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio));
 	radio = gtk_radio_button_new_with_label (group,
-					"Strobe return light detected");
+					_("Strobe return light detected"));
 	gtk_widget_show (radio);
 	gtk_box_pack_start (GTK_BOX (vbox), radio, FALSE, FALSE, 0);
 	if ((e->data[0] & (1 << 1)) && (e->data[0] & (1 << 2)))

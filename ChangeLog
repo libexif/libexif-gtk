@@ -1,3 +1,9 @@
+2013-02-27  Dan Fandrich <dan@coneharvesters.com>
+
+	* tests/.cvsignore: ignore more stuff
+	* Makefile.am: Add both gtk pkgconfig templates to the tarball
+	* Added some more strings to translate that were missing
+
 2013-02-25  Dan Fandrich <dan@coneharvesters.com>
 
 	* po/es.po: Updated Spanish translation by Fabián Mandelbaum

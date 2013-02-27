@@ -25,6 +25,25 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
+#ifdef ENABLE_NLS
+#  include <libintl.h>
+#  undef _
+#  define _(String) dgettext (GETTEXT_PACKAGE, String)
+#  ifdef gettext_noop
+#    define N_(String) gettext_noop (String)
+#  else
+#    define N_(String) (String)
+#  endif
+#else
+#  define textdomain(String) (String)
+#  define gettext(String) (String)
+#  define dgettext(Domain,Message) (Message)
+#  define dcgettext(Domain,Message,Type) (Message)
+#  define bindtextdomain(Domain,Directory) (Domain)
+#  define _(String) (String)
+#  define N_(String) (String)
+#endif
+
 struct _GtkExifEntryGenericPrivate {
 	ExifEntry *entry;
 
@@ -117,7 +136,7 @@ gtk_exif_entry_generic_new (ExifEntry *e)
 	gtk_table_set_col_spacings (GTK_TABLE (table), 5);
 	gtk_table_set_row_spacings (GTK_TABLE (table), 5);
 
-	label = gtk_label_new ("Format:");
+	label = gtk_label_new (_("Format:"));
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, 0, 0, 0, 0);
 	txt = g_strdup_printf ("%i ('%s')", e->format,
@@ -127,7 +146,7 @@ gtk_exif_entry_generic_new (ExifEntry *e)
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1, 0, 0, 0, 0);
 
-	label = gtk_label_new ("Components:");
+	label = gtk_label_new (_("Components:"));
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, 0, 0, 0, 0);
 	txt = g_strdup_printf ("%i", (int) e->components);
@@ -136,7 +155,7 @@ gtk_exif_entry_generic_new (ExifEntry *e)
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2, 0, 0, 0, 0);
 
-	label = gtk_label_new ("Size:");
+	label = gtk_label_new (_("Size:"));
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3, 0, 0, 0, 0);
 	txt = g_strdup_printf ("%i", e->size);
@@ -145,7 +164,7 @@ gtk_exif_entry_generic_new (ExifEntry *e)
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3, 0, 0, 0, 0);
 
-	label = gtk_label_new ("Value:");
+	label = gtk_label_new (_("Value:"));
 	gtk_widget_show (label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4, 0, 0, 0, 0);
 	label = gtk_label_new (exif_entry_get_value (e, s, sizeof (s)));
