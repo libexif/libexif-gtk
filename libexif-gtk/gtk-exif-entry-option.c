@@ -181,7 +181,7 @@ static GtkOptions options_light_source[] = {
         {  1, N_("Daylight")},
         {  2, N_("Fluorescent")},
         {  3, N_("Tungsten")},
-        {  4, N_("Flash"), NULL}},
+        {  4, N_("Flash")},
         {  9, N_("Fine weather")},
         { 10, N_("Cloudy weather")},
         { 11, N_("Shade")},
