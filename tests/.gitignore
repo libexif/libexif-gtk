@@ -1,1 +1,7 @@
+Makefile
 Makefile.in
+.libs
+.deps
+test-libexif-gtk
+*.o
+*.lo
