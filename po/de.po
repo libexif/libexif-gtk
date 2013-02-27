@@ -1,5 +1,4 @@
-# translation of libexif-gtk-5.pot .po to German
-# German Translation
+# German Translation for libexif-gtk.
 # Copyright:
 # This file is distributed under the same license as the libexif-gtk package.
 #
@@ -11,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libexif-gtk 0.3.6\n"
 "Report-Msgid-Bugs-To: libexif-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-02-23 20:11+0100\n"
+"POT-Creation-Date: 2013-02-27 21:25+0100\n"
 "PO-Revision-Date: 2012-05-15 23:20+0200\n"
 "Last-Translator: Dan Fandrich <dan@coneharvesters.com>\n"
 "Language: de\n"
@@ -73,7 +72,7 @@ msgstr "Wert"
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: libexif-gtk/gtk-exif-content-list.c:348
+#: libexif-gtk/gtk-exif-content-list.c:359
 msgid "Remove"
 msgstr "Entfernen"
 
@@ -89,16 +88,49 @@ msgstr "Editor:"
 msgid "Time:"
 msgstr "Zeit:"
 
+#: libexif-gtk/gtk-exif-entry-flash.c:152
+msgid "Flash fired"
+msgstr "Blitz löste aus"
+
+#: libexif-gtk/gtk-exif-entry-flash.c:161
+msgid "Return light"
+msgstr "Reflektion"
+
+#: libexif-gtk/gtk-exif-entry-flash.c:169
+msgid "No strobe return detection function"
+msgstr "Keine Blitzreflektion-Funktion"
+
+#: libexif-gtk/gtk-exif-entry-flash.c:182
+msgid "Strobe return light not detected"
+msgstr "Blitzreflektion nicht erkannt"
+
+#: libexif-gtk/gtk-exif-entry-flash.c:194
+msgid "Strobe return light detected"
+msgstr "Blitzreflektion erkannt"
+
+#: libexif-gtk/gtk-exif-entry-generic.c:139
+msgid "Format:"
+msgstr "Format:"
+
+#: libexif-gtk/gtk-exif-entry-generic.c:149
+msgid "Components:"
+msgstr "Komponenten:"
+
+#: libexif-gtk/gtk-exif-entry-generic.c:158
+msgid "Size:"
+msgstr "Größe:"
+
+#: libexif-gtk/gtk-exif-entry-generic.c:167
+#: libexif-gtk/gtk-exif-entry-number.c:250
+#: libexif-gtk/gtk-exif-entry-rational.c:253
+msgid "Value:"
+msgstr "Wert:"
+
 #: libexif-gtk/gtk-exif-entry-number.c:248
 #: libexif-gtk/gtk-exif-entry-rational.c:251
 #, c-format
 msgid "Value %i:"
 msgstr "Wert %i:"
-
-#: libexif-gtk/gtk-exif-entry-number.c:250
-#: libexif-gtk/gtk-exif-entry-rational.c:253
-msgid "Value:"
-msgstr "Wert:"
 
 #: libexif-gtk/gtk-exif-entry-option.c:151
 #: libexif-gtk/gtk-exif-entry-option.c:213
@@ -209,35 +241,35 @@ msgstr "D75"
 
 #: libexif-gtk/gtk-exif-entry-option.c:195
 msgid "top - left"
-msgstr "Oben - Links"
+msgstr "oben - links"
 
 #: libexif-gtk/gtk-exif-entry-option.c:196
 msgid "top - right"
-msgstr "Oben - Rechts"
+msgstr "oben - rechts"
 
 #: libexif-gtk/gtk-exif-entry-option.c:197
 msgid "bottom - right"
-msgstr "Unten - Rechts"
+msgstr "unten - rechts"
 
 #: libexif-gtk/gtk-exif-entry-option.c:198
 msgid "bottom - left"
-msgstr "Unten - Links"
+msgstr "unten - links"
 
 #: libexif-gtk/gtk-exif-entry-option.c:199
 msgid "left - top"
-msgstr "Links - Oben"
+msgstr "links - oben"
 
 #: libexif-gtk/gtk-exif-entry-option.c:200
 msgid "right - top"
-msgstr "Rechts - Oben"
+msgstr "rechts - oben"
 
 #: libexif-gtk/gtk-exif-entry-option.c:201
 msgid "right - bottom"
-msgstr "Rechts - Unten"
+msgstr "rechts - unten"
 
 #: libexif-gtk/gtk-exif-entry-option.c:202
 msgid "left - bottom"
-msgstr "Links - Unten"
+msgstr "links - unten"
 
 #: libexif-gtk/gtk-exif-entry-option.c:207
 msgid "centered"
