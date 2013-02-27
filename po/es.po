@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libexif-gtk 0.3.6cvs3\n"
 "Report-Msgid-Bugs-To: libexif-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-02-23 20:11+0100\n"
-"PO-Revision-Date: 2013-02-24 09:36+0100\n"
+"POT-Creation-Date: 2013-02-27 21:25+0100\n"
+"PO-Revision-Date: 2013-02-27 18:01-0300\n"
 "Last-Translator: Fabián Mandelbaum <fmandelbaum@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -69,7 +69,7 @@ msgstr "Valor"
 msgid "Add"
 msgstr "Añadir"
 
-#: libexif-gtk/gtk-exif-content-list.c:348
+#: libexif-gtk/gtk-exif-content-list.c:359
 msgid "Remove"
 msgstr "Quitar"
 
@@ -85,16 +85,49 @@ msgstr "Editor:"
 msgid "Time:"
 msgstr "Fecha:"
 
+#: libexif-gtk/gtk-exif-entry-flash.c:152
+msgid "Flash fired"
+msgstr "Flash disparado"
+
+#: libexif-gtk/gtk-exif-entry-flash.c:161
+msgid "Return light"
+msgstr "Luz de retorno"
+
+#: libexif-gtk/gtk-exif-entry-flash.c:169
+msgid "No strobe return detection function"
+msgstr "Sin función de detección de retorno estrosboscópico"
+
+#: libexif-gtk/gtk-exif-entry-flash.c:182
+msgid "Strobe return light not detected"
+msgstr "Luz de retorno estrosboscópica no detectada"
+
+#: libexif-gtk/gtk-exif-entry-flash.c:194
+msgid "Strobe return light detected"
+msgstr "Luz de retorno estrosboscópica detectada"
+
+#: libexif-gtk/gtk-exif-entry-generic.c:139
+msgid "Format:"
+msgstr "Formato:"
+
+#: libexif-gtk/gtk-exif-entry-generic.c:149
+msgid "Components:"
+msgstr "Componentes:"
+
+#: libexif-gtk/gtk-exif-entry-generic.c:158
+msgid "Size:"
+msgstr "Tamaño:"
+
+#: libexif-gtk/gtk-exif-entry-generic.c:167
+#: libexif-gtk/gtk-exif-entry-number.c:250
+#: libexif-gtk/gtk-exif-entry-rational.c:253
+msgid "Value:"
+msgstr "Valor:"
+
 #: libexif-gtk/gtk-exif-entry-number.c:248
 #: libexif-gtk/gtk-exif-entry-rational.c:251
 #, c-format
 msgid "Value %i:"
 msgstr "Valor %i:"
-
-#: libexif-gtk/gtk-exif-entry-number.c:250
-#: libexif-gtk/gtk-exif-entry-rational.c:253
-msgid "Value:"
-msgstr "Valor:"
 
 #: libexif-gtk/gtk-exif-entry-option.c:151
 #: libexif-gtk/gtk-exif-entry-option.c:213
@@ -382,3 +415,4 @@ msgstr "Formato FlashPix versión 1.0"
 #: libexif-gtk/gtk-exif-entry-version.c:272
 msgid "Version:"
 msgstr "Versión:"
+

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libexif-gtk 0.3.3\n"
 "Report-Msgid-Bugs-To: libexif-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-02-23 20:11+0100\n"
+"POT-Creation-Date: 2013-02-27 21:25+0100\n"
 "PO-Revision-Date: 2012-05-17 01:20+0200\n"
 "Last-Translator: Valère Monseur <valere.monseur@ymail.com>\n"
 "Language-Team: \n"
@@ -69,7 +69,7 @@ msgstr "Valeur"
 msgid "Add"
 msgstr "Ajouter"
 
-#: libexif-gtk/gtk-exif-content-list.c:348
+#: libexif-gtk/gtk-exif-content-list.c:359
 msgid "Remove"
 msgstr "Supprimer"
 
@@ -85,16 +85,49 @@ msgstr "Editeur:"
 msgid "Time:"
 msgstr "Heure:"
 
+#: libexif-gtk/gtk-exif-entry-flash.c:152
+msgid "Flash fired"
+msgstr "Le flash s'est déclenché"
+
+#: libexif-gtk/gtk-exif-entry-flash.c:161
+msgid "Return light"
+msgstr "Lumière de retour"
+
+#: libexif-gtk/gtk-exif-entry-flash.c:169
+msgid "No strobe return detection function"
+msgstr "Aucune fonction de détection de retour de flash"
+
+#: libexif-gtk/gtk-exif-entry-flash.c:182
+msgid "Strobe return light not detected"
+msgstr "Lumière de retour de flash non détectée"
+
+#: libexif-gtk/gtk-exif-entry-flash.c:194
+msgid "Strobe return light detected"
+msgstr "Lumière de retour de flash détectée"
+
+#: libexif-gtk/gtk-exif-entry-generic.c:139
+msgid "Format:"
+msgstr "Format:"
+
+#: libexif-gtk/gtk-exif-entry-generic.c:149
+msgid "Components:"
+msgstr "Composants:"
+
+#: libexif-gtk/gtk-exif-entry-generic.c:158
+msgid "Size:"
+msgstr "Taille:"
+
+#: libexif-gtk/gtk-exif-entry-generic.c:167
+#: libexif-gtk/gtk-exif-entry-number.c:250
+#: libexif-gtk/gtk-exif-entry-rational.c:253
+msgid "Value:"
+msgstr "Valeur:"
+
 #: libexif-gtk/gtk-exif-entry-number.c:248
 #: libexif-gtk/gtk-exif-entry-rational.c:251
 #, c-format
 msgid "Value %i:"
 msgstr "Valeur %i:"
-
-#: libexif-gtk/gtk-exif-entry-number.c:250
-#: libexif-gtk/gtk-exif-entry-rational.c:253
-msgid "Value:"
-msgstr "Valeur:"
 
 #: libexif-gtk/gtk-exif-entry-option.c:151
 #: libexif-gtk/gtk-exif-entry-option.c:213
