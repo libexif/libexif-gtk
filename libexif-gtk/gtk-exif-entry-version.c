@@ -122,12 +122,14 @@ enum _ExifVersion {
 	EXIF_VERSION_2_0,
 	EXIF_VERSION_2_1,
 	EXIF_VERSION_2_2,
-	EXIF_VERSION_2_21
+	EXIF_VERSION_2_21,
+	EXIF_VERSION_2_3
 };
 
 typedef enum _FlashPixVersion FlashPixVersion;
 enum _FlashPixVersion {
-	FLASH_PIX_VERSION_1
+	FLASH_PIX_VERSION_1,
+	FLASH_PIX_VERSION_1_01
 };
 
 static GtkOptions exif_list[] = {
@@ -135,11 +137,13 @@ static GtkOptions exif_list[] = {
         {EXIF_VERSION_2_1 , N_("Exif Format Version 2.1")},
 	{EXIF_VERSION_2_2 , N_("Exif Format Version 2.2")},
 	{EXIF_VERSION_2_21, N_("Exif Format Version 2.21")},
+	{EXIF_VERSION_2_3,  N_("Exif Format Version 2.3")},
         {0, NULL}
 };
 
 static GtkOptions flash_pix_list[] = {
-        {FLASH_PIX_VERSION_1, N_("FlashPix Format Version 1.0")},
+        {FLASH_PIX_VERSION_1,    N_("FlashPix Format Version 1.0")},
+        {FLASH_PIX_VERSION_1_01, N_("FlashPix Format Version 1.01")},
         {0, NULL}
 };
 
@@ -151,6 +155,7 @@ static struct {
 	{EXIF_VERSION_2_1 , "0210"},
 	{EXIF_VERSION_2_2 , "0220"},
 	{EXIF_VERSION_2_21, "0221"},
+	{EXIF_VERSION_2_3,  "0230"},
 	{0, NULL}
 };
 
@@ -158,7 +163,8 @@ static struct {
 	FlashPixVersion version;
 	const guchar *data;
 } flash_pix_versions[] = {
-	{FLASH_PIX_VERSION_1, "0100"},
+	{FLASH_PIX_VERSION_1,    "0100"},
+	{FLASH_PIX_VERSION_1_01, "0101"},
 	{0, NULL}
 };
 
