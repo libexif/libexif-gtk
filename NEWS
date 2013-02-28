@@ -11,3 +11,4 @@ New in 0.4.0:
   * fixed bugs linked to gtk_notebook_remove_page action
   * Bug fixes: #2014281: fix display of GPSLatitude and GPSLatitudeRef names
   * fixed crash when viewing an enumerated tag with an unsupported value
+  * fixed problem with handling the Flash tag in big-endian images

@@ -4,6 +4,7 @@
 	* Makefile.am: Add both gtk pkgconfig templates to the tarball
 	* Added some more strings to translate that were missing
 	* fixed crash when viewing an enumerated tag with an unsupported value
+	* fixed problem with handling the Flash tag in big-endian images
 
 2013-02-25  Dan Fandrich <dan@coneharvesters.com>
 

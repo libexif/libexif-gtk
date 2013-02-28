@@ -117,17 +117,25 @@ GTK_EXIF_CLASS (entry_flash, EntryFlash, "EntryFlash")
 static void
 on_value_changed (GtkToggleButton *toggle, GtkExifEntryFlash *entry)
 {
+	unsigned char *d;
+	ExifByteOrder o;
+	ExifShort v;
 	g_return_if_fail (GTK_EXIF_IS_ENTRY_FLASH (entry));
 
-	entry->priv->entry->data[0] &= 0xfe;
-	if (gtk_toggle_button_get_active (entry->priv->c))
-		entry->priv->entry->data[0] |= 0x01;
+	d = entry->priv->entry->data;
+	o = exif_data_get_byte_order (entry->priv->entry->parent->parent);
+	v = exif_get_short(d,o);
 
-	entry->priv->entry->data[0] &= 0xf9;
+	v &= 0xfe;
+	if (gtk_toggle_button_get_active (entry->priv->c))
+		v |= 0x01;
+
+	v &= 0xf9;
 	if (gtk_toggle_button_get_active (entry->priv->r2))
-		entry->priv->entry->data[0] |= 0x04;
+		v |= 0x04;
 	else if (gtk_toggle_button_get_active (entry->priv->r3))
-		entry->priv->entry->data[0] |= 0x06;
+		v |= 0x06;
+	exif_set_short(d, o, v);
 	g_signal_emit_by_name (G_OBJECT (entry), "entry_changed",
 				 entry->priv->entry);
 }
@@ -138,13 +146,16 @@ gtk_exif_entry_flash_new (ExifEntry *e)
 	GtkExifEntryFlash *entry;
 	GtkWidget *check, *frame, *vbox, *radio;
 	GSList *group;
+	ExifByteOrder o;
 
 	g_return_val_if_fail (e != NULL, NULL);
 	g_return_val_if_fail (e->tag == EXIF_TAG_FLASH, NULL);
+	g_return_val_if_fail (e->format == EXIF_FORMAT_SHORT, NULL);
 
 	entry = g_object_new (GTK_EXIF_TYPE_ENTRY_FLASH, NULL);
 	entry->priv->entry = e;
 	exif_entry_ref (e);
+	o = exif_data_get_byte_order (e->parent->parent);
 	gtk_exif_entry_construct (GTK_EXIF_ENTRY (entry),
 		exif_tag_get_title_in_ifd (e->tag, exif_content_get_ifd(e->parent)),
 		exif_tag_get_description_in_ifd (e->tag, exif_content_get_ifd(e->parent)));
@@ -152,7 +163,7 @@ gtk_exif_entry_flash_new (ExifEntry *e)
 	check = gtk_check_button_new_with_label (_("Flash fired"));
 	gtk_widget_show (check);
 	gtk_box_pack_start (GTK_BOX (entry), check, FALSE, FALSE, 0);
-	if (e->data[0] & (1 << 0))
+	if (exif_get_short(e->data, o) & (1 << 0))
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
 	g_signal_connect (G_OBJECT (check), "toggled",
 			    G_CALLBACK (on_value_changed), entry);
@@ -170,7 +181,7 @@ gtk_exif_entry_flash_new (ExifEntry *e)
 						 "detection function"));
 	gtk_widget_show (radio);
 	gtk_box_pack_start (GTK_BOX (vbox), radio, FALSE, FALSE, 0);
-	if (!(e->data[0] & (1 << 1)) && !(e->data[0] & (1 << 2)))
+	if (!(exif_get_short(e->data, o) & (1 << 1)) && !(exif_get_short(e->data, o) & (1 << 2)))
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), TRUE);
 	g_signal_connect (G_OBJECT (radio), "toggled",
 			    G_CALLBACK (on_value_changed), entry);
@@ -182,7 +193,7 @@ gtk_exif_entry_flash_new (ExifEntry *e)
 				_("Strobe return light not detected"));
 	gtk_widget_show (radio);
 	gtk_box_pack_start (GTK_BOX (vbox), radio, FALSE, FALSE, 0);
-	if (!(e->data[0] & (1 << 1)) && (e->data[0] & (1 << 2)))
+	if (!(exif_get_short(e->data, o) & (1 << 1)) && (exif_get_short(e->data, o) & (1 << 2)))
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), TRUE);
 	g_signal_connect (G_OBJECT (radio), "toggled",
 			    G_CALLBACK (on_value_changed), entry);
@@ -194,7 +205,7 @@ gtk_exif_entry_flash_new (ExifEntry *e)
 					_("Strobe return light detected"));
 	gtk_widget_show (radio);
 	gtk_box_pack_start (GTK_BOX (vbox), radio, FALSE, FALSE, 0);
-	if ((e->data[0] & (1 << 1)) && (e->data[0] & (1 << 2)))
+	if ((exif_get_short(e->data, o) & (1 << 1)) && (exif_get_short(e->data, o) & (1 << 2)))
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), TRUE);
 	g_signal_connect (G_OBJECT (radio), "toggled",
 			    G_CALLBACK (on_value_changed), entry);
