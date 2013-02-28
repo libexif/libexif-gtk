@@ -9,13 +9,13 @@ msgstr ""
 "Project-Id-Version: libexif-gtk 0.3.6cvs3\n"
 "Report-Msgid-Bugs-To: libexif-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2013-02-23 20:11+0100\n"
-"PO-Revision-Date: 2005-05-27 10:00+0400\n"
+"PO-Revision-Date: 2013-02-28 22:00+0100\n"
 "Last-Translator: Вячеслав Диконов <sdiconov@mail.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8-bit\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
@@ -47,7 +47,7 @@ msgstr "Сохранить как..."
 
 #: libexif-gtk/gtk-exif-browser.c:592
 msgid "Thumbnail"
-msgstr "Миниатюра"
+msgstr "Эскиз"
 
 #: libexif-gtk/gtk-exif-browser.c:609
 msgid "Load"
@@ -71,9 +71,9 @@ msgstr "Значение"
 
 #: libexif-gtk/gtk-exif-content-list.c:272
 msgid "Add"
-msgstr ""
+msgstr "Добавить"
 
-#: libexif-gtk/gtk-exif-content-list.c:348
+#: libexif-gtk/gtk-exif-content-list.c:359
 msgid "Remove"
 msgstr ""
 
@@ -89,19 +89,53 @@ msgstr ""
 msgid "Time:"
 msgstr ""
 
+#: libexif-gtk/gtk-exif-entry-flash.c:163
+msgid "Flash fired"
+msgstr "Вспышка сработала"
+
+#: libexif-gtk/gtk-exif-entry-flash.c:172
+msgid "Return light"
+msgstr ""
+
+#: libexif-gtk/gtk-exif-entry-flash.c:180
+msgid "No strobe return detection function"
+msgstr ""
+
+#: libexif-gtk/gtk-exif-entry-flash.c:193
+msgid "Strobe return light not detected"
+msgstr ""
+
+#: libexif-gtk/gtk-exif-entry-flash.c:205
+msgid "Strobe return light detected"
+msgstr ""
+
+#: libexif-gtk/gtk-exif-entry-generic.c:139
+#, fuzzy
+msgid "Format:"
+msgstr "Формат:"
+
+#: libexif-gtk/gtk-exif-entry-generic.c:149
+msgid "Components:"
+msgstr ""
+
+#: libexif-gtk/gtk-exif-entry-generic.c:158
+msgid "Size:"
+msgstr ""
+
+#: libexif-gtk/gtk-exif-entry-generic.c:167
+#: libexif-gtk/gtk-exif-entry-number.c:250
+#: libexif-gtk/gtk-exif-entry-rational.c:253
+msgid "Value:"
+msgstr ""
+
 #: libexif-gtk/gtk-exif-entry-number.c:248
 #: libexif-gtk/gtk-exif-entry-rational.c:251
 #, c-format
 msgid "Value %i:"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-number.c:250
-#: libexif-gtk/gtk-exif-entry-rational.c:253
-msgid "Value:"
-msgstr ""
-
 #: libexif-gtk/gtk-exif-entry-option.c:151
-#: libexif-gtk/gtk-exif-entry-option.c:213
+#: libexif-gtk/gtk-exif-entry-option.c:222
 msgid "Not defined"
 msgstr "Не определено"
 
@@ -139,7 +173,6 @@ msgstr "Сжатие JPEG"
 
 #: libexif-gtk/gtk-exif-entry-option.c:168
 #: libexif-gtk/gtk-exif-entry-option.c:180
-#, fuzzy
 msgid "Unknown"
 msgstr "Неизвестно"
 
@@ -168,8 +201,7 @@ msgid "Partial"
 msgstr "Частичный замер"
 
 #: libexif-gtk/gtk-exif-entry-option.c:175
-#: libexif-gtk/gtk-exif-entry-option.c:190
-#, fuzzy
+#: libexif-gtk/gtk-exif-entry-option.c:199
 msgid "Other"
 msgstr "Другое"
 
@@ -186,127 +218,164 @@ msgid "Tungsten"
 msgstr "Лампа накаливания"
 
 #: libexif-gtk/gtk-exif-entry-option.c:184
+msgid "Flash"
+msgstr "Вспышка"
+
+#: libexif-gtk/gtk-exif-entry-option.c:185
+msgid "Fine weather"
+msgstr "Ясная погода"
+
+#: libexif-gtk/gtk-exif-entry-option.c:186
+msgid "Cloudy weather"
+msgstr "Облачность"
+
+#: libexif-gtk/gtk-exif-entry-option.c:187
+msgid "Shade"
+msgstr "Тень"
+
+#: libexif-gtk/gtk-exif-entry-option.c:188
+msgid "Daylight fluorescent"
+msgstr "Флуоресцентная лампа дневного света"
+
+#: libexif-gtk/gtk-exif-entry-option.c:189
+msgid "Day white fluorescent"
+msgstr "Белая лампа дневного света"
+
+#: libexif-gtk/gtk-exif-entry-option.c:190
+#, fuzzy
+msgid "Cool white fluorescent"
+msgstr "Флуоресцентная лампа"
+
+#: libexif-gtk/gtk-exif-entry-option.c:191
+msgid "White fluorescent"
+msgstr "Белая газоразрядная лампа"
+
+#: libexif-gtk/gtk-exif-entry-option.c:192
 msgid "Standard light A"
 msgstr "Стандартный свет A"
 
-#: libexif-gtk/gtk-exif-entry-option.c:185
+#: libexif-gtk/gtk-exif-entry-option.c:193
 msgid "Standard light B"
 msgstr "Стандартный свет B"
 
-#: libexif-gtk/gtk-exif-entry-option.c:186
+#: libexif-gtk/gtk-exif-entry-option.c:194
 msgid "Standard light C"
 msgstr "Стандартный свет C"
 
-#: libexif-gtk/gtk-exif-entry-option.c:187
+#: libexif-gtk/gtk-exif-entry-option.c:195
 msgid "D55"
 msgstr "D55"
 
-#: libexif-gtk/gtk-exif-entry-option.c:188
+#: libexif-gtk/gtk-exif-entry-option.c:196
 msgid "D65"
 msgstr "D65"
 
-#: libexif-gtk/gtk-exif-entry-option.c:189
+#: libexif-gtk/gtk-exif-entry-option.c:197
 msgid "D75"
 msgstr "D75"
 
-#: libexif-gtk/gtk-exif-entry-option.c:195
+#: libexif-gtk/gtk-exif-entry-option.c:198
+msgid "ISO studio tungsten"
+msgstr "Студийное вольфрамовое освещение ISO"
+
+#: libexif-gtk/gtk-exif-entry-option.c:204
 msgid "top - left"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-option.c:196
+#: libexif-gtk/gtk-exif-entry-option.c:205
 msgid "top - right"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-option.c:197
+#: libexif-gtk/gtk-exif-entry-option.c:206
 msgid "bottom - right"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-option.c:198
+#: libexif-gtk/gtk-exif-entry-option.c:207
 msgid "bottom - left"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-option.c:199
+#: libexif-gtk/gtk-exif-entry-option.c:208
 msgid "left - top"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-option.c:200
+#: libexif-gtk/gtk-exif-entry-option.c:209
 msgid "right - top"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-option.c:201
+#: libexif-gtk/gtk-exif-entry-option.c:210
 msgid "right - bottom"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-option.c:202
+#: libexif-gtk/gtk-exif-entry-option.c:211
 msgid "left - bottom"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-option.c:207
+#: libexif-gtk/gtk-exif-entry-option.c:216
 msgid "centered"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-option.c:208
+#: libexif-gtk/gtk-exif-entry-option.c:217
 msgid "co-sited"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-option.c:214
+#: libexif-gtk/gtk-exif-entry-option.c:223
 msgid "Manual"
 msgstr "Ручная"
 
-#: libexif-gtk/gtk-exif-entry-option.c:215
+#: libexif-gtk/gtk-exif-entry-option.c:224
 msgid "Normal program"
 msgstr "Нормальная программа"
 
-#: libexif-gtk/gtk-exif-entry-option.c:216
+#: libexif-gtk/gtk-exif-entry-option.c:225
 msgid "Aperture priority"
 msgstr "Приоритет диафрагмы"
 
-#: libexif-gtk/gtk-exif-entry-option.c:217
+#: libexif-gtk/gtk-exif-entry-option.c:226
 msgid "Shutter priority"
 msgstr "Приоритет выдержки"
 
-#: libexif-gtk/gtk-exif-entry-option.c:218
+#: libexif-gtk/gtk-exif-entry-option.c:227
 msgid "Creative program (biased toward depth of field)"
 msgstr "Творческая программа (с приоритетом глубины резкости)"
 
-#: libexif-gtk/gtk-exif-entry-option.c:219
+#: libexif-gtk/gtk-exif-entry-option.c:228
 msgid "Action program (biased toward fast shutter speed)"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-option.c:220
+#: libexif-gtk/gtk-exif-entry-option.c:229
 msgid "Portrait mode (for closeup photos with the background out of focus)"
 msgstr ""
 "Портретный режим (съёмка с близкого расстояния с передним планом вне фокуса)"
 
-#: libexif-gtk/gtk-exif-entry-option.c:222
+#: libexif-gtk/gtk-exif-entry-option.c:231
 msgid "Landscape mode (for landscape photos with the background in focus)"
 msgstr "Альбомный режим (для альбомных фото с передним планом в фокусе)"
 
-#: libexif-gtk/gtk-exif-entry-option.c:251
+#: libexif-gtk/gtk-exif-entry-option.c:260
 msgid "Sensing method:"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-option.c:255
+#: libexif-gtk/gtk-exif-entry-option.c:264
 msgid "0-th row - 0-th column:"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-option.c:259
+#: libexif-gtk/gtk-exif-entry-option.c:268
 msgid "Light source:"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-option.c:263
+#: libexif-gtk/gtk-exif-entry-option.c:272
 msgid "Metering mode:"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-option.c:267
+#: libexif-gtk/gtk-exif-entry-option.c:276
 msgid "Compression scheme:"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-option.c:271
+#: libexif-gtk/gtk-exif-entry-option.c:280
 msgid "YCbCr Positioning:"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-option.c:275
+#: libexif-gtk/gtk-exif-entry-option.c:284
 msgid "Exposure Program:"
 msgstr ""
 
@@ -349,11 +418,12 @@ msgstr "Дюйм"
 
 #: libexif-gtk/gtk-exif-entry-user-comment.c:224
 msgid "ASCII"
-msgstr ""
+msgstr "ASCII"
 
 #: libexif-gtk/gtk-exif-entry-user-comment.c:225
+#, fuzzy
 msgid "JIS"
-msgstr ""
+msgstr "JIS"
 
 #: libexif-gtk/gtk-exif-entry-user-comment.c:226
 msgid "Unicode"
@@ -367,27 +437,37 @@ msgstr "Не определено"
 msgid "Character Code:"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-version.c:134
+#: libexif-gtk/gtk-exif-entry-version.c:136
 msgid "Exif Format Version 2.0"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-version.c:135
+#: libexif-gtk/gtk-exif-entry-version.c:137
 msgid "Exif Format Version 2.1"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-version.c:136
+#: libexif-gtk/gtk-exif-entry-version.c:138
 msgid "Exif Format Version 2.2"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-version.c:137
+#: libexif-gtk/gtk-exif-entry-version.c:139
 msgid "Exif Format Version 2.21"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-version.c:142
-msgid "FlashPix Format Version 1.0"
+#: libexif-gtk/gtk-exif-entry-version.c:140
+msgid "Exif Format Version 2.3"
 msgstr ""
 
-#: libexif-gtk/gtk-exif-entry-version.c:272
+#: libexif-gtk/gtk-exif-entry-version.c:145
+#, fuzzy
+msgid "FlashPix Format Version 1.0"
+msgstr "FlashPix версии 1.0"
+
+#: libexif-gtk/gtk-exif-entry-version.c:146
+#, fuzzy
+msgid "FlashPix Format Version 1.01"
+msgstr "FlashPix версии 1.01"
+
+#: libexif-gtk/gtk-exif-entry-version.c:284
 #, fuzzy
 msgid "Version:"
-msgstr "версии:"
+msgstr "Версия:"
