@@ -538,7 +538,7 @@ on_save_clicked (GtkButton *button, GtkExifBrowser *b)
 					GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
 					NULL);
 
-	switch (gtk_dialog_run (GTK_DIALOG (fchoser)) == GTK_RESPONSE_ACCEPT)
+	if (gtk_dialog_run (GTK_DIALOG (fchoser)) == GTK_RESPONSE_ACCEPT)
 		on_save_ok_clicked (fchoser, b);
 
 	gtk_widget_destroy (fchoser);
