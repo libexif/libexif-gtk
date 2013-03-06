@@ -31,8 +31,8 @@ intl
 autom4te.cache
 configure.scan
 autoscan.log
-*.tar.gz
-*.tar.bz2
+libexif-gtk-*.tar.gz
+libexif-gtk-*.tar.bz2
 Makefile
 Makefile.in
 aclocal.m4
@@ -46,8 +46,6 @@ config.sub
 config.rpath
 configure
 install-sh
-libexif.pc
-libexif.spec
 libtool
 ltmain.sh
 missing
@@ -58,3 +56,5 @@ stamp-h.in
 conftest
 conftest.c
 ABOUT-NLS
+libexif-gtk-uninstalled.pc
+libexif-gtk.pc
