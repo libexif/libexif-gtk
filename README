@@ -24,7 +24,7 @@ Building from the source tar ball usually involves the commands:
   make
   sudo make install
 
-When building from source out of CVS, please run "autoreconf -i" first.
+When building from source out of git, please run "autoreconf -i" first.
 
 
 NOTE TO PACKAGERS
@@ -50,4 +50,4 @@ in tests/test-libexif-gtk.c
 LINKS
 =====
 
-libexif-gtk is a part of the libexif project at http://libexif.sourceforge.net/
+libexif-gtk is a part of the libexif project at https://libexif.github.io/
