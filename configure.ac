@@ -4,6 +4,7 @@ AC_CONFIG_SRCDIR([libexif-gtk/gtk-exif-browser.c])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([auto-m4])
 AM_INIT_AUTOMAKE([-Wall gnu 1.9 dist-bzip2 check-news])
+AM_SILENT_RULES([yes])
 
 GP_CHECK_SHELL_ENVIRONMENT
 GP_CONFIG_MSG([Build])
@@ -12,6 +13,8 @@ GP_CONFIG_MSG([Source code location],[${srcdir}])
 AC_PROG_CC
 AM_PROG_CC_STDC
 AM_PROG_CC_C_O
+AM_PROG_AR
+AM_PROG_LIBTOOL
 AC_HEADER_STDC
 
 GP_PKG_CONFIG()dnl
@@ -36,7 +39,6 @@ AC_SUBST(LIBEXIF_GTK_CURRENT)
 LIBEXIF_GTK_VERSION_INFO=`expr $LIBEXIF_GTK_CURRENT + $LIBEXIF_GTK_REVISION`:$LIBEXIF_GTK_AGE:$LIBEXIF_GTK_REVISION
 AC_SUBST(LIBEXIF_GTK_VERSION_INFO)
 
-AM_PROG_LIBTOOL
 GP_CONFIG_MSG([Compiler],[${CC}])
 
 dnl GP_CONFIG_MSG([Features])
@@ -51,8 +53,8 @@ GP_GETTEXT_HACK([${PACKAGE}-${LIBEXIF_GTK_CURRENT}],
                 [Lutz Müller and others])
 AM_GNU_GETTEXT_VERSION([0.14.1])
 AM_GNU_GETTEXT([external])
-AM_ICONV()
-GP_GETTEXT_FLAGS()
+AM_ICONV
+GP_GETTEXT_FLAGS
 
 
 # ---------------------------------------------------------------------------
@@ -110,6 +112,6 @@ AC_CONFIG_FILES([
   tests/Makefile
   m4m/Makefile
 ])
-AC_OUTPUT()dnl
+AC_OUTPUT
 
-GP_CONFIG_OUTPUT()dnl
+GP_CONFIG_OUTPUT

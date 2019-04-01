@@ -58,3 +58,7 @@ conftest.c
 ABOUT-NLS
 libexif-gtk-uninstalled.pc
 libexif-gtk.pc
+INSTALL
+ar-lib
+compile
+depcomp
