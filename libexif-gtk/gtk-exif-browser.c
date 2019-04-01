@@ -118,7 +118,7 @@ gtk_exif_browser_destroy (GtkObject *object)
 GTK_EXIF_FINALIZE (browser, Browser)
 
 static void
-gtk_exif_browser_class_init (gpointer g_class, gpointer class_data)
+gtk_exif_browser_class_init (gpointer g_class, gpointer class_data G_GNUC_UNUSED)
 {
 #if GTK_CHECK_VERSION(3,0,0)
 	GtkWidgetClass *widget_class;
@@ -141,7 +141,7 @@ gtk_exif_browser_class_init (gpointer g_class, gpointer class_data)
 }
 
 static void
-gtk_exif_browser_init (GTypeInstance *instance, gpointer g_class)
+gtk_exif_browser_init (GTypeInstance *instance, gpointer g_class G_GNUC_UNUSED)
 {
 	GtkExifBrowser *browser = GTK_EXIF_BROWSER (instance);
 
@@ -196,7 +196,7 @@ gtk_exif_browser_set_widget (GtkExifBrowser *browser, GtkWidget *w)
 }
 
 static void
-on_entry_changed (GtkExifEntry *entry, ExifEntry *e, GtkExifBrowser *b)
+on_entry_changed (GtkExifEntry *entry G_GNUC_UNUSED, ExifEntry *e, GtkExifBrowser *b)
 {
 	GtkExifContentList *list;
 
@@ -209,7 +209,7 @@ on_entry_changed (GtkExifEntry *entry, ExifEntry *e, GtkExifBrowser *b)
 }
 
 static void
-on_entry_added (GtkExifEntry *entry, ExifEntry *e, GtkExifBrowser *b)
+on_entry_added (GtkExifEntry *entry G_GNUC_UNUSED, ExifEntry *e, GtkExifBrowser *b)
 {
         GtkExifContentList *list;
 
@@ -222,7 +222,7 @@ on_entry_added (GtkExifEntry *entry, ExifEntry *e, GtkExifBrowser *b)
 }
 
 static void
-on_entry_removed (GtkExifEntry *entry, ExifEntry *e, GtkExifBrowser *b)
+on_entry_removed (GtkExifEntry *entry G_GNUC_UNUSED, ExifEntry *e, GtkExifBrowser *b)
 {
 	GtkExifContentList *list;
 
@@ -244,7 +244,7 @@ on_entry_removed (GtkExifEntry *entry, ExifEntry *e, GtkExifBrowser *b)
 }
 
 static void
-on_entry_selected (GtkExifContentList *list, ExifEntry *entry,
+on_entry_selected (GtkExifContentList *list G_GNUC_UNUSED, ExifEntry *entry,
 		   GtkExifBrowser *browser)
 {
 	gtk_exif_browser_show_entry (browser, entry);
@@ -467,7 +467,7 @@ on_load_ok_clicked (GtkWidget *fchoser, GtkExifBrowser *b)
 		b->priv->data->size = 0;
 	}
 	if (size) {
-		b->priv->data->data = g_new0 (char, size);
+		b->priv->data->data = g_new0 (guchar, size);
 		if (!b->priv->data->data) {
 			g_warning ("Could not allocate %i bytes!", size);
 			fclose (f);
@@ -486,7 +486,7 @@ on_load_ok_clicked (GtkWidget *fchoser, GtkExifBrowser *b)
 }
 
 static void
-on_load_clicked (GtkButton *button, GtkExifBrowser *b)
+on_load_clicked (GtkButton *button G_GNUC_UNUSED, GtkExifBrowser *b)
 {
 	GtkWidget *fchoser;
 	GtkWidget *fchoser_parent;
@@ -525,7 +525,7 @@ on_save_ok_clicked (GtkWidget *fchoser, GtkExifBrowser *b)
 }
 
 static void
-on_save_clicked (GtkButton *button, GtkExifBrowser *b)
+on_save_clicked (GtkButton *button G_GNUC_UNUSED, GtkExifBrowser *b)
 {
 	GtkWidget *fchoser;
 	GtkWidget *fchoser_parent;
@@ -545,7 +545,7 @@ on_save_clicked (GtkButton *button, GtkExifBrowser *b)
 }
 
 static void
-on_delete_clicked (GtkButton *button, GtkExifBrowser *b)
+on_delete_clicked (GtkButton *button G_GNUC_UNUSED, GtkExifBrowser *b)
 {
 	g_return_if_fail (GTK_EXIF_IS_BROWSER (b));
 
@@ -562,7 +562,7 @@ gtk_exif_browser_set_data (GtkExifBrowser *b, ExifData *data)
 {
 	GtkWidget *label, *vbox, *bbox, *button, *hbox;
 	gint n;
-	guint i;
+	gint i;
 
 	g_return_if_fail (GTK_EXIF_IS_BROWSER (b));
 	g_return_if_fail (data != NULL);

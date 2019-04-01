@@ -82,7 +82,7 @@ gtk_exif_entry_generic_destroy (GtkObject *object)
 GTK_EXIF_FINALIZE (entry_generic, EntryGeneric)
 
 static void
-gtk_exif_entry_generic_class_init (gpointer g_class, gpointer class_data)
+gtk_exif_entry_generic_class_init (gpointer g_class, gpointer class_data G_GNUC_UNUSED)
 {
 #if GTK_CHECK_VERSION(3,0,0)
 	GtkWidgetClass *widget_class;
@@ -105,7 +105,7 @@ gtk_exif_entry_generic_class_init (gpointer g_class, gpointer class_data)
 }
 
 static void
-gtk_exif_entry_generic_init (GTypeInstance *instance, gpointer g_class)
+gtk_exif_entry_generic_init (GTypeInstance *instance, gpointer g_class G_GNUC_UNUSED)
 {
 	GtkExifEntryGeneric *entry = GTK_EXIF_ENTRY_GENERIC (instance);
 

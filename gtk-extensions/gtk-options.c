@@ -97,9 +97,9 @@ gtk_tree_model_get_iter_from_option (GtkTreeModel *tm, guint option,
 	do {
 		gtk_tree_model_get_value (tm, iter, GTK_OPTIONS_OPTION_COLUMN,
 					  &v);
-		if (option == g_value_get_int (&v)) break;
+		if ((int)option == g_value_get_int (&v)) break;
 		g_value_unset (&v);
 	} while (gtk_tree_model_iter_next (tm, iter));
 
-	return (option == g_value_get_int (&v));
+	return ((int)option == g_value_get_int (&v));
 }

@@ -62,7 +62,7 @@ gtk_exif_entry_ascii_destroy (GtkObject *object)
 GTK_EXIF_FINALIZE (entry_ascii, EntryAscii)
 
 static void
-gtk_exif_entry_ascii_class_init (gpointer g_class, gpointer class_data)
+gtk_exif_entry_ascii_class_init (gpointer g_class, gpointer class_data G_GNUC_UNUSED)
 {
 #if GTK_CHECK_VERSION(3,0,0)
 	GtkWidgetClass *widget_class;
@@ -85,7 +85,7 @@ gtk_exif_entry_ascii_class_init (gpointer g_class, gpointer class_data)
 }
 
 static void
-gtk_exif_entry_ascii_init (GTypeInstance *instance, gpointer g_class)
+gtk_exif_entry_ascii_init (GTypeInstance *instance, gpointer g_class G_GNUC_UNUSED)
 {
 	GtkExifEntryAscii *entry = GTK_EXIF_ENTRY_ASCII (instance);
 
@@ -101,7 +101,7 @@ on_text_changed (GtkEditable *editable, GtkExifEntryAscii *entry)
 
 	txt = gtk_editable_get_chars (editable, 0, -1);
 	g_free (entry->priv->entry->data);
-	entry->priv->entry->data = txt;
+	entry->priv->entry->data = (unsigned char *)txt;
 	entry->priv->entry->size = strlen (txt) + 1;
 	entry->priv->entry->components = entry->priv->entry->size;
 	gtk_exif_entry_changed (GTK_EXIF_ENTRY (entry), entry->priv->entry);
@@ -126,7 +126,7 @@ gtk_exif_entry_ascii_new (ExifEntry *e)
 	widget = gtk_entry_new ();
 	gtk_widget_show (widget);
 	gtk_box_pack_start (GTK_BOX (entry), widget, TRUE, FALSE, 0);
-	gtk_entry_set_text (GTK_ENTRY (widget), e->data);
+	gtk_entry_set_text (GTK_ENTRY (widget), (gchar *)e->data);
 	g_signal_connect (G_OBJECT (widget), "changed",
 			  G_CALLBACK (on_text_changed), entry);
 

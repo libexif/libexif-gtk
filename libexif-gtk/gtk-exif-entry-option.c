@@ -83,7 +83,7 @@ gtk_exif_entry_option_destroy (GtkObject *object)
 GTK_EXIF_FINALIZE (entry_option, EntryOption)
 
 static void
-gtk_exif_entry_option_class_init (gpointer g_class, gpointer class_data)
+gtk_exif_entry_option_class_init (gpointer g_class, gpointer class_data G_GNUC_UNUSED)
 {
 #if GTK_CHECK_VERSION(3,0,0)
 	GtkWidgetClass *widget_class;
@@ -106,7 +106,7 @@ gtk_exif_entry_option_class_init (gpointer g_class, gpointer class_data)
 }
 
 static void
-gtk_exif_entry_option_init (GTypeInstance *instance, gpointer g_class)
+gtk_exif_entry_option_init (GTypeInstance *instance, gpointer g_class G_GNUC_UNUSED)
 {
 	GtkExifEntryOption *entry = GTK_EXIF_ENTRY_OPTION (instance);
 

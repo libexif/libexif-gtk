@@ -84,7 +84,7 @@ gtk_exif_entry_date_destroy (GtkObject *object)
 GTK_EXIF_FINALIZE (entry_date, EntryDate)
 
 static void
-gtk_exif_entry_date_class_init (gpointer g_class, gpointer class_data)
+gtk_exif_entry_date_class_init (gpointer g_class, gpointer class_data G_GNUC_UNUSED)
 {
 #if GTK_CHECK_VERSION(3,0,0)
 	GtkWidgetClass *widget_class;
@@ -107,7 +107,7 @@ gtk_exif_entry_date_class_init (gpointer g_class, gpointer class_data)
 }
 
 static void
-gtk_exif_entry_date_init (GTypeInstance *instance, gpointer g_class)
+gtk_exif_entry_date_init (GTypeInstance *instance, gpointer g_class G_GNUC_UNUSED)
 {
 	GtkExifEntryDate *entry = GTK_EXIF_ENTRY_DATE (instance);
 
@@ -134,7 +134,7 @@ gtk_exif_entry_date_load (GtkExifEntryDate *entry)
 	g_signal_handlers_block_matched (G_OBJECT (p->a_sec),
 				G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, entry);
 
-	data = g_strdup (entry->priv->entry->data);
+	data = g_strdup ((char *)entry->priv->entry->data);
 	data[4] = data[7] = data[10] = data[13] = data[16] = '\0';
 	gtk_calendar_select_month (p->cal, atoi (data + 5) - 1, atoi (data));
 	gtk_calendar_select_day (entry->priv->cal, atoi (data + 8));
@@ -161,7 +161,8 @@ gtk_exif_entry_date_save (GtkExifEntryDate *entry)
 	g_return_if_fail (GTK_EXIF_IS_ENTRY_DATE (entry));
 
 	gtk_calendar_get_date (entry->priv->cal, &year, &month, &day);
-	sprintf (entry->priv->entry->data, "%04i:%02i:%02i %02i:%02i:%02i",
+	snprintf ((char *)entry->priv->entry->data, entry->priv->entry->size,
+		 "%04i:%02i:%02i %02i:%02i:%02i",
 		 (gint) year,
 		 (gint) month + 1,
 		 (gint) day,
@@ -172,13 +173,13 @@ gtk_exif_entry_date_save (GtkExifEntryDate *entry)
 }
 
 static void
-on_day_selected (GtkCalendar *calendar, GtkExifEntryDate *entry)
+on_day_selected (GtkCalendar *calendar G_GNUC_UNUSED, GtkExifEntryDate *entry)
 {
 	gtk_exif_entry_date_save (entry);
 }
 
 static void
-on_time_changed (GtkAdjustment *adjustment, GtkExifEntryDate *entry)
+on_time_changed (GtkAdjustment *adjustment G_GNUC_UNUSED, GtkExifEntryDate *entry)
 {
 	gtk_exif_entry_date_save (entry);
 }

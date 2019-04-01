@@ -92,7 +92,7 @@ gtk_exif_entry_rational_destroy (GtkObject *object)
 GTK_EXIF_FINALIZE (entry_rational, EntryRational)
 
 static void
-gtk_exif_entry_rational_class_init (gpointer g_class, gpointer class_data)
+gtk_exif_entry_rational_class_init (gpointer g_class, gpointer class_data G_GNUC_UNUSED)
 {
 #if GTK_CHECK_VERSION(3,0,0)
 	GtkWidgetClass *widget_class;
@@ -115,7 +115,7 @@ gtk_exif_entry_rational_class_init (gpointer g_class, gpointer class_data)
 }
 
 static void
-gtk_exif_entry_rational_init (GTypeInstance *instance, gpointer g_class)
+gtk_exif_entry_rational_init (GTypeInstance *instance, gpointer g_class G_GNUC_UNUSED)
 {
 	GtkExifEntryRational *entry = GTK_EXIF_ENTRY_RATIONAL (instance);
 
@@ -206,7 +206,7 @@ gtk_exif_entry_rational_save (GtkExifEntryRational *entry)
 }
 
 static void
-on_adjustment_value_changed (GtkAdjustment *adj, GtkExifEntryRational *entry)
+on_adjustment_value_changed (GtkAdjustment *adj G_GNUC_UNUSED, GtkExifEntryRational *entry)
 {
 	gtk_exif_entry_rational_save (entry);
 }

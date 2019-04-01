@@ -104,7 +104,7 @@ gtk_menu_option_finalize (GObject *object)
 }
 
 static void
-gtk_menu_option_class_init (gpointer g_class, gpointer class_data)
+gtk_menu_option_class_init (gpointer g_class, gpointer class_data G_GNUC_UNUSED)
 {
 #if GTK_CHECK_VERSION(3,0,0)
 	GtkWidgetClass *widget_class;
@@ -138,7 +138,7 @@ gtk_menu_option_class_init (gpointer g_class, gpointer class_data)
 }
 
 static void
-gtk_menu_option_init (GTypeInstance *instance, gpointer g_class)
+gtk_menu_option_init (GTypeInstance *instance, gpointer g_class G_GNUC_UNUSED)
 {
 	GtkMenuOption *menu = GTK_MENU_OPTION (instance);
 

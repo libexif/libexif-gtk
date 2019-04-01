@@ -97,7 +97,7 @@ gtk_exif_content_list_destroy (GtkObject *object)
 GTK_EXIF_FINALIZE (content_list, ContentList)
 
 static void
-gtk_exif_content_list_class_init (gpointer g_class, gpointer class_data)
+gtk_exif_content_list_class_init (gpointer g_class, gpointer class_data G_GNUC_UNUSED)
 {
 #if GTK_CHECK_VERSION(3,0,0)
 	GtkWidgetClass *widget_class;
@@ -145,7 +145,7 @@ gtk_exif_content_list_class_init (gpointer g_class, gpointer class_data)
 }
 
 static gboolean
-selection_func (GtkTreeSelection *sel, GtkTreeModel *model,
+selection_func (GtkTreeSelection *sel G_GNUC_UNUSED, GtkTreeModel *model,
 		GtkTreePath *path, gboolean path_cur_selected,
 		gpointer data)
 {
@@ -166,7 +166,7 @@ selection_func (GtkTreeSelection *sel, GtkTreeModel *model,
 }
 
 static void
-gtk_exif_content_list_init (GTypeInstance *instance, gpointer g_class)
+gtk_exif_content_list_init (GTypeInstance *instance, gpointer g_class G_GNUC_UNUSED)
 {
 	GtkExifContentList *list = GTK_EXIF_CONTENT_LIST (instance);
 	GtkCellRenderer *renderer;
@@ -201,13 +201,13 @@ gtk_exif_content_list_init (GTypeInstance *instance, gpointer g_class)
 GTK_EXIF_CLASS (content_list, ContentList, "ContentList")
 
 static void
-on_hide (GtkWidget *widget, GtkMenu *menu)
+on_hide (GtkWidget *widget G_GNUC_UNUSED, GtkMenu *menu)
 {
 	g_object_unref (G_OBJECT (menu));
 }
 
 static void
-remove_foreach_func (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
+remove_foreach_func (GtkTreeModel *model, GtkTreePath *path G_GNUC_UNUSED, GtkTreeIter *iter,
 		     gpointer data)
 {
 	GValue value = {0};
@@ -226,7 +226,7 @@ remove_foreach_func (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
 }
 
 static void
-on_remove_activate (GtkMenuItem *item, GtkExifContentList *list)
+on_remove_activate (GtkMenuItem *item G_GNUC_UNUSED, GtkExifContentList *list)
 {
 	gtk_tree_selection_selected_foreach (
 			gtk_tree_view_get_selection (GTK_TREE_VIEW (list)),
@@ -234,7 +234,7 @@ on_remove_activate (GtkMenuItem *item, GtkExifContentList *list)
 }
 
 static void
-on_tag_selected (GtkMenuOption *menu, guint option, GtkExifContentList *list)
+on_tag_selected (GtkMenuOption *menu G_GNUC_UNUSED, guint option, GtkExifContentList *list)
 {
 	ExifEntry *entry;
 	ExifTag tag = option;
@@ -249,7 +249,7 @@ on_tag_selected (GtkMenuOption *menu, guint option, GtkExifContentList *list)
 #define LIST_SIZE 1024
 
 static gint
-on_button_press_event (GtkWidget *widget, GdkEventButton *event,
+on_button_press_event (GtkWidget *widget G_GNUC_UNUSED, GdkEventButton *event,
 		       GtkExifContentList *list)
 {
 	GtkWidget *menu, *item, *smenu, *ssmenu;

@@ -85,7 +85,7 @@ gtk_exif_entry_version_destroy (GtkObject *object)
 GTK_EXIF_FINALIZE (entry_version, EntryVersion)
 
 static void
-gtk_exif_entry_version_class_init (gpointer g_class, gpointer class_data)
+gtk_exif_entry_version_class_init (gpointer g_class, gpointer class_data G_GNUC_UNUSED)
 {
 #if GTK_CHECK_VERSION(3,0,0)
 	GtkWidgetClass *widget_class;
@@ -108,7 +108,7 @@ gtk_exif_entry_version_class_init (gpointer g_class, gpointer class_data)
 }
 
 static void
-gtk_exif_entry_version_init (GTypeInstance *instance, gpointer g_class)
+gtk_exif_entry_version_init (GTypeInstance *instance, gpointer g_class G_GNUC_UNUSED)
 {
 	GtkExifEntryVersion *entry = GTK_EXIF_ENTRY_VERSION (instance);
 
@@ -147,9 +147,9 @@ static GtkOptions flash_pix_list[] = {
         {0, NULL}
 };
 
-static struct {
+static const struct {
 	ExifVersion version;
-	const guchar *data;
+	const gchar *data;
 } exif_versions[] = {
 	{EXIF_VERSION_2_0 , "0200"},
 	{EXIF_VERSION_2_1 , "0210"},
@@ -159,9 +159,9 @@ static struct {
 	{0, NULL}
 };
 
-static struct {
+static const struct {
 	FlashPixVersion version;
-	const guchar *data;
+	const gchar *data;
 } flash_pix_versions[] = {
 	{FLASH_PIX_VERSION_1,    "0100"},
 	{FLASH_PIX_VERSION_1_01, "0101"},
@@ -226,7 +226,7 @@ gtk_exif_entry_version_save (GtkExifEntryVersion *entry)
 	case EXIF_TAG_EXIF_VERSION:
 		for (i = 0; exif_versions[i].data; i++)
 			if (g_value_get_int (&v) ==
-					exif_versions[i].version) {
+					(int)exif_versions[i].version) {
 				memcpy (entry->priv->entry->data,
 					exif_versions[i].data, 4);
 				break;
@@ -235,7 +235,7 @@ gtk_exif_entry_version_save (GtkExifEntryVersion *entry)
 	case EXIF_TAG_FLASH_PIX_VERSION:
 		for (i = 0; flash_pix_versions[i].data; i++)
 			if (g_value_get_int (&v) ==
-					flash_pix_versions[i].version) {
+					(int)flash_pix_versions[i].version) {
 				memcpy (entry->priv->entry->data,
 					flash_pix_versions[i].data, 4);
 				break;
@@ -248,7 +248,7 @@ gtk_exif_entry_version_save (GtkExifEntryVersion *entry)
 }
 
 static void
-on_changed (GtkComboBox *cb, GtkExifEntryVersion *entry)
+on_changed (GtkComboBox *cb G_GNUC_UNUSED, GtkExifEntryVersion *entry)
 {
 	gtk_exif_entry_version_save (entry);
 }

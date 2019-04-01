@@ -87,7 +87,7 @@ gtk_exif_entry_number_destroy (GtkObject *object)
 GTK_EXIF_FINALIZE (entry_number, EntryNumber)
 
 static void
-gtk_exif_entry_number_class_init (gpointer g_class, gpointer class_data)
+gtk_exif_entry_number_class_init (gpointer g_class, gpointer class_data G_GNUC_UNUSED)
 {
 #if GTK_CHECK_VERSION(3,0,0)
 	GtkWidgetClass *widget_class;
@@ -110,7 +110,7 @@ gtk_exif_entry_number_class_init (gpointer g_class, gpointer class_data)
 }
 
 static void
-gtk_exif_entry_number_init (GTypeInstance *instance, gpointer g_class)
+gtk_exif_entry_number_init (GTypeInstance *instance, gpointer g_class G_GNUC_UNUSED)
 {
 	GtkExifEntryNumber *entry = GTK_EXIF_ENTRY_NUMBER (instance);
 
@@ -202,7 +202,7 @@ gtk_exif_entry_number_save (GtkExifEntryNumber *entry)
 }
 
 static void
-on_adjustment_value_changed (GtkAdjustment *adj, GtkExifEntryNumber *entry)
+on_adjustment_value_changed (GtkAdjustment *adj G_GNUC_UNUSED, GtkExifEntryNumber *entry)
 {
 	gtk_exif_entry_number_save (entry);
 }

@@ -84,7 +84,7 @@ gtk_exif_entry_user_comment_destroy (GtkObject *object)
 GTK_EXIF_FINALIZE (entry_user_comment, EntryUserComment)
 
 static void
-gtk_exif_entry_user_comment_class_init (gpointer g_class, gpointer class_data)
+gtk_exif_entry_user_comment_class_init (gpointer g_class, gpointer class_data G_GNUC_UNUSED)
 {
 #if GTK_CHECK_VERSION(3,0,0)
 	GtkWidgetClass *widget_class;
@@ -107,7 +107,7 @@ gtk_exif_entry_user_comment_class_init (gpointer g_class, gpointer class_data)
 }
 
 static void
-gtk_exif_entry_user_comment_init (GTypeInstance *instance, gpointer g_class)
+gtk_exif_entry_user_comment_init (GTypeInstance *instance, gpointer g_class G_GNUC_UNUSED)
 {
 	GtkExifEntryUserComment *entry = GTK_EXIF_ENTRY_USER_COMMENT (instance);
 
@@ -124,9 +124,9 @@ enum _CharacterCode {
 	CHARACTER_CODE_UNDEFINED
 };
 
-static struct {
+static const struct {
 	CharacterCode code;
-	const guchar *data;
+	const gchar *data;
 } character_codes[] = {
 	{CHARACTER_CODE_ASCII    , "ASCII\0\0\0"     },
 	{CHARACTER_CODE_JIS      , "JIS\0\0\0\0\0"   },
@@ -168,7 +168,7 @@ static void
 gtk_exif_entry_user_comment_save (GtkExifEntryUserComment *entry)
 {
 	guint i;
-	char *d;
+	unsigned char *d;
 	unsigned int s;
 	const gchar *t;
 	GtkTreeIter iter;
@@ -179,8 +179,8 @@ gtk_exif_entry_user_comment_save (GtkExifEntryUserComment *entry)
 	gtk_combo_box_get_active_iter (entry->priv->menu, &iter);
 	gtk_tree_model_get_value (tm, &iter, GTK_OPTIONS_OPTION_COLUMN, &v);
 	for (i = 0; character_codes[i].data &&
-		    (g_value_get_int (&v) != character_codes[i].code); i++);
-	if (g_value_get_int (&v) == character_codes[i].code) {
+		    (g_value_get_int (&v) != (int)character_codes[i].code); i++);
+	if (g_value_get_int (&v) == (int)character_codes[i].code) {
 
 		/*
 		 * Make sure we have enough data left to save
@@ -215,7 +215,7 @@ gtk_exif_entry_user_comment_save (GtkExifEntryUserComment *entry)
 }
 
 static void
-on_character_code_changed (GtkComboBox *cb, GtkExifEntryUserComment *entry)
+on_character_code_changed (GtkComboBox *cb G_GNUC_UNUSED, GtkExifEntryUserComment *entry)
 {
 	gtk_exif_entry_user_comment_save (entry);
 }
@@ -229,7 +229,7 @@ static GtkOptions character_codes_list[] = {
 };
 
 static void
-on_changed (GtkEntry *w, GtkExifEntryUserComment *entry)
+on_changed (GtkEntry *w G_GNUC_UNUSED, GtkExifEntryUserComment *entry)
 {
 	gtk_exif_entry_user_comment_save (entry);
 }

@@ -102,7 +102,7 @@ gtk_exif_entry_resolution_destroy (GtkObject *object)
 GTK_EXIF_FINALIZE (entry_resolution, EntryResolution)
 
 static void
-gtk_exif_entry_resolution_class_init (gpointer g_class, gpointer class_data)
+gtk_exif_entry_resolution_class_init (gpointer g_class, gpointer class_data G_GNUC_UNUSED)
 {
 #if GTK_CHECK_VERSION(3,0,0)
 	GtkWidgetClass *widget_class;
@@ -125,7 +125,7 @@ gtk_exif_entry_resolution_class_init (gpointer g_class, gpointer class_data)
 }
 
 static void
-gtk_exif_entry_resolution_init (GTypeInstance *instance, gpointer g_class)
+gtk_exif_entry_resolution_init (GTypeInstance *instance, gpointer g_class G_GNUC_UNUSED)
 {
 	GtkExifEntryResolution *entry = GTK_EXIF_ENTRY_RESOLUTION (instance);
 
@@ -165,7 +165,7 @@ on_unit_changed (GtkComboBox *cb, GtkExifEntryResolution *entry)
 }
 
 static void
-on_w_value_changed (GtkAdjustment *a, GtkExifEntryResolution *entry)
+on_w_value_changed (GtkAdjustment *a G_GNUC_UNUSED, GtkExifEntryResolution *entry)
 {
 	ExifEntry *e;
 	ExifRational r;
@@ -195,7 +195,7 @@ on_w_value_changed (GtkAdjustment *a, GtkExifEntryResolution *entry)
 }
 
 static void
-on_h_value_changed (GtkAdjustment *a, GtkExifEntryResolution *entry)
+on_h_value_changed (GtkAdjustment *a G_GNUC_UNUSED, GtkExifEntryResolution *entry)
 {
 	ExifEntry *e;
 	ExifRational r;

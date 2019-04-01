@@ -81,7 +81,7 @@ gtk_exif_entry_copyright_destroy (GtkObject *object)
 GTK_EXIF_FINALIZE (entry_copyright, EntryCopyright)
 
 static void
-gtk_exif_entry_copyright_class_init (gpointer g_class, gpointer class_data)
+gtk_exif_entry_copyright_class_init (gpointer g_class, gpointer class_data G_GNUC_UNUSED)
 {
 #if GTK_CHECK_VERSION(3,0,0)
 	GtkWidgetClass *widget_class;
@@ -104,7 +104,7 @@ gtk_exif_entry_copyright_class_init (gpointer g_class, gpointer class_data)
 }
 
 static void
-gtk_exif_entry_copyright_init (GTypeInstance *instance, gpointer g_class)
+gtk_exif_entry_copyright_init (GTypeInstance *instance, gpointer g_class G_GNUC_UNUSED)
 {
 	GtkExifEntryCopyright *entry = GTK_EXIF_ENTRY_COPYRIGHT (instance);
 
@@ -114,7 +114,7 @@ gtk_exif_entry_copyright_init (GTypeInstance *instance, gpointer g_class)
 GTK_EXIF_CLASS (entry_copyright, EntryCopyright, "EntryCopyright")
 
 static void
-on_text_changed (GtkEditable *editable, GtkExifEntryCopyright *entry)
+on_text_changed (GtkEditable *editable G_GNUC_UNUSED, GtkExifEntryCopyright *entry)
 {
 	gchar *photographer, *editor;
 
@@ -128,7 +128,7 @@ on_text_changed (GtkEditable *editable, GtkExifEntryCopyright *entry)
 			GTK_EDITABLE (entry->priv->photographer), 0, -1);
 	editor = gtk_editable_get_chars (
 			GTK_EDITABLE (entry->priv->editor), 0, -1);
-	entry->priv->entry->data = g_strdup_printf ("%s %s", photographer,
+	entry->priv->entry->data = (unsigned char *)g_strdup_printf ("%s %s", photographer,
 						    editor);
 	entry->priv->entry->data[strlen (photographer)] = '\0';
 	entry->priv->entry->size = strlen (photographer) + 1 +
@@ -180,7 +180,7 @@ gtk_exif_entry_copyright_new (ExifEntry *e)
 	gtk_widget_show (widget);
 	gtk_table_attach (GTK_TABLE (table), widget, 1, 2, 0, 1,
 			  GTK_FILL | GTK_EXPAND, 0, 0, 0);
-	gtk_entry_set_text (GTK_ENTRY (widget), e->data);
+	gtk_entry_set_text (GTK_ENTRY (widget), (gchar *)e->data);
 	g_signal_connect (G_OBJECT (widget), "changed",
 			    G_CALLBACK (on_text_changed), entry);
 	entry->priv->photographer = GTK_ENTRY (widget);
@@ -188,7 +188,8 @@ gtk_exif_entry_copyright_new (ExifEntry *e)
 	gtk_widget_show (widget);
 	gtk_table_attach (GTK_TABLE (table), widget, 1, 2, 1, 2,
 			  GTK_FILL | GTK_EXPAND, 0, 0, 0);
-	gtk_entry_set_text (GTK_ENTRY (widget), e->data + strlen (e->data) + 1);
+	gtk_entry_set_text (GTK_ENTRY (widget),
+			    (gchar *)e->data + strlen ((char *)e->data) + 1);
 	g_signal_connect (G_OBJECT (widget), "changed",
 			    G_CALLBACK (on_text_changed), entry);
 	entry->priv->editor = GTK_ENTRY (widget);

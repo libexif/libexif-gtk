@@ -82,7 +82,7 @@ gtk_exif_entry_flash_destroy (GtkObject *object)
 GTK_EXIF_FINALIZE (entry_flash, EntryFlash)
 
 static void
-gtk_exif_entry_flash_class_init (gpointer g_class, gpointer class_data)
+gtk_exif_entry_flash_class_init (gpointer g_class, gpointer class_data G_GNUC_UNUSED)
 {
 #if GTK_CHECK_VERSION(3,0,0)
 	GtkWidgetClass *widget_class;
@@ -105,7 +105,7 @@ gtk_exif_entry_flash_class_init (gpointer g_class, gpointer class_data)
 }
 
 static void
-gtk_exif_entry_flash_init (GTypeInstance *instance, gpointer g_class)
+gtk_exif_entry_flash_init (GTypeInstance *instance, gpointer g_class G_GNUC_UNUSED)
 {
 	GtkExifEntryFlash *entry = GTK_EXIF_ENTRY_FLASH (instance);
 
@@ -115,7 +115,7 @@ gtk_exif_entry_flash_init (GTypeInstance *instance, gpointer g_class)
 GTK_EXIF_CLASS (entry_flash, EntryFlash, "EntryFlash")
 
 static void
-on_value_changed (GtkToggleButton *toggle, GtkExifEntryFlash *entry)
+on_value_changed (GtkToggleButton *toggle G_GNUC_UNUSED, GtkExifEntryFlash *entry)
 {
 	unsigned char *d;
 	ExifByteOrder o;
