@@ -10,5 +10,5 @@ Name: libexif-gtk3
 Description: gtk3-widgets for libexif
 Requires: libexif gtk+-3.0
 Version: @VERSION@
-Libs: -L${libdir} -lexif-gtk3 -lm
+Libs: -L${libdir} -lexif-gtk3
 Cflags: -I${includedir}
