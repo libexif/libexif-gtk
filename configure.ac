@@ -1,4 +1,4 @@
-AC_PREREQ(2.59)
+AC_PREREQ([2.69])
 AC_INIT([EXIF GTK widget library],[0.4.1git],[libexif-devel@lists.sourceforge.net],[libexif-gtk])
 AC_CONFIG_SRCDIR([libexif-gtk/gtk-exif-browser.c])
 AC_CONFIG_HEADERS([config.h])
