@@ -104,8 +104,10 @@ AC_CONFIG_FILES([
   po/Makefile.in
   Makefile
   libexif-gtk/Makefile
-  libexif-$LIBEXIF_GTK_EXTENSION.pc
-  libexif-$LIBEXIF_GTK_EXTENSION-uninstalled.pc
+  libexif-gtk.pc
+  libexif-gtk3.pc
+  libexif-gtk-uninstalled.pc
+  libexif-gtk3-uninstalled.pc
   gtk-extensions/Makefile
   tests/Makefile
   m4m/Makefile
