@@ -1,4 +1,4 @@
-AC_PREREQ(2.59)
+AC_PREREQ([2.69])
 AC_INIT([EXIF GTK widget library],[0.4.1git],[libexif-devel@lists.sourceforge.net],[libexif-gtk])
 AC_CONFIG_SRCDIR([libexif-gtk/gtk-exif-browser.c])
 AC_CONFIG_HEADERS([config.h])
@@ -14,9 +14,9 @@ AC_PROG_CC
 AM_PROG_CC_STDC
 AM_PROG_CC_C_O
 AM_PROG_AR
-AM_PROG_LIBTOOL
+LT_INIT
 AC_HEADER_STDC
-
+PKG_PROG_PKG_CONFIG
 
 dnl ---------------------------------------------------------------------------
 dnl Versioning (libexif-gtk-AGE.CURRENT.REVISION):
@@ -63,7 +63,6 @@ AC_ARG_WITH([gtk3],
             [LIBEXIF_GTK_EXTENSION=gtk3],
             [LIBEXIF_GTK_EXTENSION=gtk])
 
-GP_CHECK_LIBRARY([LIBEXIF], [libexif])
 if test "x$LIBEXIF_GTK_EXTENSION" == "xgtk3" ; then
   GP_CHECK_LIBRARY([GTK], [gtk+-3.0])dnl
 else
@@ -105,8 +104,10 @@ AC_CONFIG_FILES([
   po/Makefile.in
   Makefile
   libexif-gtk/Makefile
-  libexif-$LIBEXIF_GTK_EXTENSION.pc
-  libexif-$LIBEXIF_GTK_EXTENSION-uninstalled.pc
+  libexif-gtk.pc
+  libexif-gtk3.pc
+  libexif-gtk-uninstalled.pc
+  libexif-gtk3-uninstalled.pc
   gtk-extensions/Makefile
   tests/Makefile
   m4m/Makefile

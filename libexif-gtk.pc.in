@@ -8,7 +8,7 @@ localedir=@localedir@
 
 Name: libexif-gtk
 Description: gtk2-widgets for libexif
-Requires: libexif
+Requires: libexif gtk+-2.0
 Version: @VERSION@
-Libs: -L${libdir} -lexif -lexif-gtk -lm
+Libs: -L${libdir} -lexif-gtk
 Cflags: -I${includedir}
