@@ -1,9 +1,10 @@
-New in 0.4.1git:
-  * Enable AM_SILENT_RULES by default
-  * Fix cross-compilation with pkg-config
-  * Fix a bunch of compiler warnings
-  * Remove unused macro files
-  * Add continuous integration builds
+New in 0.5.0:
+
+* Enable AM_SILENT_RULES by default
+* Fix cross-compilation with pkg-config
+* Fix a bunch of compiler warnings
+* Remove unused macro files
+* Add continuous integration builds
 
 
 New in 0.4.0:
