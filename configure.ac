@@ -43,19 +43,6 @@ dnl GP_CONFIG_MSG([Features])
 
 
 # ---------------------------------------------------------------------------
-# i18n support
-# ---------------------------------------------------------------------------
-ALL_LINGUAS="de es fr pl ru"
-AM_PO_SUBDIRS
-GP_GETTEXT_HACK([${PACKAGE}-${LIBEXIF_GTK_CURRENT}],
-                [Lutz Müller and others])
-AM_GNU_GETTEXT_VERSION([0.14.1])
-AM_GNU_GETTEXT([external])
-AM_ICONV
-GP_GETTEXT_FLAGS
-
-
-# ---------------------------------------------------------------------------
 # conditional libraries
 # ---------------------------------------------------------------------------
 AC_ARG_WITH([gtk3],
@@ -70,6 +57,19 @@ else
 fi
 
 AC_SUBST([LIBEXIF_GTK_EXTENSION])dnl
+
+
+# ---------------------------------------------------------------------------
+# i18n support
+# ---------------------------------------------------------------------------
+ALL_LINGUAS="de es fr pl ru"
+AM_PO_SUBDIRS
+GP_GETTEXT_HACK([libexif-${LIBEXIF_GTK_EXTENSION}-${LIBEXIF_GTK_CURRENT}],
+                [Lutz Müller and others])
+AM_GNU_GETTEXT_VERSION([0.14.1])
+AM_GNU_GETTEXT([external])
+AM_ICONV
+GP_GETTEXT_FLAGS
 
 
 # ---------------------------------------------------------------------------
