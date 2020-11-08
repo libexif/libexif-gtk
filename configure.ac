@@ -64,8 +64,12 @@ AC_SUBST([LIBEXIF_GTK_EXTENSION])dnl
 # ---------------------------------------------------------------------------
 ALL_LINGUAS="de es fr pl ru"
 AM_PO_SUBDIRS
-GP_GETTEXT_HACK([libexif-${LIBEXIF_GTK_EXTENSION}-${LIBEXIF_GTK_CURRENT}],
-                [Lutz Müller and others])
+if test "$LIBEXIF_GTK_EXTENSION" = "gtk"; then
+    LIBEXIF_GTK_FULLNAME=libexif-$LIBEXIF_GTK_EXTENSION$LIBEXIF_GTK_CURRENT
+else
+    LIBEXIF_GTK_FULLNAME=libexif-$LIBEXIF_GTK_EXTENSION-$LIBEXIF_GTK_CURRENT
+fi
+GP_GETTEXT_HACK([${LIBEXIF_GTK_FULLNAME}], [Lutz Müller and others])
 AM_GNU_GETTEXT_VERSION([0.14.1])
 AM_GNU_GETTEXT([external])
 AM_ICONV
