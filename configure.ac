@@ -6,7 +6,8 @@ AC_CONFIG_MACRO_DIR([auto-m4])
 AM_INIT_AUTOMAKE([
   -Wall
   gnu
-  1.9
+  1.14.1
+  dist-xz
   dist-bzip2
   check-news
 ])
@@ -18,7 +19,6 @@ GP_CONFIG_MSG([Source code location],[${srcdir}])
 
 AC_PROG_CC
 AM_PROG_CC_STDC
-AM_PROG_CC_C_O
 AM_PROG_AR
 LT_INIT
 AC_HEADER_STDC
