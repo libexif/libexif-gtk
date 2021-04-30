@@ -3,7 +3,13 @@ AC_INIT([EXIF GTK widget library],[0.5.1git],[libexif-devel@lists.sourceforge.ne
 AC_CONFIG_SRCDIR([libexif-gtk/gtk-exif-browser.c])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([auto-m4])
-AM_INIT_AUTOMAKE([-Wall gnu 1.9 dist-bzip2 check-news])
+AM_INIT_AUTOMAKE([
+  -Wall
+  gnu
+  1.9
+  dist-bzip2
+  check-news
+])
 AM_SILENT_RULES([yes])
 
 GP_CHECK_SHELL_ENVIRONMENT
