@@ -56,11 +56,10 @@ AC_ARG_WITH([gtk3],
             [LIBEXIF_GTK_EXTENSION=gtk3],
             [LIBEXIF_GTK_EXTENSION=gtk])
 
-if test "x$LIBEXIF_GTK_EXTENSION" == "xgtk3" ; then
-  GP_CHECK_LIBRARY([GTK], [gtk+-3.0])dnl
-else
-  GP_CHECK_LIBRARY([GTK], [gtk+-2.0], [>= 2.4])dnl
-fi
+AS_VAR_IF([LIBEXIF_GTK_EXTENSION],
+          [gtk3],
+          [GP_CHECK_LIBRARY([GTK], [gtk+-3.0])],
+          [GP_CHECK_LIBRARY([GTK], [gtk+-2.0], [>= 2.4])])
 
 AC_SUBST([LIBEXIF_GTK_EXTENSION])dnl
 
@@ -70,11 +69,10 @@ AC_SUBST([LIBEXIF_GTK_EXTENSION])dnl
 # ---------------------------------------------------------------------------
 ALL_LINGUAS="de es fr pl ru"
 AM_PO_SUBDIRS
-if test "$LIBEXIF_GTK_EXTENSION" = "gtk"; then
-    LIBEXIF_GTK_FULLNAME=libexif-$LIBEXIF_GTK_EXTENSION$LIBEXIF_GTK_CURRENT
-else
-    LIBEXIF_GTK_FULLNAME=libexif-$LIBEXIF_GTK_EXTENSION-$LIBEXIF_GTK_CURRENT
-fi
+AS_VAR_IF([LIBEXIF_GTK_EXTENSION],
+          [gtk],
+          [LIBEXIF_GTK_FULLNAME=libexif-$LIBEXIF_GTK_EXTENSION$LIBEXIF_GTK_CURRENT],
+          [LIBEXIF_GTK_FULLNAME=libexif-$LIBEXIF_GTK_EXTENSION-$LIBEXIF_GTK_CURRENT])
 GP_GETTEXT_HACK([${LIBEXIF_GTK_FULLNAME}], [Lutz Müller and others])
 AM_GNU_GETTEXT_VERSION([0.14.1])
 AM_GNU_GETTEXT([external])
@@ -94,12 +92,12 @@ GP_CHECK_LIBRARY([LIBEXIF], [libexif])dnl
 AM_CPPFLAGS="$AM_CPPFLAGS -I\$(top_srcdir)"
 AM_CPPFLAGS="$AM_CPPFLAGS -I\$(top_builddir)"
 AM_LDFLAGS="$LDFLAGS"
-if test "x$GCC" = "xyes"; then
+AS_VAR_IF([GCC], [yes], [dnl
     AM_CFLAGS="$AM_CFLAGS -Wall -Wchar-subscripts -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wpointer-arith"
     AM_CXXFLAGS="$AM_CXXFLAGS -ansi -pedantic-error"
     AM_CPPFLAGS="$AM_CPPFLAGS -g -Wall -Wmissing-declarations -Wmissing-prototypes"
     AM_LDFLAGS="$AM_LDFLAGS -g -Wall"
-fi
+])
 
 AC_SUBST([AM_CPPFLAGS])dnl
 AC_SUBST([AM_LDFLAGS])dnl
