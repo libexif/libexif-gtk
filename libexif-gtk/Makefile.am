@@ -49,3 +49,9 @@ libexif_@LIBEXIF_GTK_EXTENSION@_la_LIBADD = \
 	$(top_builddir)/gtk-extensions/libgtk-extensions.la	\
 	$(LIBEXIF_LIBS)							\
 	$(GTK_LIBS)
+
+# dependency workaround for this recursive make build
+EXTRA_libexif_@LIBEXIF_GTK_EXTENSION@_la_DEPENDENCIES = \
+	$(top_builddir)/gtk-extensions/libgtk-extensions.la-stamp
+$(top_builddir)/gtk-extensions/libgtk-extensions.la-stamp:
+	cd $(top_builddir)/gtk-extensions && $(MAKE) libgtk-extensions.la

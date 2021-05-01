@@ -12,3 +12,9 @@ test_libexif_gtk_LDADD = 		\
 	$(LIBEXIF_LIBS)				\
 	$(GTK_LIBS)					\
 	$(INTLLIBS)
+
+# dependency workaround for this recursive make build
+EXTRA_test_libexif_gtk_DEPENDENCIES = \
+	$(top_builddir)/libexif-gtk/libexif-@LIBEXIF_GTK_EXTENSION@.la-stamp
+$(top_builddir)/libexif-gtk/libexif-@LIBEXIF_GTK_EXTENSION@.la-stamp:
+	cd $(top_builddir)/libexif-gtk && $(MAKE) libexif-@LIBEXIF_GTK_EXTENSION@.la
