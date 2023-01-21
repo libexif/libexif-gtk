@@ -1,3 +1,5 @@
+# This is really a demo program and not a regression test, so build it
+# during the main build and not just in the check target.
 noinst_PROGRAMS = test-libexif-gtk
 
 test_libexif_gtk_CFLAGS = 	\
