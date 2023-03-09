@@ -1,0 +1,463 @@
+# Georgian translation for libexif-gtk.
+# Copyright (C) 2023 Lutz Müller and others
+# This file is distributed under the same license as the libexif-gtk package.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: libexif-gtk 0.5.1git\n"
+"Report-Msgid-Bugs-To: libexif-devel@lists.sourceforge.net\n"
+"POT-Creation-Date: 2023-03-09 11:01+0100\n"
+"PO-Revision-Date: 2023-03-09 11:29+0100\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
+"Language-Team: Georgian <(nothing)>\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.2.2\n"
+
+#: libexif-gtk/gtk-exif-browser.c:157
+msgid "Nothing selected."
+msgstr "არაფერია მონიშნული."
+
+#: libexif-gtk/gtk-exif-browser.c:408
+msgid "No thumbnail available."
+msgstr "მინიატურები ხელმიუწვდომელია."
+
+#: libexif-gtk/gtk-exif-browser.c:416
+msgid "Corrupt thumbnail image."
+msgstr "მინიატურის გამოსახულება დაზიანებულია."
+
+#: libexif-gtk/gtk-exif-browser.c:431
+#, c-format
+msgid "Size: %i bytes."
+msgstr "ზომა: %i ბაიტი."
+
+#: libexif-gtk/gtk-exif-browser.c:495
+msgid "Load..."
+msgstr "ჩატვირთვა..."
+
+#: libexif-gtk/gtk-exif-browser.c:534
+msgid "Save As..."
+msgstr "შენახვა, როგორც..."
+
+#: libexif-gtk/gtk-exif-browser.c:592
+msgid "Thumbnail"
+msgstr "მინიატურა"
+
+#: libexif-gtk/gtk-exif-browser.c:609
+msgid "Load"
+msgstr "ჩატვირთვა"
+
+#: libexif-gtk/gtk-exif-browser.c:614
+msgid "Save"
+msgstr "შენახვა"
+
+#: libexif-gtk/gtk-exif-browser.c:619
+msgid "Delete"
+msgstr "წაშლა"
+
+#: libexif-gtk/gtk-exif-content-list.c:178
+msgid "Tag"
+msgstr "ჭდე"
+
+#: libexif-gtk/gtk-exif-content-list.c:184
+msgid "Value"
+msgstr "მნიშვნელობა"
+
+#: libexif-gtk/gtk-exif-content-list.c:272
+msgid "Add"
+msgstr "დამატება"
+
+#: libexif-gtk/gtk-exif-content-list.c:359
+msgid "Remove"
+msgstr "წაშლა"
+
+#: libexif-gtk/gtk-exif-entry-copyright.c:167
+msgid "Photographer:"
+msgstr "ფოტოგრაფი:"
+
+#: libexif-gtk/gtk-exif-entry-copyright.c:173
+msgid "Editor:"
+msgstr "რედაქტორი:"
+
+#: libexif-gtk/gtk-exif-entry-date.c:223
+msgid "Time:"
+msgstr "დრო:"
+
+#: libexif-gtk/gtk-exif-entry-flash.c:163
+msgid "Flash fired"
+msgstr "განათება ჩაირთო"
+
+#: libexif-gtk/gtk-exif-entry-flash.c:172
+msgid "Return light"
+msgstr "დაბრუნებული სინათლე"
+
+#: libexif-gtk/gtk-exif-entry-flash.c:180
+msgid "No strobe return detection function"
+msgstr "სტრობის დაბრუნების აღმოჩენის ფუნქციის გარეშე"
+
+#: libexif-gtk/gtk-exif-entry-flash.c:193
+msgid "Strobe return light not detected"
+msgstr "სტრობის დაბრუნებული სინათლე აღმოჩენილი არაა"
+
+#: libexif-gtk/gtk-exif-entry-flash.c:205
+msgid "Strobe return light detected"
+msgstr "სტრობის დაბრუნებული სინათლე აღმოჩენილია"
+
+#: libexif-gtk/gtk-exif-entry-generic.c:139
+msgid "Format:"
+msgstr "ფორმატი:"
+
+#: libexif-gtk/gtk-exif-entry-generic.c:149
+msgid "Components:"
+msgstr "კომპონენტები:"
+
+#: libexif-gtk/gtk-exif-entry-generic.c:158
+msgid "Size:"
+msgstr "ზომა:"
+
+#: libexif-gtk/gtk-exif-entry-generic.c:167
+#: libexif-gtk/gtk-exif-entry-number.c:250
+#: libexif-gtk/gtk-exif-entry-rational.c:253
+msgid "Value:"
+msgstr "მნიშვნელობა:"
+
+#: libexif-gtk/gtk-exif-entry-number.c:248
+#: libexif-gtk/gtk-exif-entry-rational.c:251
+#, c-format
+msgid "Value %i:"
+msgstr "მნიშვნელობა %i:"
+
+#: libexif-gtk/gtk-exif-entry-option.c:151
+#: libexif-gtk/gtk-exif-entry-option.c:222
+msgid "Not defined"
+msgstr "აღუწერელია"
+
+#: libexif-gtk/gtk-exif-entry-option.c:152
+msgid "One-chip color area sensor"
+msgstr "ერთჩიპიანი ფერის ადგილის სენსორი"
+
+#: libexif-gtk/gtk-exif-entry-option.c:153
+msgid "Two-chip color area sensor"
+msgstr "ორჩიპიანი ფერის ადგილის სენსორი"
+
+#: libexif-gtk/gtk-exif-entry-option.c:154
+msgid "Three-chip color area sensor"
+msgstr "სამჩიპიანი ფერის ადგილის სენსორი"
+
+#: libexif-gtk/gtk-exif-entry-option.c:155
+msgid "Color sequential area sensor"
+msgstr ""
+
+#: libexif-gtk/gtk-exif-entry-option.c:156
+msgid "Trilinear sensor"
+msgstr "სამხაზოვანი სენსორი"
+
+#: libexif-gtk/gtk-exif-entry-option.c:157
+msgid "Color sequential linear sensor"
+msgstr ""
+
+#: libexif-gtk/gtk-exif-entry-option.c:162
+msgid "Uncompressed"
+msgstr "შეუკუმშავი"
+
+#: libexif-gtk/gtk-exif-entry-option.c:163
+msgid "JPEG compression"
+msgstr "JPEG შეკუმშვა"
+
+#: libexif-gtk/gtk-exif-entry-option.c:168
+#: libexif-gtk/gtk-exif-entry-option.c:180
+msgid "Unknown"
+msgstr "უცნობი"
+
+#: libexif-gtk/gtk-exif-entry-option.c:169
+msgid "Average"
+msgstr "საშუალო"
+
+#: libexif-gtk/gtk-exif-entry-option.c:170
+msgid "Center-Weighted Average"
+msgstr "ცენტრალურად გაზომილი საშუალო"
+
+#: libexif-gtk/gtk-exif-entry-option.c:171
+msgid "Spot"
+msgstr "წერტილოვანი"
+
+#: libexif-gtk/gtk-exif-entry-option.c:172
+msgid "Multi Spot"
+msgstr "მრავალი ადგილი"
+
+#: libexif-gtk/gtk-exif-entry-option.c:173
+msgid "Pattern"
+msgstr "ნიმუში"
+
+#: libexif-gtk/gtk-exif-entry-option.c:174
+msgid "Partial"
+msgstr "ნაწილობრივ"
+
+#: libexif-gtk/gtk-exif-entry-option.c:175
+#: libexif-gtk/gtk-exif-entry-option.c:199
+msgid "Other"
+msgstr "სხვა"
+
+#: libexif-gtk/gtk-exif-entry-option.c:181
+msgid "Daylight"
+msgstr "დღის სინათლე"
+
+#: libexif-gtk/gtk-exif-entry-option.c:182
+msgid "Fluorescent"
+msgstr "ფლუორესცენტული"
+
+#: libexif-gtk/gtk-exif-entry-option.c:183
+msgid "Tungsten"
+msgstr "ვოლფრამი"
+
+#: libexif-gtk/gtk-exif-entry-option.c:184
+msgid "Flash"
+msgstr "განათება"
+
+#: libexif-gtk/gtk-exif-entry-option.c:185
+msgid "Fine weather"
+msgstr "კარგი ამინდი"
+
+#: libexif-gtk/gtk-exif-entry-option.c:186
+msgid "Cloudy weather"
+msgstr "ღრუბლიანი ამინდი"
+
+#: libexif-gtk/gtk-exif-entry-option.c:187
+msgid "Shade"
+msgstr "დაჩრდილვა"
+
+#: libexif-gtk/gtk-exif-entry-option.c:188
+msgid "Daylight fluorescent"
+msgstr "დღისით ფლუორესცენცია"
+
+#: libexif-gtk/gtk-exif-entry-option.c:189
+msgid "Day white fluorescent"
+msgstr "დღის თეთრი ფლუორესცენცია"
+
+#: libexif-gtk/gtk-exif-entry-option.c:190
+msgid "Cool white fluorescent"
+msgstr "გრილი თეთრი ფლუორესცენცია"
+
+#: libexif-gtk/gtk-exif-entry-option.c:191
+msgid "White fluorescent"
+msgstr "თეთრი ფლუორესცენცია"
+
+#: libexif-gtk/gtk-exif-entry-option.c:192
+msgid "Standard light A"
+msgstr "სტანდარტული სინათლე A"
+
+#: libexif-gtk/gtk-exif-entry-option.c:193
+msgid "Standard light B"
+msgstr "სტანდარტული სინათლე B"
+
+#: libexif-gtk/gtk-exif-entry-option.c:194
+msgid "Standard light C"
+msgstr "სტანდარტული სინათლე C"
+
+#: libexif-gtk/gtk-exif-entry-option.c:195
+msgid "D55"
+msgstr "D55"
+
+#: libexif-gtk/gtk-exif-entry-option.c:196
+msgid "D65"
+msgstr "D65"
+
+#: libexif-gtk/gtk-exif-entry-option.c:197
+msgid "D75"
+msgstr "D75"
+
+#: libexif-gtk/gtk-exif-entry-option.c:198
+msgid "ISO studio tungsten"
+msgstr "ISO სტუდია ვოლფრამი"
+
+#: libexif-gtk/gtk-exif-entry-option.c:204
+msgid "top - left"
+msgstr "ზედა - მარცხენა"
+
+#: libexif-gtk/gtk-exif-entry-option.c:205
+msgid "top - right"
+msgstr "ზედა - მარჯვენა"
+
+#: libexif-gtk/gtk-exif-entry-option.c:206
+msgid "bottom - right"
+msgstr "ქვედა - მარჯვენა"
+
+#: libexif-gtk/gtk-exif-entry-option.c:207
+msgid "bottom - left"
+msgstr "ქვედა - მარცხენა"
+
+#: libexif-gtk/gtk-exif-entry-option.c:208
+msgid "left - top"
+msgstr "მარცხენა - ზედა"
+
+#: libexif-gtk/gtk-exif-entry-option.c:209
+msgid "right - top"
+msgstr "მარჯვენა - ზედა"
+
+#: libexif-gtk/gtk-exif-entry-option.c:210
+msgid "right - bottom"
+msgstr "მარჯვენა - ქვედა"
+
+#: libexif-gtk/gtk-exif-entry-option.c:211
+msgid "left - bottom"
+msgstr "მარცხენა - ქვედა"
+
+#: libexif-gtk/gtk-exif-entry-option.c:216
+msgid "centered"
+msgstr "შუაში"
+
+#: libexif-gtk/gtk-exif-entry-option.c:217
+msgid "co-sited"
+msgstr "ახლომდებარე"
+
+#: libexif-gtk/gtk-exif-entry-option.c:223
+msgid "Manual"
+msgstr "ხელით"
+
+#: libexif-gtk/gtk-exif-entry-option.c:224
+msgid "Normal program"
+msgstr "ნორმალური პროგრამა"
+
+#: libexif-gtk/gtk-exif-entry-option.c:225
+msgid "Aperture priority"
+msgstr "დიაფრაგმის პრიორიტეტი"
+
+#: libexif-gtk/gtk-exif-entry-option.c:226
+msgid "Shutter priority"
+msgstr "შატერის პრიორიტეტი"
+
+#: libexif-gtk/gtk-exif-entry-option.c:227
+msgid "Creative program (biased toward depth of field)"
+msgstr "ხელოვანის პროგრამა (პრიორიტეტით სიმკვეთრის სიღრმეზე)"
+
+#: libexif-gtk/gtk-exif-entry-option.c:228
+msgid "Action program (biased toward fast shutter speed)"
+msgstr "ქმედების პროგრამა (პრიორიტეტით სრაფი შატერის სიჩქარეზე)"
+
+#: libexif-gtk/gtk-exif-entry-option.c:229
+msgid "Portrait mode (for closeup photos with the background out of focus)"
+msgstr "პორტრეტის რეჟიმი (ახლოდან გადაღებული სურათებისთვის, სადაც ფონი ფოკუსში არაა)"
+
+#: libexif-gtk/gtk-exif-entry-option.c:231
+msgid "Landscape mode (for landscape photos with the background in focus)"
+msgstr "ლანდშაფტის რეჟიმი (ლანდშაფტურ სურათებზე ფოკუსში ფონია)"
+
+#: libexif-gtk/gtk-exif-entry-option.c:260
+msgid "Sensing method:"
+msgstr "გრძნობის მეთოდი:"
+
+#: libexif-gtk/gtk-exif-entry-option.c:264
+msgid "0-th row - 0-th column:"
+msgstr "მე-0-ე მწკრივი - მე-0-ე სვეტი:"
+
+#: libexif-gtk/gtk-exif-entry-option.c:268
+msgid "Light source:"
+msgstr "სინათლის წყაროს:"
+
+#: libexif-gtk/gtk-exif-entry-option.c:272
+msgid "Metering mode:"
+msgstr "გაზომვის რეჟიმი:"
+
+#: libexif-gtk/gtk-exif-entry-option.c:276
+msgid "Compression scheme:"
+msgstr "შეკუმშვის სქემა:"
+
+#: libexif-gtk/gtk-exif-entry-option.c:280
+msgid "YCbCr Positioning:"
+msgstr "YCbCr მდებარეობა:"
+
+#: libexif-gtk/gtk-exif-entry-option.c:284
+msgid "Exposure Program:"
+msgstr "ექსპოზიციის პროგრამა:"
+
+#: libexif-gtk/gtk-exif-entry-resolution.c:404
+msgid "Focal Plane Resolution"
+msgstr "ფოკალური სიბრტყის გაფართოებ"
+
+#: libexif-gtk/gtk-exif-entry-resolution.c:405
+msgid "The number of pixels on the camera focal plane."
+msgstr "პიქსელების რაოდენობა კამერის ფოკალურ სიბრტყეზე."
+
+#: libexif-gtk/gtk-exif-entry-resolution.c:411
+msgid "Resolution"
+msgstr "გარჩევადობა"
+
+#: libexif-gtk/gtk-exif-entry-resolution.c:412
+msgid "The number of pixels per unit."
+msgstr "პიქსელების რაოდენოვა ერთეულში."
+
+#: libexif-gtk/gtk-exif-entry-resolution.c:423
+msgid "Image width direction:"
+msgstr "გამოსახულების სიგანის მიმართულება:"
+
+#: libexif-gtk/gtk-exif-entry-resolution.c:459
+msgid "Image height direction:"
+msgstr "გამოსახულების სიმაღლის მიმართულება:"
+
+#: libexif-gtk/gtk-exif-entry-resolution.c:495
+msgid "Unit:"
+msgstr "ერთეული:"
+
+#: libexif-gtk/gtk-exif-entry-resolution.c:507
+msgid "Centimeter"
+msgstr "სანტიმეტრი"
+
+#: libexif-gtk/gtk-exif-entry-resolution.c:511
+msgid "Inch"
+msgstr "დუიმი"
+
+#: libexif-gtk/gtk-exif-entry-user-comment.c:224
+msgid "ASCII"
+msgstr "ASCII"
+
+#: libexif-gtk/gtk-exif-entry-user-comment.c:225
+msgid "JIS"
+msgstr "JIS"
+
+#: libexif-gtk/gtk-exif-entry-user-comment.c:226
+msgid "Unicode"
+msgstr "უნიკოდი"
+
+#: libexif-gtk/gtk-exif-entry-user-comment.c:227
+msgid "Undefined"
+msgstr "გაურკვეველი"
+
+#: libexif-gtk/gtk-exif-entry-user-comment.c:261
+msgid "Character Code:"
+msgstr "სიმბოლოს კოდი:"
+
+#: libexif-gtk/gtk-exif-entry-version.c:136
+msgid "Exif Format Version 2.0"
+msgstr "Exif ფორმატის ვერსია 2.0"
+
+#: libexif-gtk/gtk-exif-entry-version.c:137
+msgid "Exif Format Version 2.1"
+msgstr "Exif ფორმატის ვერსია 2.1"
+
+#: libexif-gtk/gtk-exif-entry-version.c:138
+msgid "Exif Format Version 2.2"
+msgstr "Exif ფორმატის ვერსია 2.2"
+
+#: libexif-gtk/gtk-exif-entry-version.c:139
+msgid "Exif Format Version 2.21"
+msgstr "Exif ფორმატის ვერსია 2.21"
+
+#: libexif-gtk/gtk-exif-entry-version.c:140
+msgid "Exif Format Version 2.3"
+msgstr "Exif ფორმატის ვერსია 2.3"
+
+#: libexif-gtk/gtk-exif-entry-version.c:145
+msgid "FlashPix Format Version 1.0"
+msgstr "FlashPix ფორმატის ვერსია 1.0"
+
+#: libexif-gtk/gtk-exif-entry-version.c:146
+msgid "FlashPix Format Version 1.01"
+msgstr "FlashPix ფორმატის ვერსია 1.01"
+
+#: libexif-gtk/gtk-exif-entry-version.c:284
+msgid "Version:"
+msgstr "ვერსია:"
