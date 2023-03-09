@@ -71,7 +71,7 @@ AC_SUBST([LIBEXIF_GTK_EXTENSION])dnl
 # ---------------------------------------------------------------------------
 # i18n support
 # ---------------------------------------------------------------------------
-ALL_LINGUAS="de es fr pl ru"
+ALL_LINGUAS="de es fr pl ru ka"
 AM_PO_SUBDIRS
 AS_VAR_IF([LIBEXIF_GTK_EXTENSION],
           [gtk],
