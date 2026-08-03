@@ -15,7 +15,7 @@ on:
       - master
 
 env:
-  MAKEFLAGS: -j 2
+  MAKEFLAGS: -j 3
 
 jobs:
   build-linux:
