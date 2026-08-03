@@ -78,7 +78,7 @@ jobs:
             cflags: -Wall -Wextra -Werror -Wno-error=deprecated-declarations -Wno-error=unused-value -O3
           - cc: gcc
             configure: --with-gtk3
-            install: automake libtool gtk+3 libexif
+            install: automake libtool gtk+3 libexif gettext
             cflags: -Wall -Wextra -Werror -Wno-error=deprecated-declarations -Wno-error=unused-value -O3
           - cc: clang
             configure: --with-gtk3
